@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "id": "motion-columns",
+  "seed": 8,
+  "render": {"engine": "eevee", "width": 270, "height": 480, "fps": 24, "frames": 72, "samples": 16},
+  "scene": {
+    "environment": {"background": [0.1, 0.035, 0.12], "strength": 0.4,
+      "ground_material": {"color": [0.19, 0.07, 0.15], "roughness": 0.5}},
+    "entities": [
+      {"id": "left", "primitive": "cube", "location": [-1.8, 0, 1], "scale": [0.65, 0.65, 1],
+        "material": {"color": [0.95, 0.25, 0.17]}, "interpolation": "BEZIER",
+        "keyframes": [{"frame": 1, "scale": [0.65, 0.65, 1], "location": [-1.8, 0, 1]},
+          {"frame": 36, "scale": [0.65, 0.65, 2.2], "location": [-1.8, 0, 2.2]},
+          {"frame": 72, "scale": [0.65, 0.65, 1], "location": [-1.8, 0, 1]}]},
+      {"id": "middle", "primitive": "cube", "location": [0, 0, 2.2], "scale": [0.65, 0.65, 2.2],
+        "material": {"color": [0.98, 0.66, 0.13]}, "interpolation": "BEZIER",
+        "keyframes": [{"frame": 1, "scale": [0.65, 0.65, 2.2], "location": [0, 0, 2.2]},
+          {"frame": 36, "scale": [0.65, 0.65, 0.8], "location": [0, 0, 0.8]},
+          {"frame": 72, "scale": [0.65, 0.65, 2.2], "location": [0, 0, 2.2]}]},
+      {"id": "right", "primitive": "cube", "location": [1.8, 0, 1.6], "scale": [0.65, 0.65, 1.6],
+        "material": {"color": [0.25, 0.68, 0.72]}, "interpolation": "BEZIER",
+        "keyframes": [{"frame": 1, "scale": [0.65, 0.65, 1.6], "location": [1.8, 0, 1.6]},
+          {"frame": 36, "scale": [0.65, 0.65, 2.8], "location": [1.8, 0, 2.8]},
+          {"frame": 72, "scale": [0.65, 0.65, 1.6], "location": [1.8, 0, 1.6]}]},
+      {"id": "orb", "primitive": "uv_sphere", "location": [-1.8, 0, 6.4], "scale": [0.5, 0.5, 0.5],
+        "material": {"color": [0.8, 0.3, 0.65], "metallic": 0.6, "roughness": 0.2},
+        "keyframes": [{"frame": 1, "location": [-1.8, 0, 6.4]}, {"frame": 72, "location": [1.8, 0, 6.4]}]}
+    ],
+    "camera": {"location": [10, -19, 11], "target": [0, 0, 3], "lens": 44,
+      "keyframes": [{"frame": 1, "location": [10, -19, 11]}, {"frame": 72, "location": [6, -19, 10]}]},
+    "lights": [
+      {"id": "key", "location": [-3, -5, 10], "energy": 1800, "size": 6},
+      {"id": "rim", "location": [3, 4, 8], "energy": 2000, "size": 4, "color": [0.45, 0.6, 1]}
+    ]
+  }
+}

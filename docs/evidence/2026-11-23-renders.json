@@ -1,0 +1,179 @@
+[
+  {
+    "project_id": "motion-columns",
+    "job_id": "97f4062576ed4a62bf711a98adf14fae",
+    "status": "succeeded",
+    "engine_version": "0.1.0",
+    "engine_source_sha256": "b0164dac347c427ff43d1bb3d8266e63b097dfa88b6fb22b3a02647270a38161",
+    "project_sha256": "7b2a6c89f2d5e10402207216a7c8b20c42a478102a7bd41908f0b553f8615747",
+    "seed": 8,
+    "timings_seconds": {
+      "blender_process": 51.527208500003326,
+      "encoding": 0.2058649999962654,
+      "decode_verification": 0.06529459999001119,
+      "total": 52.45095849999052
+    },
+    "disk_bytes": 9443283,
+    "video": {
+      "width": 270,
+      "height": 480,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "404ca0c506339534d830acc296e9e4f83e39c8fbc4890275f00d068b0061ea20"
+    },
+    "tools": {
+      "blender": {
+        "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "version": "Blender 5.2.3 LTS"
+      },
+      "ffmpeg": {
+        "path": "C:\\ffmpeg\\ffmpeg.exe",
+        "version": "ffmpeg version N-123395-gb66c314c4b-20260312 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "ffprobe": {
+        "path": "C:\\ffmpeg\\ffprobe.exe",
+        "version": "ffprobe version N-123395-gb66c314c4b-20260312 Copyright (c) 2007-2026 the FFmpeg developers"
+      }
+    },
+    "output_directory": "outputs/motion-columns-97f4062576ed4a62bf711a98adf14fae",
+    "blender": {
+      "version": "5.2.3 LTS",
+      "engine": "BLENDER_EEVEE",
+      "build_seconds": 0.19352830000570975,
+      "render_seconds": 48.63870400004089,
+      "mean_frame_seconds": 0.6755375555561235,
+      "entity_count": 4,
+      "warnings": []
+    },
+    "reverified_after_review": {
+      "width": 270,
+      "height": 480,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p"
+    }
+  },
+  {
+    "project_id": "orbit-studio",
+    "job_id": "d1e614272e1d4db798ab5ff906616453",
+    "status": "succeeded",
+    "engine_version": "0.1.0",
+    "engine_source_sha256": "b0164dac347c427ff43d1bb3d8266e63b097dfa88b6fb22b3a02647270a38161",
+    "project_sha256": "51de411ef26e6d44b0c8f7593c375a54bc990785de9329dfeac28074268c0700",
+    "seed": 17,
+    "timings_seconds": {
+      "blender_process": 53.294051999997464,
+      "encoding": 0.23344759999599773,
+      "decode_verification": 0.0948151000047801,
+      "total": 54.284868999995524
+    },
+    "disk_bytes": 11053182,
+    "video": {
+      "width": 480,
+      "height": 270,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "75f74d79a3176dbaa48b41883b1886bd0d9d7e48931652e60313aacc57ff7a89"
+    },
+    "tools": {
+      "blender": {
+        "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "version": "Blender 5.2.3 LTS"
+      },
+      "ffmpeg": {
+        "path": "C:\\ffmpeg\\ffmpeg.exe",
+        "version": "ffmpeg version N-123395-gb66c314c4b-20260312 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "ffprobe": {
+        "path": "C:\\ffmpeg\\ffprobe.exe",
+        "version": "ffprobe version N-123395-gb66c314c4b-20260312 Copyright (c) 2007-2026 the FFmpeg developers"
+      }
+    },
+    "output_directory": "outputs/orbit-studio-d1e614272e1d4db798ab5ff906616453",
+    "blender": {
+      "version": "5.2.3 LTS",
+      "engine": "BLENDER_EEVEE",
+      "build_seconds": 0.19469849999586586,
+      "render_seconds": 50.55092480003077,
+      "mean_frame_seconds": 0.7020961777782051,
+      "entity_count": 3,
+      "warnings": []
+    },
+    "reverified_after_review": {
+      "width": 480,
+      "height": 270,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p"
+    }
+  },
+  {
+    "project_id": "sunrise-grove",
+    "job_id": "be3c4edf674a40cb92abedf4800ed2a3",
+    "status": "succeeded",
+    "engine_version": "0.1.0",
+    "engine_source_sha256": "b0164dac347c427ff43d1bb3d8266e63b097dfa88b6fb22b3a02647270a38161",
+    "project_sha256": "b29e334df9e4f6734fefaecc36f57cbbb5bf6638c1768f1a7d58158b39e42422",
+    "seed": 42,
+    "timings_seconds": {
+      "blender_process": 55.617777899999055,
+      "encoding": 0.23385140000027604,
+      "decode_verification": 0.06392920001235325,
+      "total": 56.59513779998815
+    },
+    "disk_bytes": 10398561,
+    "video": {
+      "width": 480,
+      "height": 270,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "9577c94f43b4d11d43beae8b10ca5fec2f16195b8a131305807acfe94186e2a3"
+    },
+    "tools": {
+      "blender": {
+        "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "version": "Blender 5.2.3 LTS"
+      },
+      "ffmpeg": {
+        "path": "C:\\ffmpeg\\ffmpeg.exe",
+        "version": "ffmpeg version N-123395-gb66c314c4b-20260312 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "ffprobe": {
+        "path": "C:\\ffmpeg\\ffprobe.exe",
+        "version": "ffprobe version N-123395-gb66c314c4b-20260312 Copyright (c) 2007-2026 the FFmpeg developers"
+      }
+    },
+    "output_directory": "outputs/sunrise-grove-be3c4edf674a40cb92abedf4800ed2a3",
+    "blender": {
+      "version": "5.2.3 LTS",
+      "engine": "BLENDER_EEVEE",
+      "build_seconds": 0.2641159000049811,
+      "render_seconds": 52.82684700003301,
+      "mean_frame_seconds": 0.7337062083337919,
+      "entity_count": 37,
+      "warnings": []
+    },
+    "reverified_after_review": {
+      "width": 480,
+      "height": 270,
+      "frames": 72,
+      "fps": 24.0,
+      "duration": 3.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p"
+    }
+  }
+]

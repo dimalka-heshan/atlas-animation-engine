@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atlas-animation"
+version = "0.1.0"
+description = "Local, configuration-driven 3D animation production foundation"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.12,<3"]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10"]
+
+[project.scripts]
+atlas = "apps.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["engine*", "apps*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: launches Blender and FFmpeg (opt in with ATLAS_INTEGRATION=1)"]
