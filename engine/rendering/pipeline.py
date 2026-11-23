@@ -9,6 +9,7 @@ import uuid
 from pathlib import Path
 
 from engine import __version__
+from engine.assets.resolution import resolve_project_assets, snapshot_assets
 from engine.core.models import Project
 from engine.rendering.runtime import capture, find_tool, run_logged
 from engine.rendering.video import encode_video, verify_video
@@ -27,7 +28,8 @@ def source_digest() -> str:
 
 
 def render_project(project: Project, output_root: Path, *, blender: Path | None = None,
-                   ffmpeg: Path | None = None, ffprobe: Path | None = None) -> Path:
+                   ffmpeg: Path | None = None, ffprobe: Path | None = None,
+                   asset_library: Path | None = None) -> Path:
     """Render into a new job directory inside an explicitly approved output root.
 
     Returns the verified MP4 path; errors retain the project, logs and failed status.
@@ -55,6 +57,8 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
         atomic_json(directory / "project.json", project.model_dump(mode="json"))
         manifest["project_sha256"] = hashlib.sha256((directory / "project.json").read_bytes()).hexdigest()
         expanded = expand_project(project)
+        entries = resolve_project_assets(expanded, asset_library or Path("assets/library"))
+        manifest["assets"] = snapshot_assets(entries, directory)
         atomic_json(directory / "resolved.json", expanded.model_dump(mode="json"))
         executables = {"blender": find_tool("blender", blender), "ffmpeg": find_tool("ffmpeg", ffmpeg),
                        "ffprobe": find_tool("ffprobe", ffprobe)}

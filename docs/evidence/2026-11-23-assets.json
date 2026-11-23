@@ -1,0 +1,408 @@
+[
+  {
+    "project_id": "lantern-studio",
+    "job_id": "30e2573835f34969916549ae43ef65e1",
+    "status": "succeeded",
+    "engine_version": "0.2.0",
+    "engine_source_sha256": "b2a722b160bca0dac043e4f580d30018b89f497665096403275ab8459d18966c",
+    "project_sha256": "0237f887060217d1900c64621fc5daa0c99bb40d77b5eb6c0accf31a20c6de95",
+    "seed": 21,
+    "timings_seconds": {
+      "blender_process": 56.604786500000046,
+      "encoding": 0.30860970000503585,
+      "decode_verification": 0.06167029999778606,
+      "total": 57.61270979999972
+    },
+    "disk_bytes": 11448224,
+    "video": {
+      "width": 640,
+      "height": 360,
+      "frames": 48,
+      "fps": 24.0,
+      "duration": 2.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "57f3ed5031b3c2cc619cb3d54e7b5d9cf3334113389c7d14484ce3b7aba58e0e"
+    },
+    "tools": {
+      "blender": {
+        "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "version": "Blender 5.2.3 LTS"
+      },
+      "ffmpeg": {
+        "path": "C:\\ffmpeg\\ffmpeg.exe",
+        "version": "ffmpeg version N-123395-gb66c314c4b-20260312 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "ffprobe": {
+        "path": "C:\\ffmpeg\\ffprobe.exe",
+        "version": "ffprobe version N-123395-gb66c314c4b-20260312 Copyright (c) 2007-2026 the FFmpeg developers"
+      }
+    },
+    "assets": [
+      {
+        "id": "lantern",
+        "version": 1,
+        "sha256": "ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f",
+        "provenance": {
+          "approval": "approved",
+          "attribution": "",
+          "category": "prop",
+          "creator": "ATLAS local procedural fixture generator",
+          "description": "Reusable eight-part static lantern with teal enamel, brass supports and amber core.",
+          "license_id": "LicenseRef-ATLAS-Generated",
+          "license_text": "Original primitive geometry and materials generated locally for this ATLAS project. Use and modification in local ATLAS test renders are authorized by the project brief. No third-party assets are included. This record does not grant third-party redistribution rights.",
+          "name": "Original ATLAS lantern",
+          "redistribution_allowed": false,
+          "render_allowed": true,
+          "restrictions": [],
+          "source_url": "urn:atlas:fixture:lantern:v1",
+          "tags": [
+            "lantern",
+            "original",
+            "static"
+          ]
+        },
+        "container": {
+          "format": "glb",
+          "gltf_version": "2.0",
+          "size_bytes": 85480,
+          "mesh_count": 8,
+          "material_count": 3,
+          "texture_count": 0,
+          "animation_count": 0,
+          "skin_count": 0,
+          "external_dependencies": []
+        },
+        "created_at": "2026-11-23T16:55:00.639407+00:00",
+        "inspection": {
+          "status": "ready",
+          "report": {
+            "mesh_count": 8,
+            "object_count": 9,
+            "polygon_count": 1144,
+            "bounds": {
+              "min": [
+                1.25,
+                -1.75,
+                0.699999988079071
+              ],
+              "max": [
+                2.75,
+                -0.25,
+                3.5250000953674316
+              ]
+            },
+            "dimensions": [
+              1.5,
+              1.5,
+              2.825000047683716
+            ],
+            "material_count": 3,
+            "materials": [
+              "Amber core",
+              "Brass",
+              "Teal enamel"
+            ],
+            "texture_count": 0,
+            "textures": [],
+            "missing_textures": [],
+            "skeleton_count": 0,
+            "animation_count": 0,
+            "coordinate_system": "right-handed Z-up meters",
+            "import_seconds": 0.4384379999974044,
+            "blender_version": "5.2.3 LTS",
+            "process_seconds": 2.987422299993341,
+            "source_sha256": "ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f",
+            "log": "inspections\\331f230560de42acae20186e9aa3fa0d\\blender.log"
+          },
+          "updated_at": "2026-11-23T16:55:04.097392+00:00"
+        },
+        "source_file": "assets/ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f.glb"
+      }
+    ],
+    "output_directory": "outputs/lantern-studio-30e2573835f34969916549ae43ef65e1",
+    "blender": {
+      "version": "5.2.3 LTS",
+      "engine": "BLENDER_EEVEE",
+      "build_seconds": 0.6379057000012835,
+      "render_seconds": 53.34115390002262,
+      "mean_frame_seconds": 1.1112740395838046,
+      "entity_count": 2,
+      "warnings": [],
+      "imported_assets": [
+        {
+          "entity": "hero",
+          "asset": {
+            "id": "lantern",
+            "version": 1
+          },
+          "mesh_count": 8,
+          "object_count": 9,
+          "polygon_count": 1144,
+          "bounds": {
+            "min": [
+              1.25,
+              -1.75,
+              0.699999988079071
+            ],
+            "max": [
+              2.75,
+              -0.25,
+              3.5250000953674316
+            ]
+          },
+          "dimensions": [
+            1.5,
+            1.5,
+            2.825000047683716
+          ],
+          "material_count": 3,
+          "materials": [
+            "Amber core",
+            "Brass",
+            "Teal enamel"
+          ],
+          "texture_count": 0,
+          "textures": [],
+          "missing_textures": [],
+          "skeleton_count": 0,
+          "animation_count": 0,
+          "coordinate_system": "right-handed Z-up meters",
+          "import_seconds": 0.439033600006951
+        }
+      ]
+    },
+    "reverified_after_review": {
+      "width": 640,
+      "height": 360,
+      "frames": 48,
+      "fps": 24.0,
+      "duration": 2.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p"
+    }
+  },
+  {
+    "project_id": "lantern-courtyard",
+    "job_id": "bcd1627801df469c8d4ccd5eae82f2d3",
+    "status": "succeeded",
+    "engine_version": "0.2.0",
+    "engine_source_sha256": "b2a722b160bca0dac043e4f580d30018b89f497665096403275ab8459d18966c",
+    "project_sha256": "6febfb75397a9abaf37887f8aad8d4d271339f56296480dcb6373c463aec6db1",
+    "seed": 32,
+    "timings_seconds": {
+      "blender_process": 63.23285080000642,
+      "encoding": 0.18080600000394043,
+      "decode_verification": 0.04516330000478774,
+      "total": 63.93107350000355
+    },
+    "disk_bytes": 11171334,
+    "video": {
+      "width": 640,
+      "height": 360,
+      "frames": 48,
+      "fps": 24.0,
+      "duration": 2.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "698b5fe79f9aeb32cf29dd5191f413ba846f91692bd2ebc39c6e20ae82de5acd"
+    },
+    "tools": {
+      "blender": {
+        "path": "C:\\Program Files\\Blender Foundation\\Blender 5.2\\blender.exe",
+        "version": "Blender 5.2.3 LTS"
+      },
+      "ffmpeg": {
+        "path": "C:\\ffmpeg\\ffmpeg.exe",
+        "version": "ffmpeg version N-123395-gb66c314c4b-20260312 Copyright (c) 2000-2026 the FFmpeg developers"
+      },
+      "ffprobe": {
+        "path": "C:\\ffmpeg\\ffprobe.exe",
+        "version": "ffprobe version N-123395-gb66c314c4b-20260312 Copyright (c) 2007-2026 the FFmpeg developers"
+      }
+    },
+    "assets": [
+      {
+        "id": "lantern",
+        "version": 1,
+        "sha256": "ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f",
+        "provenance": {
+          "approval": "approved",
+          "attribution": "",
+          "category": "prop",
+          "creator": "ATLAS local procedural fixture generator",
+          "description": "Reusable eight-part static lantern with teal enamel, brass supports and amber core.",
+          "license_id": "LicenseRef-ATLAS-Generated",
+          "license_text": "Original primitive geometry and materials generated locally for this ATLAS project. Use and modification in local ATLAS test renders are authorized by the project brief. No third-party assets are included. This record does not grant third-party redistribution rights.",
+          "name": "Original ATLAS lantern",
+          "redistribution_allowed": false,
+          "render_allowed": true,
+          "restrictions": [],
+          "source_url": "urn:atlas:fixture:lantern:v1",
+          "tags": [
+            "lantern",
+            "original",
+            "static"
+          ]
+        },
+        "container": {
+          "format": "glb",
+          "gltf_version": "2.0",
+          "size_bytes": 85480,
+          "mesh_count": 8,
+          "material_count": 3,
+          "texture_count": 0,
+          "animation_count": 0,
+          "skin_count": 0,
+          "external_dependencies": []
+        },
+        "created_at": "2026-11-23T16:55:00.639407+00:00",
+        "inspection": {
+          "status": "ready",
+          "report": {
+            "mesh_count": 8,
+            "object_count": 9,
+            "polygon_count": 1144,
+            "bounds": {
+              "min": [
+                1.25,
+                -1.75,
+                0.699999988079071
+              ],
+              "max": [
+                2.75,
+                -0.25,
+                3.5250000953674316
+              ]
+            },
+            "dimensions": [
+              1.5,
+              1.5,
+              2.825000047683716
+            ],
+            "material_count": 3,
+            "materials": [
+              "Amber core",
+              "Brass",
+              "Teal enamel"
+            ],
+            "texture_count": 0,
+            "textures": [],
+            "missing_textures": [],
+            "skeleton_count": 0,
+            "animation_count": 0,
+            "coordinate_system": "right-handed Z-up meters",
+            "import_seconds": 0.4384379999974044,
+            "blender_version": "5.2.3 LTS",
+            "process_seconds": 2.987422299993341,
+            "source_sha256": "ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f",
+            "log": "inspections\\331f230560de42acae20186e9aa3fa0d\\blender.log"
+          },
+          "updated_at": "2026-11-23T16:55:04.097392+00:00"
+        },
+        "source_file": "assets/ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f.glb"
+      }
+    ],
+    "output_directory": "outputs/lantern-courtyard-bcd1627801df469c8d4ccd5eae82f2d3",
+    "blender": {
+      "version": "5.2.3 LTS",
+      "engine": "BLENDER_EEVEE",
+      "build_seconds": 1.5064095000125235,
+      "render_seconds": 57.783129100032966,
+      "mean_frame_seconds": 1.2038151895840201,
+      "entity_count": 17,
+      "warnings": [],
+      "imported_assets": [
+        {
+          "entity": "lantern_left",
+          "asset": {
+            "id": "lantern",
+            "version": 1
+          },
+          "mesh_count": 8,
+          "object_count": 9,
+          "polygon_count": 1144,
+          "bounds": {
+            "min": [
+              1.25,
+              -1.75,
+              0.699999988079071
+            ],
+            "max": [
+              2.75,
+              -0.25,
+              3.5250000953674316
+            ]
+          },
+          "dimensions": [
+            1.5,
+            1.5,
+            2.825000047683716
+          ],
+          "material_count": 3,
+          "materials": [
+            "Amber core",
+            "Brass",
+            "Teal enamel"
+          ],
+          "texture_count": 0,
+          "textures": [],
+          "missing_textures": [],
+          "skeleton_count": 0,
+          "animation_count": 0,
+          "coordinate_system": "right-handed Z-up meters",
+          "import_seconds": 0.9558530999929644
+        },
+        {
+          "entity": "lantern_right",
+          "asset": {
+            "id": "lantern",
+            "version": 1
+          },
+          "mesh_count": 8,
+          "object_count": 9,
+          "polygon_count": 1144,
+          "bounds": {
+            "min": [
+              1.25,
+              -1.75,
+              0.699999988079071
+            ],
+            "max": [
+              2.75,
+              -0.25,
+              3.5250000953674316
+            ]
+          },
+          "dimensions": [
+            1.5,
+            1.5,
+            2.825000047683716
+          ],
+          "material_count": 3,
+          "materials": [
+            "Amber core.001",
+            "Brass.001",
+            "Teal enamel.001"
+          ],
+          "texture_count": 0,
+          "textures": [],
+          "missing_textures": [],
+          "skeleton_count": 0,
+          "animation_count": 0,
+          "coordinate_system": "right-handed Z-up meters",
+          "import_seconds": 0.03892500000074506
+        }
+      ]
+    },
+    "reverified_after_review": {
+      "width": 640,
+      "height": 360,
+      "frames": 48,
+      "fps": 24.0,
+      "duration": 2.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p"
+    }
+  }
+]

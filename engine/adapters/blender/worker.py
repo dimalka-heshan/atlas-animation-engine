@@ -14,6 +14,9 @@ import bpy
 from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Vector
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from asset_import import import_asset
+
 
 def material(spec, name):
     mat = bpy.data.materials.new(name)
@@ -135,7 +138,24 @@ def build(project, directory):
     background = world.node_tree.nodes.get("Background")
     background.inputs["Color"].default_value = (*environment["background"], 1)
     background.inputs["Strength"].default_value = environment["strength"]
-    entities = {item["id"]: create_entity(item) for item in spec["entities"]}
+    asset_map = json.loads((directory / "asset-map.json").read_text(encoding="utf-8"))
+    entities, imported_assets = {}, []
+    for item in spec["entities"]:
+        if "asset" in item:
+            reference = item["asset"]
+            entry = asset_map[f"{reference['id']}@{reference['version']}"]
+            source = (directory / entry["source_file"]).resolve()
+            if not source.is_relative_to(directory.resolve()):
+                raise ValueError("Asset snapshot escapes job directory")
+            obj, report = import_asset(source, item["id"], item["normalize"], item["pivot"])
+            if report["missing_textures"]:
+                raise ValueError(f"Missing asset textures: {report['missing_textures']}")
+            apply_transform(obj, item)
+            animate(obj, item)
+            imported_assets.append({"entity": item["id"], "asset": reference, **report})
+        else:
+            obj = create_entity(item)
+        entities[item["id"]] = obj
     if environment["ground"]:
         bpy.ops.mesh.primitive_plane_add(size=environment["ground_size"])
         ground = bpy.context.object
@@ -177,7 +197,7 @@ def build(project, directory):
     scene.frame_set(1)
     scene.render.filepath = str(directory / "frames" / "000001.png")
     bpy.ops.wm.save_as_mainfile(filepath=str(directory / "scene.blend"))
-    return scene, entities
+    return scene, entities, imported_assets
 
 
 def main():
@@ -185,7 +205,7 @@ def main():
     project_path, directory = Path(args[0]), Path(args[1])
     project = json.loads(project_path.read_text(encoding="utf-8"))
     started = time.perf_counter()
-    scene, entities = build(project, directory)
+    scene, entities, imported_assets = build(project, directory)
     build_time = time.perf_counter() - started
     frame_seconds, warnings = [], []
     for frame in range(1, project["render"]["frames"] + 1):
@@ -206,7 +226,7 @@ def main():
     report = {"version": bpy.app.version_string, "engine": scene.render.engine,
               "build_seconds": build_time, "render_seconds": sum(frame_seconds),
               "mean_frame_seconds": statistics.mean(frame_seconds), "frame_seconds": frame_seconds,
-              "entity_count": len(entities), "warnings": warnings}
+              "entity_count": len(entities), "warnings": warnings, "imported_assets": imported_assets}
     (directory / "blender-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 

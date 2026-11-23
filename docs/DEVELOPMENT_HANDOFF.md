@@ -1,46 +1,48 @@
-# Development handoff
+# Development handoff — ATLAS 0.2
 
-## Resume here
+Repository: C:/Dimalka/yt/blender; local branch atlas-foundation. Continue the existing engine. Read STATUS and ASSETS before the next narrow change.
 
-Repository: `C:\Dimalka\yt\blender`; local branch `atlas-foundation`. Version 0.1.0. Read STATUS first, then the narrow module needed for the next change. Do not rebuild the working foundation or implement every roadmap module at once.
+## Working capability
 
-## What works
+Primitive production remains intact. Schema 1.1 projects additionally reference approved, inspected GLBs by immutable ID/version. The registry preserves independent provenance and shared content hashes. Blender imports hierarchy/materials, computes exact vertex bounds, applies pivot/normalization, and animates the entity root. Production retains checked source copies and attribution notices. The same original lantern appears in two distinct configurations.
 
-Validated JSON -> deterministic primitives/scatter -> isolated Blender scene and keyframes -> PNG frames -> verified silent MP4. All three example JSON files generate distinct scenes with the same engine. Both CPU Cycles and installed Eevee have real integration coverage. The installed wheel works outside the checkout.
+## Relevant files
 
-Relevant files:
+- engine/assets/models.py: rights policy and required inspection evidence.
+- engine/assets/glb.py: bounded static/self-contained triangle profile, scene/image references.
+- engine/assets/registry.py: SQLite schema 1, versions, deduplication, search and resolution.
+- engine/assets/inspection.py and resolution.py: inspection lifecycle, source snapshots and provenance.
+- engine/adapters/blender/asset_import.py: shared bpy importer, exact bounds, lazy texture decode and normalization.
+- engine/adapters/blender/inspect_asset.py and worker.py: inspection/production entrypoints.
+- engine/core/models.py: portable AssetReference/AssetEntity and 1.0/1.1 compatibility.
+- apps/cli/assets.py and main.py: asset commands and project library selection.
+- tools/create_asset_fixture.py: original reusable GLB generator, not a per-video script.
+- assets/fixtures/ and examples/04_lantern_studio.json, 05_lantern_courtyard.json: runnable examples.
+- tests/unit/test_assets.py, test_asset_projects.py, test_asset_cli.py and tests/integration/test_asset_import.py: new coverage.
 
-- `engine/core/models.py`: schema v1.0, constraints and cross-reference/timeline checks.
-- `engine/worlds/placement.py`: deterministic scatter expansion.
-- `engine/adapters/blender/worker.py`: bpy-only scene/animation/render execution.
-- `engine/rendering/pipeline.py`: job lifecycle, manifests, subprocess orchestration and success ordering.
-- `engine/rendering/runtime.py`: discovery, capability/environment report and process diagnostics.
-- `engine/rendering/video.py`: fixed encoding arguments and verification contract.
-- `engine/storage/jobs.py`: SQLite jobs, contained output paths, read-only listing and atomic JSON.
-- `apps/cli/main.py`: user commands and machine-readable errors/logging.
-- `tests/unit/`, `tests/integration/`: validation/failure/real rendering coverage.
-- `examples/`: three standalone projects; `docs/evidence/`: tracked render summaries and preview images.
+## Run
 
-## Run and verify
+Use .venv/Scripts/python.exe -m pip install -e '.[dev]' to refresh the editable package. CLI commands:
 
-```powershell
-.\.venv\Scripts\atlas.exe doctor
-.\.venv\Scripts\atlas.exe render examples\01_orbit_studio.json
-.\.venv\Scripts\python.exe -m pytest -q
-$env:ATLAS_INTEGRATION = '1'
-.\.venv\Scripts\python.exe -m pytest -q
-```
+    atlas assets register assets/fixtures/lantern.glb --id lantern --provenance assets/fixtures/lantern.provenance.json
+    atlas assets inspect lantern --version 1
+    atlas render examples/04_lantern_studio.json
+    atlas render examples/05_lantern_courtyard.json
 
-Full suite on 2026-11-23: 53 passed, one skipped (Windows file-symlink privilege). Integration tests perform actual rendering, video verification and Blender scene inspection. Failure-injection tests first reproduced review defects, then passed after fixes. Full output is retained locally under `outputs/full-suite-final.log`. Exact dependency versions are in `requirements-tested.txt`.
+Use .venv/Scripts/atlas.exe without activation. Asset commands accept --library; validate/render accept --asset-library. Identical latest registration is idempotent; changed bytes/provenance creates a new version. References never silently advance. Reinspect to refresh readiness evidence after importer-profile changes.
 
-Three retained example videos are listed in STATUS; all have 72 decoded frames, 24 fps, 3-second duration, H.264/yuv420p. Measured end-to-end times: 54.28 s studio, 56.60 s grove, 52.45 s portrait. See PERFORMANCE for conditions and unmeasured quantities.
+Run .venv/Scripts/python.exe -m pytest -q. Set ATLAS_INTEGRATION=1 to include real Blender/FFmpeg tests. Final result: **117 passed, 1 skipped in 87.84 seconds** (108 unit and nine integration passes). Logs are retained locally in outputs/asset-full-suite-final.log. The skip is the Windows file-symlink privilege test.
 
-## Known issues and boundaries
+## Evidence and review
 
-This is the first production slice, not the complete vision. Deferred systems and security/runtime limits are enumerated in STATUS. Of particular importance: no automatic crash resume; no imported assets; no shot sequencing or audio; no full mesh collision or camera-obstruction validation. Keep Blender API changes isolated to the worker. Do not add host dependencies inside Blender or execute code from project specifications.
+Two new videos are 640x360, 48 frames, 24 fps, two seconds, verified H.264/yuv420p. Their manifests contain the same pinned source hash. A fresh installed-wheel library was registered, inspected and rendered from outside the checkout. PERFORMANCE and docs/evidence/2026-11-23-assets.json record actual measurements.
 
-## Next development task and acceptance
+Review defects were reproduced and fixed: lazy packed-image state, unbound texture references, unused/alternate scene nodes affecting imports, rotated AABB errors, inspection/hash mismatch, incomplete provenance URLs, invisible nonsurface meshes and SQLite integer overflow. Current preflight rejects unsupported scene topology and nonsurface modes explicitly.
 
-Build the Phase 2 asset-registry/GLB-import slice described in STATUS. Begin with schema and database migration tests for source hash, creator, source URL, exact license, attribution and restrictions. Reject unknown/incompatible usage; no automatic third-party downloads. Add only one supported import format initially, test it in actual Blender, and demonstrate one explicitly approved asset reused in two scene JSON files. Preserve config-driven primitive rendering as a regression path.
+## Next task
 
-Future modules should be added only when they contain working features. Update this file, STATUS and measured evidence at the next milestone. Keep source unchanged during reproducibility runs; hashes describe the files present when a job starts.
+Implement deterministic directory discovery, reviewed batch registration and thumbnails. First test stable order, duplicate bytes versus provenance, unsupported formats, per-file failures and path containment. Reuse all GLB/rights/readiness checks; do not automatically approve missing provenance. Produce thumbnails through the trusted Blender adapter and verify the actual images. Benchmark a small local fixture collection. Keep all primitive and asset render regressions green.
+
+## Outstanding work
+
+Full Phase 2 asset-pack acceptance, more formats, external texture repair, rig/clip support, thumbnails, import caching and global rights revocation remain incomplete. Older pinned approvals stay independent of later versions. Characters/actions, audio, multi-shot production, queues/resume, dashboard and Unity are not implemented. Source files should remain unchanged during provenance runs. Example videos predating review fixes are explicitly distinguished from final-code integration and installed-wheel runs.

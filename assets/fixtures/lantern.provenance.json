@@ -1,0 +1,18 @@
+{
+  "name": "Original ATLAS lantern",
+  "creator": "ATLAS local procedural fixture generator",
+  "source_url": "urn:atlas:fixture:lantern:v1",
+  "license_id": "LicenseRef-ATLAS-Generated",
+  "license_text": "Original primitive geometry and materials generated locally for this ATLAS project. Use and modification in local ATLAS test renders are authorized by the project brief. No third-party assets are included. This record does not grant third-party redistribution rights.",
+  "approval": "approved",
+  "render_allowed": true,
+  "redistribution_allowed": false,
+  "attribution": "",
+  "category": "prop",
+  "tags": [
+    "lantern",
+    "original",
+    "static"
+  ],
+  "description": "Reusable eight-part static lantern with teal enamel, brass supports and amber core."
+}

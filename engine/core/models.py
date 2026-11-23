@@ -31,17 +31,31 @@ class Keyframe(Model):
     scale: Scale | None = None
 
 
-class Entity(Model):
+class AnimatedEntity(Model):
     id: Identifier
-    primitive: Literal["cube", "uv_sphere", "ico_sphere", "cylinder", "cone", "torus", "plane"] = "cube"
     location: Vec3 = (0, 0, 1)
     rotation: Vec3 = (0, 0, 0)
     scale: Scale = (1, 1, 1)
+    interpolation: Literal["LINEAR", "BEZIER", "CONSTANT"] = "LINEAR"
+    keyframes: list[Keyframe] = Field(default_factory=list, max_length=10000)
+
+
+class Entity(AnimatedEntity):
+    primitive: Literal["cube", "uv_sphere", "ico_sphere", "cylinder", "cone", "torus", "plane"] = "cube"
     material: Material = Field(default_factory=Material)
     bevel: Annotated[Number, Field(ge=0, le=0.5)] = 0.05
     smooth: bool = True
-    interpolation: Literal["LINEAR", "BEZIER", "CONSTANT"] = "LINEAR"
-    keyframes: list[Keyframe] = Field(default_factory=list, max_length=10000)
+
+
+class AssetReference(Model):
+    id: Identifier
+    version: Annotated[StrictInt, Field(ge=1, le=9223372036854775807)]
+
+
+class AssetEntity(AnimatedEntity):
+    asset: AssetReference
+    normalize: Literal["none", "unit"] = "none"
+    pivot: Literal["origin", "center", "base"] = "origin"
 
 
 class Camera(Model):
@@ -81,7 +95,7 @@ class Environment(Model):
 
 class Scatter(Model):
     id: Identifier
-    prototype: Entity
+    prototype: Entity | AssetEntity
     count: Annotated[StrictInt, Field(ge=0, le=5000)]
     bounds: tuple[Number, Number, Number, Number] = (-5, 5, -5, 5)
     scale_range: tuple[Positive, Positive] = (0.5, 1.5)
@@ -98,7 +112,7 @@ class Scatter(Model):
 
 
 class Scene(Model):
-    entities: list[Entity] = Field(default_factory=list, max_length=10000)
+    entities: list[Entity | AssetEntity] = Field(default_factory=list, max_length=10000)
     scatter: list[Scatter] = Field(default_factory=list, max_length=100)
     environment: Environment = Field(default_factory=Environment)
     camera: Camera = Field(default_factory=Camera)
@@ -123,7 +137,7 @@ class RenderSettings(Model):
 
 
 class Project(Model):
-    schema_version: Literal["1.0"] = "1.0"
+    schema_version: Literal["1.0", "1.1"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
@@ -131,6 +145,9 @@ class Project(Model):
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
+        prototypes = [*self.scene.entities, *(group.prototype for group in self.scene.scatter)]
+        if self.schema_version == "1.0" and any(isinstance(entity, AssetEntity) for entity in prototypes):
+            raise ValueError("Asset references require schema_version 1.1")
         ids = [entity.id for entity in self.scene.entities]
         generated = [f"{group.id}_{i}" for group in self.scene.scatter for i in range(group.count)]
         all_ids = ids + generated + [light.id for light in self.scene.lights]

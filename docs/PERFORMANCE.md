@@ -25,3 +25,18 @@ The examples were rendered before review hardening and reverified using the fina
 Representative frame 36 was visually inspected for all three videos and saved under `docs/evidence/`. Objects are visible and videos are distinct. The previews show sampling noise and simple primitive scenery; they are acceptance artifacts, not a claim of finished cinematic art. No center-visibility warnings were recorded. This check cannot detect occlusion or certify full-subject framing.
 
 Peak process/GPU memory, asset import time, separate animation preparation time, cache effectiveness, production-scale failure frequency, multi-machine behavior and final-quality performance are not yet measured. Caching and asset import do not exist yet. Tiny CPU Cycles and Eevee renders are covered by integration tests. Future benchmarking should add process memory sampling and controlled repeated profile/complexity comparisons before optimization.
+
+## Version 0.2 asset slice
+
+The paragraph above describes the 0.1 baseline. Asset import is now implemented and timed. Other unmeasured quantities remain unmeasured. Same machine/runtime; engine version 0.2.0, no new runtime packages. Original lantern: 8 mesh parts, 1144 polygons, 3 materials, dimensions 1.5 x 1.5 x 2.825 meters after Blender coordinate conversion, no image textures.
+
+Initial isolated inspection measured 0.438 s inside Blender and 2.987 s for the whole Blender process. This is one observation, not a throughput guarantee. The final report is refreshed after review hardening. Asset bytes are identical in both videos (hash recorded in [asset evidence](evidence/2026-11-23-assets.json)).
+
+| Project | Instances | Resolution | Frames/fps | Scene build | Frame rendering | Encoding | Total | Job disk* |
+|---|---:|---|---|---:|---:|---:|---:|---:|---:|
+| lantern-studio | 1 | 640x360 | 48/24 | 0.638 s | 53.34 s | 0.309 s | 57.61 s | 10.92 MiB |
+| lantern-courtyard | 2 | 640x360 | 48/24 | 1.506 s | 57.78 s | 0.181 s | 63.93 s | 10.65 MiB |
+
+Both are two-second Eevee previews requesting 32 samples. *Disk includes local GLB copies, PNG frames, .blend, logs and video before terminal manifest replacement. Unit/integration work ran concurrently during parts of these runs. They are acceptance measurements, not controlled comparisons against the lower-resolution 0.1 videos.
+
+Frame 24 was visually inspected and retained for each project. Imported materials, geometry and multiple instances are visible; sampling noise is present. Both had zero origin-visibility warnings. The example videos precede the review fixes; final-code tests and an installed-wheel production run exercise the hardened importer, exact vertex bounds, texture loading and inspection proof. No shared-mesh cache, third-party pack benchmark or peak-memory measurement has been added.

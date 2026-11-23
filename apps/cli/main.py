@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from apps.cli.assets import add_asset_commands, run_asset_command
+from engine.assets.resolution import resolve_project_assets
 from engine import __version__
 from engine.core.models import Project
 from engine.rendering.pipeline import render_project
@@ -19,7 +21,7 @@ from engine.worlds.placement import expand_project
 class JsonFormatter(logging.Formatter):
     def format(self, record):
         data = {"level": record.levelname, "event": record.getMessage()}
-        for key in ("job_id", "directory", "error"):
+        for key in ("job_id", "directory", "error", "asset_id", "version"):
             if hasattr(record, key):
                 data[key] = getattr(record, key)
         return json.dumps(data)
@@ -37,13 +39,16 @@ def parser() -> argparse.ArgumentParser:
     sub = root.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor", help="inspect runtime and installed executables")
     sub.add_parser("schema", help="print the project JSON Schema")
+    add_asset_commands(sub)
     validate = sub.add_parser("validate", help="validate a project and expand procedural placement")
     validate.add_argument("project", type=Path)
+    validate.add_argument("--asset-library", type=Path, default=Path("assets/library"))
     render = sub.add_parser("render", help="render and verify a new production job")
     render.add_argument("project", type=Path)
     render.add_argument("--output", type=Path, default=Path("outputs"))
     render.add_argument("--blender", type=Path)
     render.add_argument("--engine", choices=["cycles", "eevee"])
+    render.add_argument("--asset-library", type=Path, default=Path("assets/library"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
     verify.add_argument("--project", type=Path, required=True)
@@ -68,18 +73,22 @@ def main(argv: list[str] | None = None) -> int:
             result = Project.model_json_schema()
         elif args.command == "jobs":
             result = list_jobs(args.output.resolve())
+        elif args.command == "assets":
+            result = run_asset_command(args)
         else:
             project = load_project(args.project)
             if args.command == "validate":
                 expanded = expand_project(project)
+                assets = resolve_project_assets(expanded, args.asset_library)
                 result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
-                          "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps}
+                          "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
+                          "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets]}
             elif args.command == "verify":
                 result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"))
             else:
                 if args.engine:
                     project.render.engine = args.engine
-                path = render_project(project, args.output, blender=args.blender)
+                path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library)
                 result = {"status": "succeeded", "video": str(path), "manifest": str(path.parent / "manifest.json")}
         print(json.dumps(result, indent=2))
         return 0

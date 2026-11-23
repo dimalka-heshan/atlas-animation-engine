@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven 3D animation engine. Version 0.1 implements the first working production slice: JSON -> procedural scene -> Blender PNG frames -> FFmpeg H.264 MP4 -> independent verification.
+A local, configuration-driven 3D animation engine. Version 0.2 extends the working JSON -> Blender -> verified MP4 pipeline with a versioned, license-aware local GLB asset registry and reusable imported static models.
 
 Change JSON to produce a different video. No paid AI, downloaded assets, browser service or coding assistant is required during production. This is an early foundation, not the complete platform described in the roadmap.
 
@@ -53,6 +53,19 @@ Each successful command prints absolute video and manifest paths. Every run uses
 
 `outputs/jobs.sqlite3` retains status across invocations. Errors return exit code 2; Ctrl+C returns 130. Ordinary failures retain diagnostics and a failed manifest. Power loss or force-killing the host can leave `running` records; automatic resumption is deferred. Rerun the configuration into a new job to recover manually.
 
+## Reuse an imported model
+
+An original generated GLB lantern and two schema 1.1 projects are included. Register it once, inspect it with Blender, then reuse it in different scenes:
+
+```powershell
+.\.venv\Scripts\atlas.exe assets register assets\fixtures\lantern.glb --id lantern --provenance assets\fixtures\lantern.provenance.json
+.\.venv\Scripts\atlas.exe assets inspect lantern --version 1
+.\.venv\Scripts\atlas.exe render examples\04_lantern_studio.json
+.\.venv\Scripts\atlas.exe render examples\05_lantern_courtyard.json
+```
+
+See [ASSETS](docs/ASSETS.md) for provenance policy, version pinning, search, normalization, supported GLBs and custom-library commands. Older primitive-only projects remain schema 1.0.
+
 Verify a video using its saved effective project (especially after `--engine` overrides):
 
 ```powershell
@@ -67,7 +80,7 @@ Copy an example JSON and change its `id`, geometry, materials, transforms, keys,
 
 Default rendering is CPU Cycles at 320x180, 48 frames, 24 fps, 16 samples, 8 threads. Examples use Eevee at 480x270 or 270x480 for three seconds. For final output, increase resolution and samples in JSON after checking a preview. Both dimensions must be even. Higher settings can substantially increase render time and disk usage.
 
-Seeded scatter provides minimum XY center spacing within each group; it does not test mesh collisions or avoid other groups. Primitive assets are reusable without third-party files. No character rigging, semantic actions, imported asset libraries, multi-shot editing or audio is claimed in this release.
+Seeded scatter provides minimum XY center spacing within each group; it does not test mesh collisions or avoid other groups. Primitive assets need no external files; imported static GLBs require an approved, inspected registry version. Character rigging, semantic actions, multi-shot editing and audio remain deferred.
 
 ## Development
 
