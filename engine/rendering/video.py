@@ -7,11 +7,11 @@ from engine.core.models import RenderSettings
 from engine.rendering.runtime import capture, run_logged
 
 
-def validate_probe(data: dict, settings: RenderSettings) -> dict:
+def validate_probe(data: dict, settings: RenderSettings, *, expect_audio: bool = False) -> dict:
     streams = [s for s in data.get("streams", []) if s.get("codec_type") == "video"]
     if len(streams) != 1:
         raise ValueError("Expected exactly one video stream")
-    if len(data.get("streams", [])) != 1:
+    if not expect_audio and len(data.get("streams", [])) != 1:
         raise ValueError("This release expects silent video without additional streams")
     container = data.get("format", {})
     if "mp4" not in container.get("format_name", "").split(","):
@@ -39,15 +39,32 @@ def validate_probe(data: dict, settings: RenderSettings) -> dict:
         raise ValueError(f"Video frame rate mismatch: {result['fps']}")
     if not abs(result["duration"] - settings.frames / settings.fps) <= 0.5 / settings.fps:
         raise ValueError(f"Video duration mismatch: {result['duration']}")
+    if expect_audio:
+        audio = [s for s in data.get("streams", []) if s.get("codec_type") == "audio"]
+        if len(audio) != 1 or len(data["streams"]) != 2:
+            raise ValueError("Expected exactly one video and one audio stream")
+        try:
+            a = audio[0]
+            sound = {"codec": a["codec_name"], "sample_rate": int(a["sample_rate"]), "channels": int(a["channels"]),
+                     "duration": float(a["duration"]), "start_time": float(a["start_time"])}
+        except (KeyError, ValueError, TypeError) as exc:
+            raise ValueError("Incomplete audio stream metadata") from exc
+        if sound["codec"] != "aac" or sound["sample_rate"] != 48000 or sound["channels"] != 2:
+            raise ValueError("Expected AAC, 48000 Hz stereo audio")
+        if not abs(sound["duration"] - settings.frames / settings.fps) <= max(.05, .5 / settings.fps):
+            raise ValueError("Audio duration does not match video")
+        if not abs(sound["start_time"]) <= .025:
+            raise ValueError("Audio stream starts out of sync")
+        result["audio"] = sound
     return result
 
 
-def verify_video(path: Path, settings: RenderSettings, ffprobe: Path) -> dict:
+def verify_video(path: Path, settings: RenderSettings, ffprobe: Path, *, expect_audio: bool = False) -> dict:
     if not path.is_file() or path.stat().st_size == 0:
         raise ValueError(f"Video is missing or empty: {path}")
     data = json.loads(capture([str(ffprobe), "-v", "error", "-count_frames", "-show_streams",
                                "-show_format", "-of", "json", str(path)], timeout=settings.timeout_seconds))
-    return validate_probe(data, settings)
+    return validate_probe(data, settings, expect_audio=expect_audio)
 
 
 def encode_video(directory: Path, settings: RenderSettings, ffmpeg: Path) -> float:

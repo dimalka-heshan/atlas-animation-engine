@@ -10,6 +10,7 @@ from pathlib import Path
 
 from engine import __version__
 from engine.assets.resolution import resolve_project_assets, snapshot_assets
+from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
 from engine.rendering.runtime import capture, find_tool, run_logged
 from engine.rendering.video import encode_video, verify_video
@@ -29,7 +30,7 @@ def source_digest() -> str:
 
 def render_project(project: Project, output_root: Path, *, blender: Path | None = None,
                    ffmpeg: Path | None = None, ffprobe: Path | None = None,
-                   asset_library: Path | None = None) -> Path:
+                   asset_library: Path | None = None, audio_library: Path | None = None) -> Path:
     """Render into a new job directory inside an explicitly approved output root.
 
     Returns the verified MP4 path; errors retain the project, logs and failed status.
@@ -59,11 +60,16 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
         expanded = expand_project(project)
         entries = resolve_project_assets(expanded, asset_library or Path("assets/library"))
         manifest["assets"] = snapshot_assets(entries, directory)
+        audio_entries = resolve_audio(expanded, audio_library or Path("assets/audio"))
+        manifest["audio"] = snapshot_audio(audio_entries, directory)
         atomic_json(directory / "resolved.json", expanded.model_dump(mode="json"))
         executables = {"blender": find_tool("blender", blender), "ffmpeg": find_tool("ffmpeg", ffmpeg),
                        "ffprobe": find_tool("ffprobe", ffprobe)}
         manifest["tools"] = {name: {"path": str(path), "version": capture([str(path),
             "--version" if name == "blender" else "-version"]).splitlines()[0]} for name, path in executables.items()}
+        if audio_entries:
+            manifest["audio_mix"] = mix_audio(manifest["audio"], directory, project.render.frames / project.render.fps,
+                executables["ffmpeg"], project.render.timeout_seconds)
         atomic_json(directory / "manifest.json", manifest)
         worker = Path(__file__).resolve().parents[1] / "adapters" / "blender" / "worker.py"
         (directory / "frames").mkdir()
@@ -79,7 +85,11 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
                 raise RuntimeError(f"Missing or empty rendered frame: {image}")
         manifest["blender"] = json.loads((directory / "blender-report.json").read_text(encoding="utf-8"))
         manifest["timings_seconds"]["encoding"] = encode_video(directory, project.render, executables["ffmpeg"])
-        manifest["video"] = verify_video(directory / "video.partial.mp4", project.render, executables["ffprobe"])
+        if audio_entries:
+            manifest["timings_seconds"]["audio_mux"] = mux_audio(directory, project.render.frames / project.render.fps,
+                executables["ffmpeg"], project.render.timeout_seconds)
+        manifest["video"] = verify_video(directory / "video.partial.mp4", project.render, executables["ffprobe"],
+            expect_audio=bool(audio_entries))
         # Decode every frame: metadata alone cannot prove that a stream is intact.
         manifest["timings_seconds"]["decode_verification"] = run_logged([
             str(executables["ffmpeg"]), "-nostdin", "-v", "error", "-xerror", "-i",

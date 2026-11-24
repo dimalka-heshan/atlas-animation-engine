@@ -1,8 +1,8 @@
 # ATLAS
 
-A local, configuration-driven 3D animation engine. Version 0.3 adds reviewed directory batches and verified Blender thumbnails to the JSON -> Blender -> MP4 pipeline and versioned local GLB asset registry.
+A local, configuration-driven Blender animation engine. Version 0.4 adds isolated local Chatterbox-Turbo speech, approved audio timelines, narration mixing and editable audio-driven facial animation to the existing video and GLB asset pipeline.
 
-Change JSON to produce a different video. No paid AI, downloaded assets, browser service or coding assistant is required during production. This is an early foundation, not the complete platform described in the roadmap.
+Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 
 ## Install (PowerShell)
 
@@ -91,7 +91,27 @@ Copy an example JSON and change its `id`, geometry, materials, transforms, keys,
 
 Default rendering is CPU Cycles at 320x180, 48 frames, 24 fps, 16 samples, 8 threads. Examples use Eevee at 480x270 or 270x480 for three seconds. For final output, increase resolution and samples in JSON after checking a preview. Both dimensions must be even. Higher settings can substantially increase render time and disk usage.
 
-Seeded scatter provides minimum XY center spacing within each group; it does not test mesh collisions or avoid other groups. Primitive assets need no external files; imported static GLBs require an approved, inspected registry version. Character rigging, semantic actions, multi-shot editing and audio remain deferred.
+Seeded scatter provides minimum XY center spacing within each group; it does not test mesh collisions or avoid other groups. Primitive assets need no external files; imported static GLBs require an approved, inspected registry version. General character rigs, semantic actions and multi-shot editing remain deferred.
+
+## Local speech, narration and talking characters
+
+Blender remains the sole 3D backend. The optional voice runtime is isolated from the main environment and Blender. The tested CPU runtime/model revisions, install instructions and consent workflow are in [VOICE](docs/VOICE.md).
+
+```powershell
+.\.venv\Scripts\python.exe tools\install_voice_runtime.py --python C:\Python314\python.exe
+.\.venv\Scripts\atlas.exe voice doctor --download-model
+.\.venv\Scripts\atlas.exe voice create narrator
+$speech = .\.venv\Scripts\atlas.exe voice generate narrator --text 'Hello. Welcome to ATLAS.' | ConvertFrom-Json
+.\.venv\Scripts\atlas.exe voice list
+```
+
+`voice preview` creates a short WAV, `voice history` lists retained output manifests, and `--force` preserves a newly regenerated take. Reference-conditioned profiles require explicit owner/usage/consent evidence. There is no paid-service fallback. CPU performance is measured in PERFORMANCE; doctor readiness alone is not inference proof.
+
+Register generated speech or an approved recording with `audio import WAV --id ID --provenance JSON`. Schema 1.2 projects reference immutable audio versions and measured offsets. Use `--audio-library PATH` with validate/render; legacy schema 1.0/1.1 stays silent. [AUDIO](docs/AUDIO.md) documents metadata and timing.
+
+`lipsync align WAV --transcript TEXT --output timeline.json --executable RHUBARB` creates real audio-bound mouth cues. Embed that timeline in a schema 1.2 facial performance assigned to its dialogue event and actor. The original `atlas-face-1` character has editable shape keys; static GLBs do not become facial rigs. See [LIPSYNC](docs/LIPSYNC.md) for installation, mappings, silence and subframe timing.
+
+Examples 07/08 reuse the verified local Turbo demonstration clip `atlas-line@1`: a talking robot bust and the existing orbit scene with narration. Their source audio, exact timeline and local library are retained in this workspace under `outputs/v04-*`; the WAV/model weights are not bundled in Git. Regenerating speech changes its hash/duration: realign it and update the example's timeline and render duration before reuse. Both examples run through the ordinary `atlas render` command.
 
 ## Development
 

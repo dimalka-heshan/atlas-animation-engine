@@ -1,4 +1,4 @@
-# Status — ATLAS 0.3.0 — 2026-11-24
+# Status â€” ATLAS 0.3.0 â€” 2026-11-24
 
 ATLAS now supports reviewed directory batches and verified asset thumbnails alongside configuration-driven Blender/MP4 production. Phase 2 remains partial: no third-party pack acceptance, additional input formats or rig support is claimed.
 
@@ -34,7 +34,7 @@ Only the documented static embedded triangle GLB profile is supported. No extern
 
 Batch inventory requires portable filenames and stable source trees. Child links/special files are rejected, but path checks are not an adversarial OS sandbox. Full-report rewrites favor small collections; 10,000 entries is a cap, not proven throughput. Hard termination may leave running records/staging files; no automatic resume. Registry, blobs and reports have separate durability boundaries. Existing inspection diagnostics and production snapshots retain source copies. Thumbnail checks detect corruption/uniformity, not artistic quality or visibility.
 
-Characters/actions, physics, audio, multiple shots, queues/resume, dashboard and Unity remain deferred. Scatter checks centers only; camera warnings do not detect occlusion. Preview noise remains visible. Other platforms/Blender versions, peak memory and final-quality performance remain unverified.
+Characters/actions, physics, audio, multiple shots, queues/resume, dashboard remain deferred. Scatter checks centers only; camera warnings do not detect occlusion. Preview noise remains visible. Other platforms/Blender versions, peak memory and final-quality performance remain unverified.
 
 ## Exact next task
 

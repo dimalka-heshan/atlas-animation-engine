@@ -16,6 +16,7 @@ from mathutils import Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from asset_import import import_asset
+from facial import build_talking_head, apply_performance
 
 
 def material(spec, name):
@@ -153,9 +154,18 @@ def build(project, directory):
             apply_transform(obj, item)
             animate(obj, item)
             imported_assets.append({"entity": item["id"], "asset": reference, **report})
+        elif "character" in item:
+            obj = build_talking_head(item)
+            apply_transform(obj, item)
+            animate(obj, item)
         else:
             obj = create_entity(item)
         entities[item["id"]] = obj
+    audio_events = {event["id"]: event for event in project.get("audio", [])}
+    for performance in project.get("performances", []):
+        event = audio_events[performance["audio_event_id"]]
+        apply_performance(entities[performance["actor_id"]],
+                          performance | {"start_seconds": event["start_seconds"]}, settings["fps"])
     if environment["ground"]:
         bpy.ops.mesh.primitive_plane_add(size=environment["ground_size"])
         ground = bpy.context.object
@@ -194,6 +204,12 @@ def build(project, directory):
     data.dof.focus_object = target
     data.dof.aperture_fstop = spec_camera["fstop"]
     animate(camera, spec_camera)
+    if project.get("audio"):
+        mix_path = directory / "audio-mix.wav"
+        strip = scene.sequence_editor_create().strips.new_sound("ATLAS verified audio", str(mix_path), 1, 1)
+        strip.sound.filepath = "//audio-mix.wav"
+        # Keep 3D still rendering independent of the editor; retain audio for scene playback.
+        scene.render.use_sequencer = False
     scene.frame_set(1)
     scene.render.filepath = str(directory / "frames" / "000001.png")
     bpy.ops.wm.save_as_mainfile(filepath=str(directory / "scene.blend"))

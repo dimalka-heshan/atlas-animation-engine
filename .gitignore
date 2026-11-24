@@ -9,3 +9,5 @@ outputs/
 .superpowers/
 *.log
 assets/library/
+assets/audio/
+assets/voices/

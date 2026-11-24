@@ -1,4 +1,4 @@
-# Development handoff — ATLAS 0.3
+# Development handoff â€” ATLAS 0.3
 
 Repository: C:/Dimalka/yt/blender; dedicated local branch atlas-foundation. Continue this engine. Read STATUS and ASSETS first. The user's master prompt authorizes routine implementation choices and requires progressive working releases, evidence and honest limitations.
 
@@ -42,4 +42,4 @@ Build reusable environment templates and prove reuse with multiple explicitly li
 
 ## Outstanding work
 
-Full Phase 2 pack acceptance, additional formats/texture repair, rigs/clips, caching, library indexing and global rights revocation remain incomplete. Batch requires portable filenames; full-report rewrites are not optimized for 10,000 selected entries. Stable source directories are required, not a hostile filesystem. Hard kills can bypass cleanup; existing inspection/production snapshots retain diagnostic sources. Characters/actions, audio, multi-shot production, queues/resume, dashboard and Unity are future work.
+Full Phase 2 pack acceptance, additional formats/texture repair, rigs/clips, caching, library indexing and global rights revocation remain incomplete. Batch requires portable filenames; full-report rewrites are not optimized for 10,000 selected entries. Stable source directories are required, not a hostile filesystem. Hard kills can bypass cleanup; existing inspection/production snapshots retain diagnostic sources. Characters/actions, audio, multi-shot production, queues/resume, dashboard are future work.

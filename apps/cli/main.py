@@ -8,6 +8,10 @@ import sys
 from pathlib import Path
 
 from apps.cli.assets import add_asset_commands, run_asset_command
+from apps.cli.audio import add_audio_commands, run_audio_command
+from apps.cli.voice import add_voice_commands, run_voice_command
+from apps.cli.lipsync import add_lipsync_commands, run_lipsync_command
+from engine.audio.production import resolve_audio
 from engine.assets.resolution import resolve_project_assets
 from engine import __version__
 from engine.core.models import Project
@@ -40,15 +44,20 @@ def parser() -> argparse.ArgumentParser:
     sub.add_parser("doctor", help="inspect runtime and installed executables")
     sub.add_parser("schema", help="print the project JSON Schema")
     add_asset_commands(sub)
+    add_audio_commands(sub)
+    add_voice_commands(sub)
+    add_lipsync_commands(sub)
     validate = sub.add_parser("validate", help="validate a project and expand procedural placement")
     validate.add_argument("project", type=Path)
     validate.add_argument("--asset-library", type=Path, default=Path("assets/library"))
+    validate.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
     render = sub.add_parser("render", help="render and verify a new production job")
     render.add_argument("project", type=Path)
     render.add_argument("--output", type=Path, default=Path("outputs"))
     render.add_argument("--blender", type=Path)
     render.add_argument("--engine", choices=["cycles", "eevee"])
     render.add_argument("--asset-library", type=Path, default=Path("assets/library"))
+    render.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
     verify.add_argument("--project", type=Path, required=True)
@@ -75,23 +84,34 @@ def main(argv: list[str] | None = None) -> int:
             result = list_jobs(args.output.resolve())
         elif args.command == "assets":
             result = run_asset_command(args)
+        elif args.command == "audio":
+            result = run_audio_command(args)
+        elif args.command == "voice":
+            result = run_voice_command(args)
+        elif args.command == "lipsync":
+            result = run_lipsync_command(args)
         else:
             project = load_project(args.project)
             if args.command == "validate":
                 expanded = expand_project(project)
                 assets = resolve_project_assets(expanded, args.asset_library)
+                audio = resolve_audio(expanded, args.audio_library)
                 result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
                           "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
-                          "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets]}
+                          "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets],
+                          "audio_events": len(audio)}
             elif args.command == "verify":
-                result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"))
+                result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"), expect_audio=bool(project.audio))
             else:
                 if args.engine:
                     project.render.engine = args.engine
-                path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library)
+                path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library,
+                    audio_library=args.audio_library)
                 result = {"status": "succeeded", "video": str(path), "manifest": str(path.parent / "manifest.json")}
         print(json.dumps(result, indent=2))
         if args.command == "assets" and args.asset_command == "batch" and result["status"] != "succeeded":
+            return 2
+        if args.command == "voice" and args.voice_command == "doctor" and not result.get("ready"):
             return 2
         return 0
     except KeyboardInterrupt:

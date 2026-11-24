@@ -1,8 +1,9 @@
-"""Versioned renderer-independent IR. Units: meters, degrees, integer frames."""
+"""Versioned Blender production IR. Units: meters, degrees, integer frames."""
 from math import dist
 from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
+from engine.lipsync.models import LipSyncTimeline, FacialControls
 
 Number = Annotated[float, Field(allow_inf_nan=False, strict=True, ge=-1e9, le=1e9)]
 Positive = Annotated[Number, Field(gt=0)]
@@ -45,6 +46,10 @@ class Entity(AnimatedEntity):
     material: Material = Field(default_factory=Material)
     bevel: Annotated[Number, Field(ge=0, le=0.5)] = 0.05
     smooth: bool = True
+
+
+class CharacterEntity(AnimatedEntity):
+    character: Literal["atlas-face-1"]
 
 
 class AssetReference(Model):
@@ -112,7 +117,7 @@ class Scatter(Model):
 
 
 class Scene(Model):
-    entities: list[Entity | AssetEntity] = Field(default_factory=list, max_length=10000)
+    entities: list[Entity | AssetEntity | CharacterEntity] = Field(default_factory=list, max_length=10000)
     scatter: list[Scatter] = Field(default_factory=list, max_length=100)
     environment: Environment = Field(default_factory=Environment)
     camera: Camera = Field(default_factory=Camera)
@@ -137,14 +142,41 @@ class RenderSettings(Model):
 
 
 class Project(Model):
-    schema_version: Literal["1.0", "1.1"] = "1.0"
+    schema_version: Literal["1.0", "1.1", "1.2"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
     render: RenderSettings = Field(default_factory=RenderSettings)
+    audio: list["AudioEvent"] = Field(default_factory=list, max_length=100)
+    performances: list["FacialPerformance"] = Field(default_factory=list, max_length=100)
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
+        if self.audio and self.schema_version != "1.2":
+            raise ValueError("Audio requires schema_version 1.2")
+        characters = {entity.id for entity in self.scene.entities if isinstance(entity, CharacterEntity)}
+        if (characters or self.performances) and self.schema_version != "1.2":
+            raise ValueError("Characters and facial performances require schema_version 1.2")
+        if self.audio and self.render.frames / self.render.fps > 180:
+            raise ValueError("This audio production profile supports at most 180 seconds")
+        if len({event.id for event in self.audio}) != len(self.audio):
+            raise ValueError("Audio event identifiers must be unique")
+        if any(event.start_seconds >= self.render.frames / self.render.fps for event in self.audio):
+            raise ValueError("Audio event starts outside the video duration")
+        events = {event.id: event for event in self.audio}
+        active: dict[str, list[tuple[float, float]]] = {}
+        for performance in self.performances:
+            if performance.actor_id not in characters:
+                raise ValueError("Facial actor must reference a compatible character, not a static asset")
+            event = events.get(performance.audio_event_id)
+            if event is None or event.role != "dialogue" or event.speaker != performance.actor_id:
+                raise ValueError("Facial performance requires a dialogue event assigned to the same speaker")
+            interval = (event.start_seconds, event.start_seconds + performance.timeline.duration_seconds)
+            if interval[1] > self.render.frames / self.render.fps + 1e-8:
+                raise ValueError("Facial performance extends beyond video duration")
+            if any(interval[0] < end and interval[1] > start for start, end in active.get(performance.actor_id, [])):
+                raise ValueError("One actor cannot have overlapping facial performances")
+            active.setdefault(performance.actor_id, []).append(interval)
         prototypes = [*self.scene.entities, *(group.prototype for group in self.scene.scatter)]
         if self.schema_version == "1.0" and any(isinstance(entity, AssetEntity) for entity in prototypes):
             raise ValueError("Asset references require schema_version 1.1")
@@ -175,3 +207,24 @@ class Project(Model):
         if any(k.rotation is not None or k.scale is not None for k in camera.keyframes):
             raise ValueError("tracked cameras support location keyframes only")
         return self
+
+
+class AudioEvent(Model):
+    id: Identifier
+    clip: AssetReference
+    role: Literal["narration", "dialogue"] = "narration"
+    start_seconds: Annotated[Number, Field(ge=0, le=86400)] = 0
+    gain: Annotated[Number, Field(gt=0, le=1)] = 1
+    speaker: Identifier | None = None
+
+
+class FacialPerformance(Model):
+    actor_id: Identifier
+    audio_event_id: Identifier
+    timeline: LipSyncTimeline
+    profile: Literal["atlas-face-1"] = "atlas-face-1"
+    controls: FacialControls | None = None
+    smoothing_seconds: Annotated[Number, Field(ge=0, le=.2)] = .04
+
+
+Project.model_rebuild()

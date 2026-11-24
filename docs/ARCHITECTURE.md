@@ -4,7 +4,7 @@
 
 `apps/cli` loads JSON -> `engine/core/models.py` validates a Project -> `engine/worlds/placement.py` expands deterministic scatter -> `engine/rendering/pipeline.py` persists a job and calls the Blender worker -> `engine/rendering/video.py` encodes and checks the result -> `engine/storage/jobs.py` records status and atomically writes the manifest.
 
-The host runs Python/Pydantic; Blender runs trusted stdlib + bpy entrypoints. Blender needs no pip packages. Portable models never import bpy. No generated script or expression from project JSON is executed. Adding a future renderer can consume `resolved.json` and pinned asset snapshots without changing the IR; the current production orchestrator explicitly supports Blender only.
+The host runs Python/Pydantic; Blender runs trusted stdlib + bpy entrypoints. Blender needs no pip packages. Portable models never import bpy. No generated script or expression from project JSON is executed. Blender is the sole 3D execution and rendering backend. Portable validated models remain independent of bpy for testing and orchestration, not for a planned second renderer.
 
 ## Public interfaces
 
@@ -37,9 +37,9 @@ Output roots are explicitly selected through the CLI/API. Unique UUID child dire
 
 Encoding uses a fixed argument vocabulary and a partial MP4. The host verifies every expected PNG, probes stream and container duration, rejects unexpected streams, fully decodes it using FFmpeg, then publishes `video.mp4`. The terminal manifest is saved before SQLite success is recorded. Failed jobs preserve intermediate files. SQLite and manifests are separate persistence boundaries, not one atomic distributed transaction; forced termination can leave inconsistent terminal metadata and requires manual inspection. Listing jobs opens an existing, contained database read-only and creates no output directories.
 
-## Future renderer contract
+## Blender execution contract
 
-A future adapter (including Unity) should consume a validated resolved project and approved job directory, produce numbered RGB PNGs, a reopenable scene where practical, and a versioned report containing actual backend version/settings and timings. Capability validation must reject unsupported primitives/materials/animations before rendering. No Unity stub or unused adapter hierarchy is included; extract a formal Python Protocol once a second working adapter or backend-specific capability negotiation needs it.
+The package-owned Blender worker consumes validated resolved projects and approved job-local assets, produces numbered RGB PNGs, an editable scene and a versioned settings/timing report. Capability validation rejects unsupported input before execution. No second 3D backend or cross-renderer abstraction is planned.
 
 ## Asset subsystem (0.2)
 
@@ -54,3 +54,13 @@ Registry lookup checks a pinned version's own approval; older approved versions 
 `batch.py` owns validated inventory/selection plans, bounded regular-file reads, root/child-link checks, reviewed content/provenance hashes and incremental per-file reports. Apply uses the existing register/inspect workflow, with independent failures and explicit cancellation states. SQLite records and atomic batch reports are separate durability boundaries; no resume guarantee is made.
 
 `thumbnails.py` snapshots an approved inspected blob, launches the package-owned `thumbnail.py` Blender worker, and persists an image/provenance report. `quality/images.py` validates PNG framing/checksums and decoded pixels. Registry readiness/resolution revalidates image evidence rather than trusting caller-supplied dimensions or pixel statistics. Schema 2 adds a thumbnail status table without altering immutable asset versions. Temporary batch/thumbnail GLBs are cleaned in finally blocks; logs, images and production sources remain local artifacts.
+
+## Voice/audio/facial subsystem (0.4)
+
+`engine/voice/provider.py` invokes a package-owned JSON worker using an independent Python runtime. `worker.py` imports optional torch/Chatterbox, verifies source/model pins and file identities, and writes PCM WAV. `process.py` captures output with bounded reads and terminates the worker process tree on timeout/cancellation. `profiles.py` validates stored profile/reference permission contracts; `library.py` owns immutable profiles, measured segmentation/assembly and content-addressed per-segment/take caches. Main ATLAS and Blender never import torch.
+
+`engine/audio/library.py` records approved immutable clip versions in a separate SQLite schema1. `production.py` checks measured duration/hash before Blender, retains job-local sources/attribution, mixes48kHz stereo PCM and muxes AAC after the existing silent encoder. `verify_video(..., expect_audio=False)` preserves legacy behavior; explicit voiced production requires a checked audio stream and full decode. Schema1.2 adds `audio`, `performances` and the original `CharacterEntity`; schema1.0/1.1 cannot silently gain those behaviors.
+
+`engine/lipsync` calls isolated pinned Rhubarb and validates a contiguous bounded A-H/X mouth-cue timeline bound to exact WAV bytes. Core validation binds each performance to a compatible character, dialogue event and speaker, rejects overlapping performances for one actor, and checks measured duration. `facial.py` builds the reusable original robot bust and writes editable shape-key/basic jaw controls at `1 + seconds * fps` subframes with bounded linear transitions and explicit rest. Imported static GLBs remain static; arbitrary third-party rig import/retargeting is not implemented.
+
+The Blender worker applies transforms/animation through existing paths, then facial keys, and retains the verified audio mix as a relative sequencer sound for playback. Its image render bypasses sequencer compositing. New package-owned modules ship in the normal wheel. Voice model/runtime and Rhubarb executables remain separately installed local dependencies.
