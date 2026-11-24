@@ -40,3 +40,19 @@ Initial isolated inspection measured 0.438 s inside Blender and 2.987 s for the 
 Both are two-second Eevee previews requesting 32 samples. *Disk includes local GLB copies, PNG frames, .blend, logs and video before terminal manifest replacement. Unit/integration work ran concurrently during parts of these runs. They are acceptance measurements, not controlled comparisons against the lower-resolution 0.1 videos.
 
 Frame 24 was visually inspected and retained for each project. Imported materials, geometry and multiple instances are visible; sampling noise is present. Both had zero origin-visibility warnings. The example videos precede the review fixes; final-code tests and an installed-wheel production run exercise the hardened importer, exact vertex bounds, texture loading and inspection proof. No shared-mesh cache, third-party pack benchmark or peak-memory measurement has been added.
+
+## Version 0.3 batch and thumbnails — 2026-11-24
+
+Same machine/runtime. The final installed 0.3 wheel ran from outside the checkout working directory. An original six-file collection had five selected GLBs: three succeeded (including duplicate bytes with separate provenance), corrupt/unreviewed inputs failed independently, and unsupported OBJ was skipped. End-to-end batch time was **49.67 seconds**. Three records share two unique registry blobs. New batch/thumbnail staging directories contain no remaining GLB copies; existing inspection diagnostics and production snapshots retain their own copies.
+
+| Asset | Import inside thumbnail worker | Thumbnail rendering | Reported thumbnail total* | Complete batch item |
+|---|---:|---:|---:|---:|
+| beacon-copy | 1.03 s | 4.03 s | 9.17 s | 14.92 s |
+| beacon | 1.11 s | 4.18 s | 9.23 s | 14.74 s |
+| crate | 1.40 s | 4.61 s | 14.12 s | 19.95 s |
+
+Previews are 256x256 PNG, CPU Cycles, 24 samples, four threads. *The thumbnail report timestamp precedes final registry evidence validation/persistence; complete batch-item time includes registration, inspection and thumbnail completion. Hash deduplication avoids duplicate registry blobs; it does not cache inspection or preview work.
+
+The installed package then rendered `06_batch_showcase.json`: two imported originals, Eevee, 480x270, 24 frames at 24 fps, one-second verified H.264/yuv420p MP4. Blender process took 39.23 seconds, encoding 0.44 seconds and complete production 41.17 seconds. Retained job size at measurement was 3,476,093 bytes (~3.32 MiB), including sources, frames, scene and video before terminal manifest replacement.
+
+Both distinct previews and video frame 12 were visually inspected and retained alongside [machine-readable evidence](evidence/2026-11-24-batch.json). Geometry is visible and framed; the models are simple originals and video sampling noise remains visible. Other tests ran during parts of these observations. These are one-run small-collection acceptance measurements, not controlled performance comparisons, large-library throughput or third-party pack acceptance. Peak memory and final-quality rendering remain unmeasured.

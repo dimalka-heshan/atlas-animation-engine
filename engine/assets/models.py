@@ -66,3 +66,24 @@ class InspectionProof(BaseModel):
         if min(self.dimensions) < 0 or max(self.dimensions) < 1e-8 or self.missing_textures:
             raise ValueError("Inspection must show renderable bounds without missing textures")
         return self
+
+
+class ThumbnailProof(BaseModel):
+    """Media evidence bound to one source version and thumbnail profile."""
+    model_config = ConfigDict(extra="ignore")
+    source_sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
+    image_sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
+    image_file: Annotated[str, Field(min_length=1, max_length=2000)]
+    profile: Literal["atlas-thumbnail-1"]
+    codec: Literal["png"]
+    width: Literal[128, 256, 512]
+    height: Literal[128, 256, 512]
+    pixel_min: Annotated[StrictInt, Field(ge=0, le=255)]
+    pixel_max: Annotated[StrictInt, Field(ge=0, le=255)]
+    spatial_range: Annotated[StrictInt, Field(ge=9, le=255)]
+
+    @model_validator(mode="after")
+    def square_and_visible(self) -> Self:
+        if self.width != self.height or self.pixel_max - self.pixel_min <= 8:
+            raise ValueError("Thumbnail must be square with visible pixel variation")
+        return self

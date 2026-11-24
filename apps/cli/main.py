@@ -91,6 +91,8 @@ def main(argv: list[str] | None = None) -> int:
                 path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library)
                 result = {"status": "succeeded", "video": str(path), "manifest": str(path.parent / "manifest.json")}
         print(json.dumps(result, indent=2))
+        if args.command == "assets" and args.asset_command == "batch" and result["status"] != "succeeded":
+            return 2
         return 0
     except KeyboardInterrupt:
         print(json.dumps({"error": "Production cancelled; completed files and job history retained"}), file=sys.stderr)

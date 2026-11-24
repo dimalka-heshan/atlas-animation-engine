@@ -10,7 +10,7 @@ from pathlib import Path
 from pydantic import TypeAdapter
 
 from engine.assets.glb import MAX_GLB_BYTES, inspect_glb
-from engine.assets.models import InspectionProof, Provenance
+from engine.assets.models import InspectionProof, Provenance, ThumbnailProof
 from engine.core.models import Identifier
 from engine.storage.jobs import contained_path, utc_now
 
@@ -23,7 +23,7 @@ def file_hash(path: Path) -> str:
 
 
 class AssetRegistry:
-    """Database schema 1. Records pin provenance independently of shared bytes."""
+    """Database schema 2. Records pin provenance independently of shared bytes."""
 
     def __init__(self, root: Path):
         self.root = root.resolve()
@@ -32,8 +32,8 @@ class AssetRegistry:
         with self._connect() as db:
             db.execute("BEGIN IMMEDIATE")
             version = db.execute("PRAGMA user_version").fetchone()[0]
-            if version not in {0, 1}:
-                raise ValueError(f"Unsupported asset registry schema {version}; expected 1")
+            if version not in {0, 1, 2}:
+                raise ValueError(f"Unsupported asset registry schema {version}; expected 2")
             if version == 0:
                 if db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchone():
                     raise ValueError("Refusing to initialize an unversioned nonempty asset database")
@@ -46,7 +46,12 @@ class AssetRegistry:
                     report TEXT NOT NULL, updated_at TEXT NOT NULL,
                     PRIMARY KEY(id,version), FOREIGN KEY(id,version) REFERENCES asset_versions(id,version))""")
                 db.execute("CREATE INDEX asset_hash ON asset_versions(sha256)")
-                db.execute("PRAGMA user_version=1")
+            if version < 2:
+                db.execute("""CREATE TABLE thumbnails (
+                    id TEXT NOT NULL, version INTEGER NOT NULL, status TEXT NOT NULL,
+                    report TEXT NOT NULL, updated_at TEXT NOT NULL,
+                    PRIMARY KEY(id,version), FOREIGN KEY(id,version) REFERENCES asset_versions(id,version))""")
+                db.execute("PRAGMA user_version=2")
 
     @contextmanager
     def _connect(self):
@@ -116,11 +121,14 @@ class AssetRegistry:
             if row is None:
                 raise ValueError(f"Asset {asset_id} version {version} not found")
             inspection = db.execute("SELECT * FROM inspections WHERE id=? AND version=?", (asset_id, version)).fetchone()
+            thumbnail = db.execute("SELECT * FROM thumbnails WHERE id=? AND version=?", (asset_id, version)).fetchone()
         result = dict(row)
         result["provenance"] = json.loads(result["provenance"])
         result["container"] = json.loads(result["container"])
         result["inspection"] = ({"status": inspection["status"], "report": json.loads(inspection["report"]),
                                  "updated_at": inspection["updated_at"]} if inspection else {"status": "pending"})
+        result["thumbnail"] = ({"status": thumbnail["status"], "report": json.loads(thumbnail["report"]),
+                                "updated_at": thumbnail["updated_at"]} if thumbnail else {"status": "pending"})
         return result
 
     def search(self, *, query: str = "", tag: str | None = None, category: str | None = None,
@@ -170,3 +178,35 @@ class AssetRegistry:
         proof = InspectionProof.model_validate(report)
         if proof.source_sha256 != entry["sha256"]:
             raise ValueError("Inspection content hash does not match the registered asset version")
+
+    def set_thumbnail(self, asset_id: str, version: int, status: str, report: dict) -> None:
+        if status not in {"ready", "failed"}:
+            raise ValueError("Thumbnail status must be ready or failed")
+        entry = self.get(asset_id, version)
+        if status == "ready":
+            entry = self.resolve(asset_id, version)
+            self._check_thumbnail(entry, report)
+        with self._connect() as db:
+            db.execute("INSERT OR REPLACE INTO thumbnails VALUES (?,?,?,?,?)",
+                       (asset_id, version, status, json.dumps(report, allow_nan=False), utc_now()))
+
+    def _check_thumbnail(self, entry: dict, report: dict) -> Path:
+        proof = ThumbnailProof.model_validate(report)
+        if proof.source_sha256 != entry["sha256"]:
+            raise ValueError("Thumbnail source hash does not match the registered asset")
+        path = contained_path(self.root, proof.image_file)
+        if not path.is_file() or file_hash(path) != proof.image_sha256:
+            raise ValueError("Thumbnail is missing or has an image hash mismatch")
+        from engine.quality.images import verify_png
+        actual = verify_png(path, proof.width)
+        for field in ("codec", "width", "height", "pixel_min", "pixel_max", "spatial_range"):
+            if actual[field] != getattr(proof, field):
+                raise ValueError(f"Thumbnail decoded {field} does not match its proof")
+        return path
+
+    def resolve_thumbnail(self, asset_id: str, version: int) -> dict:
+        entry = self.resolve(asset_id, version)
+        if entry["thumbnail"]["status"] != "ready":
+            raise ValueError("Asset requires a successful thumbnail attempt")
+        report = entry["thumbnail"]["report"]
+        return report | {"path": self._check_thumbnail(entry, report)}

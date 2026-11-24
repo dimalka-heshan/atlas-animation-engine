@@ -1,45 +1,41 @@
-# Status — ATLAS 0.2.0 — 2026-11-23
+# Status — ATLAS 0.3.0 — 2026-11-24
 
-The Phase 0/1 foundation now includes the first Phase 2 asset-import slice. An original registered GLB is reused in two different configuration-driven videos. Full Phase 2, including multiple third-party asset packs, remains incomplete.
+ATLAS now supports reviewed directory batches and verified asset thumbnails alongside configuration-driven Blender/MP4 production. Phase 2 remains partial: no third-party pack acceptance, additional input formats or rig support is claimed.
 
 ## Implemented
 
-- Existing primitive/scenery/keyframe/camera/light pipeline, both CPU Cycles and Eevee, PNG frames, verified silent H.264 MP4, persistent jobs and manifests.
-- Local GLB register/search/show/inspect CLI, SQLite schema 1 migration, immutable ID/version provenance, hash-deduplicated blobs and literal metadata search.
-- Explicit approval/render-permission gating, creator/source/license text/attribution tracking, restriction rejection and source URL/URN checks. No automatic licensing approval or downloads.
-- Bounded self-contained static GLB preflight, scene graph/texture-reference validation and real Blender inspection with failure diagnostics.
-- Imported hierarchy/material preservation, exact vertex bounds, unit normalization, center/base pivots, root transform animation and embedded texture decoding.
-- Schema 1.1 pinned asset references, schema 1.0 primitive compatibility, checked job-local GLB snapshots, asset manifests and attribution sidecars.
-- Readiness evidence tied to the current profile and content hash, positive surface counts, valid bounds and no missing textures.
+- Existing primitive/scatter/keyframe/camera/light pipeline, CPU Cycles/Eevee, verified H.264 video and persistent jobs/manifests.
+- Local static GLB registry, immutable provenance versions, content deduplication, rights gating, search, Blender inspection, normalization/pivots and schema 1.1 pinned references; schema 1.0 remains compatible.
+- Deterministic directory scans, all entries unselected by default, reviewed source/sidecar hashes, explicit matching root, disjoint library, child-link rejection and bounded regular-file reads.
+- Sequential batch registration with optional inspection/thumbnails, independent failures, durable reports, partial-failure exit code 2 and cancellation preserving registered versions/pending entries.
+- CPU studio previews at 128/256/512 pixels and transactional SQLite schema 1 -> 2 migration preserving prior records.
+- Thumbnail readiness requires approved matching inspection, source/image hashes, complete PNG framing/CRC/IEND, actual dimensions/decode and spatial pixel variation. New batch/thumbnail staging copies are cleaned after normal success/failure/cancellation.
 
 ## Verification
 
-Final full suite with `ATLAS_INTEGRATION=1`: **117 passed, 1 skipped in 87.84 seconds**. The only skip is Windows file-symlink creation privilege. This includes 108 unit tests and nine real Blender integration tests (five for imported assets). Full output is retained in `outputs/asset-full-suite-final.log`.
+**Final suite: 148 passed, 1 skipped in 215.38 seconds**, with ATLAS_INTEGRATION=1 (133 unit passes and 15 real Blender/FFmpeg integration passes). The only skip is the Windows file-symlink privilege test; the directory-junction test passed. Authoritative test evidence is outputs/batch-final-tests.xml; its readable summary is outputs/batch-full-suite-final.log. A 30-second diagnostic exposed a long Blender call that subsequently passed; no runtime change was needed. Independent review rechecked four important fixes with 26 passing targeted tests and found no remaining concrete defect in those areas.
 
-Real integration tests cover primitive rendering, persistence failures, asset reuse, hierarchy/scale/pivot/animation, rotated triangles, valid and corrupt embedded PNGs, and failed inspection. Independent review findings were reproduced with failing tests and fixed.
+The final installed 0.3 wheel ran outside the repository working directory. Its original mixed collection produced the expected three successes, two independent failures and one skip in 49.67 seconds. Three records share two unique blobs; no new batch/thumbnail staging GLBs remain. Both distinct previews were visually inspected.
 
-An installed 0.2 wheel registered the fixture into a fresh library, ran the packaged inspection worker and rendered a verified CPU MP4 from outside the repository.
-
-Both new example videos are 640x360, 48 frames, 24 fps, exactly 2 seconds, H.264/yuv420p. They share lantern version 1, SHA-256 ea217311b71e809c6942e761368407395b8caa1d24eab6cfdfedb8d4cb3fa05f. Representative frames were visually inspected. Earlier Phase 1 videos remain retained.
+The installed package rendered and fully verified the same two assets in a 480x270, 24-frame, 24-fps, one-second H.264/yuv420p video (41.17 seconds total). Frame 12 was visually inspected. No new runtime dependency was added. Concurrent testing means these times are observations, not controlled benchmarks.
 
 ## Outputs
 
-- outputs/lantern-studio-30e2573835f34969916549ae43ef65e1/video.mp4
-- outputs/lantern-courtyard-bcd1627801df469c8d4ccd5eae82f2d3/video.mp4
-- assets/fixtures/lantern.glb and lantern.provenance.json: committed original source fixture.
-- assets/library/: ignored local registry and inspection logs.
-- docs/evidence/2026-11-23-assets.json and adjacent PNGs: tracked provenance, timing and visual evidence.
-
-Every asset job retains its input/resolved IR, .blend, PNGs, logs, manifest, checked source blobs, asset-map.json and attributions.txt.
+- outputs/batch-showcase-bf2562ded77e4bf290b2f6eb368cebec/video.mp4: final installed-wheel video with scene, frames, sources, manifest and logs.
+- outputs/batch-library-v03-final/: registered versions, previews, inspection diagnostics and durable report.
+- outputs/batch-result-v03-final.json and outputs/batch-plan-v03.json: results and reviewed original-fixture selection.
+- docs/evidence/2026-11-24-batch.json and adjacent PNGs: tracked provenance, timing and visual evidence.
+- tools/create_batch_fixture.py and examples/06_batch_showcase.json: reproducible originals and configuration-only video.
+- Previous five example videos and the original lantern fixture remain retained.
 
 ## Limits
 
-Only one-scene static triangle GLBs with all nodes reachable are supported. No extensions, external/data URIs, skins, animation, morphs or imported cameras/lights. PNG/JPEG textures must be embedded. Additional formats, directory scanning, thumbnails, repair, rig/clip handling, shared import caching and large-library indexing remain unfinished.
+Only the documented static embedded triangle GLB profile is supported. No external textures/extensions/skins/animation/morphs, additional formats, repair, rig/clip playback or shared import cache. Provenance checks enforce declarations, not legal ownership; older pinned approval is not automatically revoked.
 
-Provenance checks enforce operator declarations, not legal ownership. Older approved versions are not revoked automatically by newer provenance versions. No third-party asset-pack acceptance is claimed.
+Batch inventory requires portable filenames and stable source trees. Child links/special files are rejected, but path checks are not an adversarial OS sandbox. Full-report rewrites favor small collections; 10,000 entries is a cap, not proven throughput. Hard termination may leave running records/staging files; no automatic resume. Registry, blobs and reports have separate durability boundaries. Existing inspection diagnostics and production snapshots retain source copies. Thumbnail checks detect corruption/uniformity, not artistic quality or visibility.
 
-Characters/actions, physics, audio, multiple shots, queues/cache/resume, dashboard and Unity remain deferred. Scatter checks centers only; camera visibility checks entity origins, not obstruction. Preview noise remains visible. Hard termination or disk failure may leave unfinished metadata; manual rerender is the recovery path. Database, blob and manifest writes are separate transaction boundaries. Asset parsing is not an OS sandbox. Other platforms/Blender versions and peak-memory/final-quality performance remain unverified.
+Characters/actions, physics, audio, multiple shots, queues/resume, dashboard and Unity remain deferred. Scatter checks centers only; camera warnings do not detect occlusion. Preview noise remains visible. Other platforms/Blender versions, peak memory and final-quality performance remain unverified.
 
 ## Exact next task
 
-Continue Phase 2 with deterministic directory discovery, reviewed batch registration and Blender-generated thumbnails. Reuse provenance/hash/profile checks, never auto-approve licenses, isolate per-file failures, verify path containment and actual thumbnail images, and benchmark a modest local fixture collection before adding formats or a dashboard.
+Continue Phase 2 with reusable environment templates backed by explicitly licensed compatible assets. Start with a small source/license inventory, retain original license/attribution records, import through the reviewed batch workflow, and render two distinct environments through the same engine. Measure costs before expanding formats, a dashboard or rigging. Do not claim full Phase 2 until multiple real asset packs pass acceptance.

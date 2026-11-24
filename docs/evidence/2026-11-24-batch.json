@@ -1,0 +1,182 @@
+{
+  "engine_version": "0.3.0",
+  "date": "2026-11-24",
+  "scope": "Original local fixtures; no third-party pack acceptance",
+  "execution": "Installed wheel CLI outside repository cwd; final code after review fixes",
+  "batch": {
+    "id": "06aa9eba952a4dfb9057f4d70ad3f948",
+    "status": "partial",
+    "started_at": "2026-11-24T04:19:43.396511+00:00",
+    "source_root": "C:\\Dimalka\\yt\\blender\\outputs\\batch-fixtures-v03",
+    "report_file": "batches/06aa9eba952a4dfb9057f4d70ad3f948/report.json",
+    "entries": [
+      {
+        "path": "beacon-copy.glb",
+        "id": "beacon-copy",
+        "status": "thumbnail_ready",
+        "version": 1,
+        "sha256": "353a5487990bfce55556a4f5f8d91a493660a557bb4e3673b6547646bd7c0191",
+        "stage": "ready",
+        "thumbnail": {
+          "blender_version": "5.2.3 LTS",
+          "engine": "CYCLES",
+          "device": "CPU",
+          "samples": 24,
+          "build_seconds": 1.2403210999909788,
+          "render_seconds": 4.029938199993921,
+          "asset_dimensions": [
+            1.399999976158142,
+            1.399999976158142,
+            2.1399998664855957
+          ],
+          "import_seconds": 1.0281651000259444,
+          "codec": "png",
+          "width": 256,
+          "height": 256,
+          "pixel_min": 19,
+          "pixel_max": 237,
+          "spatial_range": 218,
+          "file_bytes": 60566,
+          "profile": "atlas-thumbnail-1",
+          "source_sha256": "353a5487990bfce55556a4f5f8d91a493660a557bb4e3673b6547646bd7c0191",
+          "image_sha256": "702acf6a14a2f5554a3b480bfe39f75b785c7e7465275bc0dc48d7fa215076a2",
+          "image_file": "thumbnails/b450c54ff1c9472f9c6d8b8c4e66972b/thumbnail.png",
+          "process_seconds": 8.664442200009944,
+          "total_seconds": 9.172373800014611,
+          "log": "thumbnails/b450c54ff1c9472f9c6d8b8c4e66972b/blender.log"
+        },
+        "seconds": 14.915035499987425
+      },
+      {
+        "path": "beacon.glb",
+        "id": "beacon",
+        "status": "thumbnail_ready",
+        "version": 1,
+        "sha256": "353a5487990bfce55556a4f5f8d91a493660a557bb4e3673b6547646bd7c0191",
+        "stage": "ready",
+        "thumbnail": {
+          "blender_version": "5.2.3 LTS",
+          "engine": "CYCLES",
+          "device": "CPU",
+          "samples": 24,
+          "build_seconds": 1.299201100016944,
+          "render_seconds": 4.1810079000133555,
+          "asset_dimensions": [
+            1.399999976158142,
+            1.399999976158142,
+            2.1399998664855957
+          ],
+          "import_seconds": 1.1087921000143979,
+          "codec": "png",
+          "width": 256,
+          "height": 256,
+          "pixel_min": 19,
+          "pixel_max": 237,
+          "spatial_range": 218,
+          "file_bytes": 60566,
+          "profile": "atlas-thumbnail-1",
+          "source_sha256": "353a5487990bfce55556a4f5f8d91a493660a557bb4e3673b6547646bd7c0191",
+          "image_sha256": "6e1beb2a6fd6c14a16687e32cca65a95156aff67d6c50881eb0fdf2f72e5b1bf",
+          "image_file": "thumbnails/40178b101f3149509299431f6c493bed/thumbnail.png",
+          "process_seconds": 8.742867599998135,
+          "total_seconds": 9.229871199990157,
+          "log": "thumbnails/40178b101f3149509299431f6c493bed/blender.log"
+        },
+        "seconds": 14.74209929999779
+      },
+      {
+        "path": "corrupt.glb",
+        "id": "corrupt",
+        "status": "failed",
+        "error": "ValueError: Invalid GLB magic, version or declared length",
+        "seconds": 0.02279590000398457
+      },
+      {
+        "path": "crate.glb",
+        "id": "crate",
+        "status": "thumbnail_ready",
+        "version": 1,
+        "sha256": "b7c05d40ccadbca414694c8be5c1d35a2fadc19d1997466efdfae6c833c6d629",
+        "stage": "ready",
+        "thumbnail": {
+          "blender_version": "5.2.3 LTS",
+          "engine": "CYCLES",
+          "device": "CPU",
+          "samples": 24,
+          "build_seconds": 1.669996299984632,
+          "render_seconds": 4.607415799982846,
+          "asset_dimensions": [
+            1.7000000476837158,
+            1.7200000286102295,
+            1.600000023841858
+          ],
+          "import_seconds": 1.4031500000273809,
+          "codec": "png",
+          "width": 256,
+          "height": 256,
+          "pixel_min": 8,
+          "pixel_max": 226,
+          "spatial_range": 218,
+          "file_bytes": 68198,
+          "profile": "atlas-thumbnail-1",
+          "source_sha256": "b7c05d40ccadbca414694c8be5c1d35a2fadc19d1997466efdfae6c833c6d629",
+          "image_sha256": "6e24d147e7c670605e6d958ac7e0f5944ec383839d9aafefd349e68c59b9d62b",
+          "image_file": "thumbnails/d33a9a8709474bda904a3d879e6c6228/thumbnail.png",
+          "process_seconds": 13.48795589999645,
+          "total_seconds": 14.124869799998123,
+          "log": "thumbnails/d33a9a8709474bda904a3d879e6c6228/blender.log"
+        },
+        "seconds": 19.945379799988586
+      },
+      {
+        "path": "unreviewed.glb",
+        "id": "unreviewed",
+        "status": "failed",
+        "error": "ValueError: Asset must be explicitly approved with render_allowed=true",
+        "seconds": 0.009405599994352087
+      },
+      {
+        "path": "unsupported.obj",
+        "id": "unsupported",
+        "status": "skipped"
+      }
+    ],
+    "summary": {
+      "selected": 5,
+      "succeeded": 3,
+      "failed": 2,
+      "skipped": 1
+    },
+    "finished_at": "2026-11-24T04:20:33.062554+00:00",
+    "seconds": 49.66599939999287
+  },
+  "video_file": "C:\\Dimalka\\yt\\blender\\outputs\\batch-showcase-bf2562ded77e4bf290b2f6eb368cebec\\video.mp4",
+  "video": {
+    "width": 480,
+    "height": 270,
+    "frames": 24,
+    "fps": 24.0,
+    "duration": 1.0,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "sha256": "eaa67cd4e0f109925d5d7a61497096d9d65526724691a3968bbf508850c98fae"
+  },
+  "video_timings": {
+    "blender_process": 39.22687539999606,
+    "encoding": 0.4443047000095248,
+    "decode_verification": 0.16393730000709184,
+    "total": 41.17181839997647
+  },
+  "video_disk_bytes": 3476093,
+  "quality": "Visually inspected beacon/crate previews and video frame 12; correctly framed original geometry, simple materials, visible preview noise",
+  "limitations": "Single small run, other tests active; no throughput, peak memory or final-quality claim",
+  "tests": {
+    "passed": 148,
+    "skipped": 1,
+    "seconds": 215.38,
+    "integration_passes": 15,
+    "unit_passes": 133,
+    "report": "outputs/batch-final-tests.xml",
+    "skip_reason": "Windows file-symlink privilege"
+  }
+}

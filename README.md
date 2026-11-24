@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven 3D animation engine. Version 0.2 extends the working JSON -> Blender -> verified MP4 pipeline with a versioned, license-aware local GLB asset registry and reusable imported static models.
+A local, configuration-driven 3D animation engine. Version 0.3 adds reviewed directory batches and verified Blender thumbnails to the JSON -> Blender -> MP4 pipeline and versioned local GLB asset registry.
 
 Change JSON to produce a different video. No paid AI, downloaded assets, browser service or coding assistant is required during production. This is an early foundation, not the complete platform described in the roadmap.
 
@@ -65,6 +65,17 @@ An original generated GLB lantern and two schema 1.1 projects are included. Regi
 ```
 
 See [ASSETS](docs/ASSETS.md) for provenance policy, version pinning, search, normalization, supported GLBs and custom-library commands. Older primitive-only projects remain schema 1.0.
+
+Generate a preview of an inspected asset, or scan your own collection into an editable selection plan:
+
+```powershell
+.\.venv\Scripts\atlas.exe assets thumbnail lantern --version 1 --size 256
+.\.venv\Scripts\atlas.exe assets scan 'C:\MyModels' --plan outputs\asset-plan.json
+# Review the plan and sidecars; set selected=true only for assets you intend to import.
+.\.venv\Scripts\atlas.exe assets batch outputs\asset-plan.json --root 'C:\MyModels' --thumbnails
+```
+
+Every scan entry starts unselected. Batch import requires approved provenance, checks reviewed hashes, and reports each file independently. `--thumbnails` includes inspection; partial failure returns exit code 2. See ASSETS for the original mixed-fixture demonstration and `examples/06_batch_showcase.json`.
 
 Verify a video using its saved effective project (especially after `--engine` overrides):
 

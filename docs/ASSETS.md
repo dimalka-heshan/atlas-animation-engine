@@ -1,6 +1,6 @@
 # Local GLB asset workflow
 
-ATLAS 0.2 adds the first Phase 2 slice: explicit local registration, immutable provenance versions, deterministic search, real Blender inspection, and reusable static GLB instances in schema 1.1 projects. Primitive-only schema 1.0 projects remain supported.
+ATLAS 0.3 adds directory inventory, reviewed batch import and verified thumbnails to local registration, immutable provenance versions, deterministic search, Blender inspection and reusable static GLB instances. Primitive-only schema 1.0 and asset schema 1.1 projects remain supported.
 
 ## Try the bundled original fixture
 
@@ -31,7 +31,7 @@ No license is automatically inferred from a filename, a site, a free download, o
 
 ## Versions and content integrity
 
-`assets register` copies the bytes once into `blobs/<sha256>.glb` and records an immutable `(id, version)` row in SQLite schema 1. IDs and paths are separate. Registering the same latest content/provenance is idempotent. Changing bytes or provenance produces the next version, retaining earlier records. Different IDs can share blob bytes without sharing their permissions. Search returns latest versions in deterministic ID order; `show --version` retrieves a pinned older record.
+`assets register` copies the bytes into `blobs/<sha256>.glb` and records an immutable `(id, version)` row in SQLite schema 2. Schema 1 migrates transactionally, preserving versions and inspections. IDs and paths are separate. Registering the same latest content/provenance is idempotent. Changing bytes or provenance produces the next version, retaining earlier records. Different IDs can share blob bytes without sharing their permissions. Search returns latest versions in deterministic ID order; `show --version` retrieves a pinned older record.
 
 Search supports literal case-insensitive `--query`, case-insensitive `--tag`, exact `--category` and `--license` filters. There is no cloud/embedding search. The implementation favors correctness for modest local collections; it is not yet indexed for very large tag searches.
 
@@ -70,6 +70,34 @@ Only static GLB 2.0 with embedded BIN/bufferView resources and triangle-surface 
 
 The boundary follows the [Khronos GLB specification](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html) and the tested [Blender 5.2 importer API](https://docs.blender.org/api/5.2/bpy.ops.import_scene.html). It deliberately supports less than the full format. Asset parsing is not an OS sandbox, and executable paths/library contents remain operator-controlled.
 
+## Reviewed directory batches and previews
+
+`assets scan ROOT --plan PLAN.json` inventories files in sorted relative-path order, recursively by default (`--no-recursive` disables recursion). It never registers files or infers approval, refuses to overwrite an existing plan, and leaves every entry `selected: false`. Each GLB uses an adjacent same-stem `.provenance.json`; the plan records separate hashes of source and metadata. Unsupported files and child links/junctions are reported without being imported or followed. GLBs are limited to 256 MiB, sidecars to 500 KB, plans to 10,000 entries and CLI plan input to 20 MiB.
+
+Review actual provenance and select intended candidates by setting `selected: true`; optionally choose stable IDs. Apply with `assets batch PLAN.json --root ROOT --library LIBRARY`. The explicit root must match the plan, and source/library directories cannot contain each other. A changed source or sidecar requires a rescan. Batch requires explicit approved render rights even for registration; single-file registration can still store an unreviewed record. Editing display metadata in the plan cannot grant rights.
+
+`--inspect` adds Blender inspection; `--thumbnails` adds inspection and preview rendering. `--size 128|256|512` selects a square preview (default 256). Files run sequentially. Corrupt, changed, unsupported or unapproved selected entries fail independently; successful records are retained. JSON stdout includes the durable report location, version/hash, timings and per-entry status. Exit code 2 means partial/failed work. Ctrl+C returns 130 and marks the active entry cancelled; later selected entries remain pending. There is no resume command. A retry is idempotent for registration but reruns requested inspection/thumbnail work.
+
+`assets thumbnail ID --version N --size 256` requires an approved, successfully inspected asset. The packaged worker uses normalized geometry, an orthographic camera, neutral studio lights and CPU Cycles (24 samples, four threads). Readiness checks complete bounded PNG framing, chunk checksums, terminal IEND, dimensions, actual RGB decode and spatial variation; reports bind source/image hashes and profile `atlas-thumbnail-1`. These checks detect corrupt or uniform images, not artistic quality or subject visibility. Failed attempts remain explicit without changing inspection status. Earlier images remain in their unique attempt directories.
+
+New batch/thumbnail staging GLBs are removed after success, failure or cancellation. Deduplicated registry blobs, plans, reports, logs and preview images remain; inspection attempt snapshots and production-job snapshots retain their existing diagnostic/reproducibility behavior. Hard termination can bypass cleanup. Check cleanup errors in reports/logs before manually removing leftover staging files.
+
+### Original mixed collection demonstration
+
+Run the included trusted generator with Blender into a fresh empty directory:
+
+```powershell
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' --background --factory-startup --python tools\create_batch_fixture.py -- outputs\my-batch-inputs
+.\.venv\Scripts\atlas.exe assets scan outputs\my-batch-inputs --plan outputs\my-batch-plan.json
+# Select beacon.glb and crate.glb; set their IDs to beacon and crate.
+.\.venv\Scripts\atlas.exe assets batch outputs\my-batch-plan.json --root outputs\my-batch-inputs --library outputs\my-batch-library --thumbnails
+.\.venv\Scripts\atlas.exe render examples\06_batch_showcase.json --asset-library outputs\my-batch-library
+```
+
+The generator also supplies a duplicate beacon, an unreviewed model, a corrupt GLB and unsupported OBJ for failure testing. Selecting all GLB candidates intentionally produces three successes and two failures. Never approve the deliberately unreviewed entry just to make the report green.
+
+The current scan requires portable filenames; Unix names containing colons/backslashes are rejected. Keep source trees unchanged during scan/apply. Descriptor checks reject special files; containment checks are not an OS sandbox against hostile directory races. Durable reports rewrite the full inventory per processed item; the 10,000-entry cap is a safety bound, not a demonstrated throughput target. Use small collections until larger benchmarks justify an append-only journal or indexing changes.
+
 ## Deferred
 
-No network downloads, directory scanning, FBX/OBJ/BLEND/USD input, external texture repair, thumbnail generation, rig/clip playback, automatic semantic tagging, license revocation UI or asset-pack redistribution. Instances currently import geometry independently; shared mesh caching and large-library performance work are future tasks. Full Phase 2 acceptance with multiple third-party asset packs has not been attempted.
+No network downloads, FBX/OBJ/BLEND/USD input, external texture repair, rig/clip playback, automatic semantic tagging, license revocation UI or asset-pack redistribution. Instances currently import geometry independently; shared mesh caching and large-library performance work are future tasks. Full Phase 2 acceptance with multiple third-party asset packs has not been attempted.
