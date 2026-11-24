@@ -6,22 +6,38 @@ import bpy
 from mathutils import Vector
 
 
-def import_asset(path, identifier, normalize="none", pivot="origin"):
+def import_asset(path, identifier, normalize="none", pivot="origin", *, profile="static", clips=(), fps=None):
     started = time.perf_counter()
     before = set(bpy.data.objects)
-    result = bpy.ops.import_scene.gltf(filepath=str(path), import_pack_images=True,
-                                     import_scene_extras=False, import_scene_as_collection=False)
+    scene = bpy.context.scene
+    previous_fps = scene.render.fps
+    if profile == "rigged":
+        scene.render.fps = 30
+    try:
+        result = bpy.ops.import_scene.gltf(filepath=str(path), import_pack_images=True,
+                                         import_scene_extras=False, import_scene_as_collection=False)
+    finally:
+        scene.render.fps = previous_fps
     if "FINISHED" not in result:
         raise ValueError(f"GLB importer did not finish: {result}")
     objects = sorted(set(bpy.data.objects) - before, key=lambda obj: obj.name)
     meshes = [obj for obj in objects if obj.type == "MESH"]
-    if not meshes or any(obj.type not in {"MESH", "EMPTY"} for obj in objects):
-        raise ValueError("Only GLBs containing static mesh/empty objects are supported")
-    if any(obj.animation_data or (obj.type == "MESH" and obj.data.shape_keys) for obj in objects):
+    allowed = {"MESH", "EMPTY"} | ({"ARMATURE"} if profile == "rigged" else set())
+    if not meshes or any(obj.type not in allowed for obj in objects):
+        raise ValueError("GLB object types exceed the selected import profile")
+    if profile == "static" and any(obj.animation_data or (obj.type == "MESH" and obj.data.shape_keys) for obj in objects):
         raise ValueError("Imported animation or morph targets are unsupported")
+    rig_report = {}
+    if profile == "rigged":
+        from skeleton import inspect_skeleton, play_clips
+        rig, actions, rig_report = inspect_skeleton(objects, meshes)
     bpy.context.view_layer.update()
     low, high = Vector((math.inf,) * 3), Vector((-math.inf,) * 3)
-    for obj in meshes:
+    bounds_meshes = meshes
+    if profile == "rigged":
+        bounds_meshes = [mesh for mesh in meshes if any(mod.type == "ARMATURE" and mod.object == rig
+                                                       for mod in mesh.modifiers)]
+    for obj in bounds_meshes:
         for vertex in obj.data.vertices:
             point = obj.matrix_world @ vertex.co
             for axis in range(3):
@@ -48,9 +64,11 @@ def import_asset(path, identifier, normalize="none", pivot="origin"):
               "material_count": len(materials), "materials": sorted(mat.name for mat in materials),
               "texture_count": len(images), "textures": textures,
               "missing_textures": missing, "skeleton_count": 0, "animation_count": 0,
-              "coordinate_system": "right-handed Z-up meters"}
+              "coordinate_system": "right-handed Z-up meters", **rig_report}
     # Reserve the public entity name independently of names inside the imported file.
     for index, obj in enumerate(objects):
+        if profile == "rigged":
+            obj["atlas_source_name"] = obj.name
         obj.name = f"__{identifier}_part_{index}"
     root = bpy.data.objects.new(identifier, None)
     bpy.context.scene.collection.objects.link(root)
@@ -70,6 +88,9 @@ def import_asset(path, identifier, normalize="none", pivot="origin"):
             origin.z = low.z
     normalization.scale = (factor,) * 3
     normalization.location = -origin * factor
+    if profile == "rigged":
+        play_clips(rig, actions, clips, fps or previous_fps)
+    report["normalization"] = {"profile": "atlas-parent-transform-1", "scale": factor, "origin": list(origin)}
     bpy.context.view_layer.update()
     report["import_seconds"] = time.perf_counter() - started
     return root, report

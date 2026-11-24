@@ -101,3 +101,7 @@ The current scan requires portable filenames; Unix names containing colons/backs
 ## Deferred
 
 No network downloads, FBX/OBJ/BLEND/USD input, external texture repair, rig/clip playback, automatic semantic tagging, license revocation UI or asset-pack redistribution. Instances currently import geometry independently; shared mesh caching and large-library performance work are future tasks. Full Phase 2 acceptance with multiple third-party asset packs has not been attempted.
+
+## Official acquisition and rigged assets (0.5)
+
+The source catalog, acquisition cache, production registry and job snapshots are separate. See ACQUISITION for official sources and bounded starter installation. Use CHARACTERS for the rigged GLB profile added alongside the strict static one. V0.5 verifies a single-armature, one-skin, embedded transform-animation profile. Zero-duration poses are reported by the container but excluded from the playable clip list. Examples 09 and 11 demonstrate one versioned static environment collection reused through the CLI.

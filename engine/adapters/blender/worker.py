@@ -98,6 +98,41 @@ def aim(obj, point):
     obj.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
 
 
+def media_image(directory, entry, channel):
+    source = next(item["source_file"] for item in entry["files"] if item["channel"] == channel)
+    path = (directory / source).resolve()
+    if not path.is_relative_to(directory.resolve()):
+        raise ValueError("Environment media escapes job directory")
+    image = bpy.data.images.load(str(path), check_existing=True)
+    if not all(image.size) or not image.has_data or max(image.size) > 4096:
+        raise ValueError(f"Invalid or oversized environment image: {channel}")
+    image.pack()
+    return image
+
+
+def apply_ground_media(material, directory, entry, repeats):
+    nodes = material.node_tree.nodes
+    links = material.node_tree.links
+    shader = nodes.get("Principled BSDF")
+    coords = nodes.new("ShaderNodeTexCoord")
+    scale = nodes.new("ShaderNodeVectorMath")
+    scale.operation = "SCALE"
+    scale.inputs["Scale"].default_value = repeats
+    links.new(coords.outputs["Object"], scale.inputs[0])
+    for channel, destination in (("Diffuse", "Base Color"), ("Rough", "Roughness"), ("nor_gl", "Normal")):
+        texture = nodes.new("ShaderNodeTexImage")
+        texture.image = media_image(directory, entry, channel)
+        links.new(scale.outputs["Vector"], texture.inputs["Vector"])
+        if channel != "Diffuse":
+            texture.image.colorspace_settings.name = "Non-Color"
+        if channel == "nor_gl":
+            normal = nodes.new("ShaderNodeNormalMap")
+            links.new(texture.outputs["Color"], normal.inputs["Color"])
+            links.new(normal.outputs["Normal"], shader.inputs[destination])
+        else:
+            links.new(texture.outputs["Color"], shader.inputs[destination])
+
+
 def build(project, directory):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
@@ -139,8 +174,14 @@ def build(project, directory):
     background = world.node_tree.nodes.get("Background")
     background.inputs["Color"].default_value = (*environment["background"], 1)
     background.inputs["Strength"].default_value = environment["strength"]
+    media_path = directory / "environment-map.json"
+    media = json.loads(media_path.read_text(encoding="utf-8")) if media_path.is_file() else {}
+    if "hdri" in media:
+        sky = world.node_tree.nodes.new("ShaderNodeTexEnvironment")
+        sky.image = media_image(directory, media["hdri"], "hdri")
+        world.node_tree.links.new(sky.outputs["Color"], background.inputs["Color"])
     asset_map = json.loads((directory / "asset-map.json").read_text(encoding="utf-8"))
-    entities, imported_assets = {}, []
+    entities, imported_assets, rig_equipment = {}, [], []
     for item in spec["entities"]:
         if "asset" in item:
             reference = item["asset"]
@@ -148,12 +189,16 @@ def build(project, directory):
             source = (directory / entry["source_file"]).resolve()
             if not source.is_relative_to(directory.resolve()):
                 raise ValueError("Asset snapshot escapes job directory")
-            obj, report = import_asset(source, item["id"], item["normalize"], item["pivot"])
+            obj, report = import_asset(source, item["id"], item["normalize"], item["pivot"],
+                profile=entry["container"].get("profile", "static"), clips=item.get("clips", []), fps=settings["fps"])
             if report["missing_textures"]:
                 raise ValueError(f"Missing asset textures: {report['missing_textures']}")
             apply_transform(obj, item)
             animate(obj, item)
             imported_assets.append({"entity": item["id"], "asset": reference, **report})
+            if item.get("equipment"):
+                rig = next(child for child in obj.children_recursive if child.type == "ARMATURE")
+                rig_equipment.append((rig, report["humanoid_mapping"], item["equipment"]))
         elif "character" in item:
             obj = build_talking_head(item)
             apply_transform(obj, item)
@@ -161,6 +206,12 @@ def build(project, directory):
         else:
             obj = create_entity(item)
         entities[item["id"]] = obj
+    for rig, mapping, equipment in rig_equipment:
+        for role, identifier in equipment.items():
+            prop = entities[identifier]
+            prop.parent = rig
+            prop.parent_type = "BONE"
+            prop.parent_bone = mapping[role]
     audio_events = {event["id"]: event for event in project.get("audio", [])}
     for performance in project.get("performances", []):
         event = audio_events[performance["audio_event_id"]]
@@ -171,6 +222,9 @@ def build(project, directory):
         ground = bpy.context.object
         ground.name = "ATLAS_ground"
         ground.data.materials.append(material(environment["ground_material"], "Ground"))
+        if "material" in media:
+            apply_ground_media(ground.data.materials[0], directory, media["material"],
+                               environment["texture_repeats_per_meter"])
     for light in spec["lights"]:
         data = bpy.data.lights.new(light["id"], light["kind"])
         data.energy, data.color = light["energy"], light["color"]

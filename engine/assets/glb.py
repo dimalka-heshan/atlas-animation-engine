@@ -11,7 +11,9 @@ MAX_GLB_BYTES = 256 * 1024 * 1024
 MAX_JSON_BYTES = 8 * 1024 * 1024
 
 
-def inspect_glb(path: Path) -> dict:
+def inspect_glb(path: Path, profile: str = "static") -> dict:
+    if profile not in {"static", "rigged"}:
+        raise ValueError("Unknown GLB import profile")
     size = path.stat().st_size
     if not 20 <= size <= MAX_GLB_BYTES:
         raise ValueError("GLB size must be between 20 bytes and 256 MiB")
@@ -47,12 +49,12 @@ def inspect_glb(path: Path) -> dict:
             or document["asset"].get("version") != "2.0"):
         raise ValueError("GLB must contain a glTF 2.0 JSON document")
     try:
-        return _inspect_document(document, binary_size, size)
+        return _inspect_document(document, binary_size, size, profile)
     except (TypeError, KeyError, AttributeError, IndexError, RecursionError) as exc:
         raise ValueError("Malformed GLB document structure") from exc
 
 
-def _inspect_document(doc: dict, binary_size: int, size: int) -> dict:
+def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "static") -> dict:
     def walk(value):
         if isinstance(value, dict):
             if "uri" in value:
@@ -68,9 +70,9 @@ def _inspect_document(doc: dict, binary_size: int, size: int) -> dict:
     walk(doc)
     if doc.get("extensionsUsed") or doc.get("extensionsRequired"):
         raise ValueError("GLB extensions are not supported by this importer profile")
-    if doc.get("animations") or doc.get("skins"):
+    if profile == "static" and (doc.get("animations") or doc.get("skins")):
         raise ValueError("Animated/skinned GLBs are unsupported; use a static mesh asset")
-    _check_scene(doc)
+    _check_scene(doc, rigged=profile == "rigged")
     buffers = doc.get("buffers", [])
     if len(buffers) > 1:
         raise ValueError("GLB must have at most one embedded buffer")
@@ -112,13 +114,17 @@ def _inspect_document(doc: dict, binary_size: int, size: int) -> dict:
                 raise ValueError("Only triangle-surface GLB primitives are supported")
             if primitive.get("targets"):
                 raise ValueError("GLB morph targets are not supported")
-    return {"format": "glb", "gltf_version": "2.0", "size_bytes": size,
+    if profile == "rigged":
+        from engine.assets.rigged import validate_rigged
+        validate_rigged(doc)
+    return {"format": "glb", "gltf_version": "2.0", "size_bytes": size, "profile": profile,
             "mesh_count": len(doc.get("meshes", [])), "material_count": len(doc.get("materials", [])),
-            "texture_count": len(doc.get("images", [])), "animation_count": 0, "skin_count": 0,
+            "texture_count": len(doc.get("images", [])), "animation_count": len(doc.get("animations", [])),
+            "skin_count": len(doc.get("skins", [])),
             "external_dependencies": []}
 
 
-def _check_scene(doc: dict) -> None:
+def _check_scene(doc: dict, *, rigged: bool = False) -> None:
     """Blender may import unmatched nodes; reject them before importer execution."""
     nodes, scenes = doc.get("nodes", []), doc.get("scenes", [])
     if not isinstance(nodes, list) or not isinstance(scenes, list):
@@ -135,7 +141,7 @@ def _check_scene(doc: dict) -> None:
         if type(index) is not int or not 0 <= index < len(nodes):
             raise ValueError("GLB scene has an invalid node reference")
     for node in nodes:
-        if "camera" in node or "skin" in node:
+        if "camera" in node or ("skin" in node and not rigged):
             raise ValueError("GLB camera/skin nodes are unsupported")
         for child in node.get("children", []):
             valid_index(child)

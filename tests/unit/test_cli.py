@@ -30,7 +30,8 @@ def test_examples_are_valid():
     assert len(examples) >= 3
     for path in examples:
         project = Project.model_validate_json(path.read_text())
-        if project_asset_references(project) or project.audio:
+        if (project_asset_references(project) or project.audio
+                or project.scene.environment.hdri or project.scene.environment.ground_texture):
             # Media examples require initialized libraries; real resolution/rendering
             # is covered by integration tests rather than a developer's local library.
             continue

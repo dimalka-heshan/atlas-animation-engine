@@ -64,7 +64,7 @@ class AssetRegistry:
         finally:
             db.close()
 
-    def register(self, source: Path, asset_id: str, provenance: Provenance) -> dict:
+    def register(self, source: Path, asset_id: str, provenance: Provenance, *, profile: str = "static") -> dict:
         """Snapshot a local GLB; identical latest registration is idempotent."""
         ID.validate_python(asset_id)
         provenance = Provenance.model_validate(provenance.model_dump())
@@ -87,7 +87,7 @@ class AssetRegistry:
                         destination.write(chunk)
                 destination.flush()
                 os.fsync(destination.fileno())
-            container = inspect_glb(temporary)
+            container = inspect_glb(temporary, profile)
             digest = file_hash(temporary)
             blob = contained_path(self.root, f"blobs/{digest}.glb")
             metadata = json.dumps(provenance.model_dump(mode="json"), sort_keys=True)
@@ -99,7 +99,8 @@ class AssetRegistry:
                 else:
                     os.replace(temporary, blob)
                 latest = db.execute("SELECT * FROM asset_versions WHERE id=? ORDER BY version DESC LIMIT 1", (asset_id,)).fetchone()
-                if latest and latest["sha256"] == digest and latest["provenance"] == metadata:
+                if (latest and latest["sha256"] == digest and latest["provenance"] == metadata
+                        and json.loads(latest["container"]).get("profile", "static") == profile):
                     version = latest["version"]
                 else:
                     version = latest["version"] + 1 if latest else 1
@@ -166,7 +167,7 @@ class AssetRegistry:
         path = contained_path(self.root, f"blobs/{digest}.glb")
         if not path.is_file() or file_hash(path) != digest:
             raise ValueError(f"Asset {asset_id} version {version} is missing or has a content hash mismatch")
-        inspect_glb(path)
+        inspect_glb(path, entry["container"].get("profile", "static"))
         if require_inspection and entry["inspection"]["status"] != "ready":
             raise ValueError(f"Asset {asset_id} version {version} requires successful Blender inspection")
         if require_inspection:
@@ -178,6 +179,11 @@ class AssetRegistry:
         proof = InspectionProof.model_validate(report)
         if proof.source_sha256 != entry["sha256"]:
             raise ValueError("Inspection content hash does not match the registered asset version")
+        profile = entry["container"].get("profile", "static")
+        if proof.inspection_profile != f"atlas-{profile}-glb-1":
+            raise ValueError("Inspection profile does not match registry asset profile")
+        if profile == "rigged" and (report.get("skeleton_count") != 1 or not report.get("clips")):
+            raise ValueError("Rigged inspection requires one skeleton and playable clips")
 
     def set_thumbnail(self, asset_id: str, version: int, status: str, report: dict) -> None:
         if status not in {"ready", "failed"}:

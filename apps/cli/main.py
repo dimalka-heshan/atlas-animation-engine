@@ -11,10 +11,12 @@ from apps.cli.assets import add_asset_commands, run_asset_command
 from apps.cli.audio import add_audio_commands, run_audio_command
 from apps.cli.voice import add_voice_commands, run_voice_command
 from apps.cli.lipsync import add_lipsync_commands, run_lipsync_command
+from apps.cli.characters import add_character_commands, run_character_command
 from engine.audio.production import resolve_audio
 from engine.assets.resolution import resolve_project_assets
+from engine.assets.environment_media import resolve_media
 from engine import __version__
-from engine.core.models import Project
+from engine.core.models import EnvironmentCollection, Project
 from engine.rendering.pipeline import render_project
 from engine.rendering.runtime import doctor, find_tool
 from engine.rendering.video import verify_video
@@ -47,9 +49,12 @@ def parser() -> argparse.ArgumentParser:
     add_audio_commands(sub)
     add_voice_commands(sub)
     add_lipsync_commands(sub)
+    add_character_commands(sub)
     validate = sub.add_parser("validate", help="validate a project and expand procedural placement")
     validate.add_argument("project", type=Path)
     validate.add_argument("--asset-library", type=Path, default=Path("assets/library"))
+    validate.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
+    validate.add_argument("--environment-collection", type=Path)
     validate.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
     render = sub.add_parser("render", help="render and verify a new production job")
     render.add_argument("project", type=Path)
@@ -57,6 +62,8 @@ def parser() -> argparse.ArgumentParser:
     render.add_argument("--blender", type=Path)
     render.add_argument("--engine", choices=["cycles", "eevee"])
     render.add_argument("--asset-library", type=Path, default=Path("assets/library"))
+    render.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
+    render.add_argument("--environment-collection", type=Path)
     render.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
@@ -90,23 +97,31 @@ def main(argv: list[str] | None = None) -> int:
             result = run_voice_command(args)
         elif args.command == "lipsync":
             result = run_lipsync_command(args)
+        elif args.command in {"characters", "animations"}:
+            result = run_character_command(args)
         else:
             project = load_project(args.project)
+            collection = getattr(args, "environment_collection", None)
+            if collection:
+                if collection.stat().st_size > 2 * 1024 * 1024:
+                    raise ValueError("Environment collection exceeds 2 MiB")
+                project = EnvironmentCollection.model_validate_json(collection.read_text(encoding="utf-8-sig")).apply(project)
             if args.command == "validate":
                 expanded = expand_project(project)
                 assets = resolve_project_assets(expanded, args.asset_library)
                 audio = resolve_audio(expanded, args.audio_library)
+                media = resolve_media(expanded, args.asset_cache)
                 result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
                           "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
                           "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets],
-                          "audio_events": len(audio)}
+                          "audio_events": len(audio), "environment_media": len(media)}
             elif args.command == "verify":
                 result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"), expect_audio=bool(project.audio))
             else:
                 if args.engine:
                     project.render.engine = args.engine
                 path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library,
-                    audio_library=args.audio_library)
+                    audio_library=args.audio_library, asset_cache=args.asset_cache)
                 result = {"status": "succeeded", "video": str(path), "manifest": str(path.parent / "manifest.json")}
         print(json.dumps(result, indent=2))
         if args.command == "assets" and args.asset_command == "batch" and result["status"] != "succeeded":

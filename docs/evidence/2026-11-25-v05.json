@@ -1,0 +1,885 @@
+{
+  "date": "2026-11-25",
+  "version": "0.5.0",
+  "baseline_commit": "48112b2",
+  "baseline_tests": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "1",
+    "tests": "212",
+    "time": "266.694",
+    "timestamp": "2026-11-25T01:17:12.365637+05:30",
+    "report": "outputs/v05-baseline.xml"
+  },
+  "catalog_counts": {
+    "kaykit": 12,
+    "polyhaven": 1866
+  },
+  "original_source_bytes": 26160115,
+  "registry_glb_bytes": 7758180,
+  "source_transfers": [
+    {
+      "url": "https://codeload.github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/zip/672074b73ba276876a19e8816ecdc5241817ab47",
+      "sha256": "00777a7b9811a7c7f8dd3fda4e56604f6a93b33673d64557153f354d677b47af",
+      "md5": "de10aad344cce123f872bb4e795f6d17",
+      "bytes": 6147593,
+      "downloaded_at": "2026-11-24T19:49:46.850430+00:00",
+      "seconds": 2.75601579999784,
+      "cache_hit": false
+    },
+    {
+      "url": "https://codeload.github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/zip/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "sha256": "cfa7faff403c93fb90e8eeb448c78e6192782802a532bebed0bdb853b39f7028",
+      "md5": "a097befa89733713e8b199428082ee61",
+      "bytes": 8428823,
+      "downloaded_at": "2026-11-24T19:49:48.171572+00:00",
+      "seconds": 4.076700999983586,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/aerodynamics_workshop_1k.hdr",
+      "sha256": "a023beb0e6c4835c39fd5b6a6b0617abeac29c6cc7a9831037d79a5ee98dab92",
+      "md5": "d697c35023a899f39a6ce2e334b47dec",
+      "bytes": 1488808,
+      "downloaded_at": "2026-11-24T19:53:14.349127+00:00",
+      "seconds": 2.7773632000025827,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_03_1k.hdr",
+      "sha256": "30933d55e45f0795daf49f3cbefbe0e5ebcb821ee04fb0a2818c02ffc3938817",
+      "md5": "74e6ef69ea9024c2cc25b3a7de8ec2f7",
+      "bytes": 1686299,
+      "downloaded_at": "2026-11-24T19:53:09.200178+00:00",
+      "seconds": 1.325473199976841,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_diff_1k.jpg",
+      "sha256": "57b8041bfe0d0f01430e4dbaad45e7ddddf0a9fc97317f90dbc51f7b0d9e1b5d",
+      "md5": "e920ce36afd0abff000b8366d3d768d3",
+      "bytes": 666655,
+      "downloaded_at": "2026-11-24T19:53:16.851813+00:00",
+      "seconds": 0.6636347000021487,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_nor_gl_1k.jpg",
+      "sha256": "1aa3e23bff453f152e089b9f83aa36b4901651e019f7e2ca01d5331a9bbbda78",
+      "md5": "c8aa4c4f09b113cc7edef89ddeaccad9",
+      "bytes": 904956,
+      "downloaded_at": "2026-11-24T19:53:19.400629+00:00",
+      "seconds": 1.8877626999747008,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/aerial_grass_rock/aerial_grass_rock_rough_1k.jpg",
+      "sha256": "b9f3f76aba74007f708333c0dbe73c52eb83ea0c4187a13e2e994f888a25114a",
+      "md5": "f78c5cdc565f990299ae7c5a81f68cf7",
+      "bytes": 362214,
+      "downloaded_at": "2026-11-24T19:53:17.508363+00:00",
+      "seconds": 0.6503996000101324,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_diffuse_1k.jpg",
+      "sha256": "6a1233ec0186703de830354d89f122991e61e67fb67e0846c7eaf6c5aefea902",
+      "md5": "955d2d4500eb549be0f2873305782798",
+      "bytes": 574381,
+      "downloaded_at": "2026-11-24T19:53:21.488341+00:00",
+      "seconds": 0.53150410001399,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_nor_gl_1k.jpg",
+      "sha256": "8afbe3919308b168a6b7235fe7b930f670cfffa1a34de39ee790d55c9d7bda09",
+      "md5": "be151875ed0897fc716aeef6daac8bd5",
+      "bytes": 295279,
+      "downloaded_at": "2026-11-24T19:53:25.447716+00:00",
+      "seconds": 1.9380052000051364,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/brick_wall_001/brick_wall_001_rough_1k.jpg",
+      "sha256": "a23342b02e6c5af106aaece16130aa9153a801cb1a84d5f3e0d06ce248677f38",
+      "md5": "618ceca60a4321aecc6d61eebe53d551",
+      "bytes": 211093,
+      "downloaded_at": "2026-11-24T19:53:23.504132+00:00",
+      "seconds": 2.010950900003081,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cobblestone_floor_01/cobblestone_floor_01_diff_1k.jpg",
+      "sha256": "7630d6a59501cab4d2295b2be47bad892b8dae49895b4bee6bc26fd45c423e05",
+      "md5": "ef7a4b9314ccd7f11ea07a06b81e515a",
+      "bytes": 459525,
+      "downloaded_at": "2026-11-24T19:53:31.408297+00:00",
+      "seconds": 0.5270739999832585,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cobblestone_floor_01/cobblestone_floor_01_nor_gl_1k.jpg",
+      "sha256": "e8a07bd38fdaeb92a419bc4829631847df7c03fd657dd32b44f19e2550a4fb35",
+      "md5": "25994f0cbfefb6a4be0e0a349fa8c3ea",
+      "bytes": 785399,
+      "downloaded_at": "2026-11-24T19:53:35.834284+00:00",
+      "seconds": 2.340987600007793,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/cobblestone_floor_01/cobblestone_floor_01_rough_1k.jpg",
+      "sha256": "18a5c4320378bc7eb17b2bc14981331912b1f0ff3100ced0a97aa59234377d41",
+      "md5": "5aae412052050610a59763370841b2d4",
+      "bytes": 327745,
+      "downloaded_at": "2026-11-24T19:53:33.486964+00:00",
+      "seconds": 2.0734266999934334,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_diff_1k.jpg",
+      "sha256": "7399f1e11292899f143c12c79cd7c7aa30294fa5564052f92a45a1bf80c615ba",
+      "md5": "54cde4912f2ce068aea22f9cae51d787",
+      "bytes": 588987,
+      "downloaded_at": "2026-11-24T19:53:39.929307+00:00",
+      "seconds": 2.4387287000135984,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_nor_gl_1k.jpg",
+      "sha256": "2bd220a803e5e6be9b7bde0312a20a06d239f6ca8b17b78215cc3b99818a82f7",
+      "md5": "28632e917b38c104ce218e1d252cee39",
+      "bytes": 1075639,
+      "downloaded_at": "2026-11-24T19:53:45.309562+00:00",
+      "seconds": 2.9983827999967616,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rocks_ground_04/rocks_ground_04_rough_1k.jpg",
+      "sha256": "9c189349e48f630f5d504fcb051a042599703b45adf42236d10989527d2dc5f7",
+      "md5": "c1cd7552be2356a9b99957dd3af7ff06",
+      "bytes": 471169,
+      "downloaded_at": "2026-11-24T19:53:42.305707+00:00",
+      "seconds": 2.3703979999991134,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_floor/wood_floor_diff_1k.jpg",
+      "sha256": "2a1c07687b6dbb214c4b9213739c6d92d425f1f0fc8ab3ac157f105d78240789",
+      "md5": "b7e927d2bf2f8f103820ff3890c8407c",
+      "bytes": 734493,
+      "downloaded_at": "2026-11-24T19:53:27.906911+00:00",
+      "seconds": 0.6064356999995653,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_floor/wood_floor_nor_gl_1k.jpg",
+      "sha256": "452247f0d0d1b7fc7f8324ff3b6ed60bcc6de1405f4284eeb8d9bce90d4939c2",
+      "md5": "620f174d2c09b579c5d02d37b2106668",
+      "bytes": 423303,
+      "downloaded_at": "2026-11-24T19:53:29.595526+00:00",
+      "seconds": 0.5837356999982148,
+      "cache_hit": false
+    },
+    {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_floor/wood_floor_rough_1k.jpg",
+      "sha256": "061f1e1293251b2d28c76e3fac1ea9452b0e8648bb8f9b3728e09db386166e5c",
+      "md5": "36146634f1dbd1bc30cd071857584c10",
+      "bytes": 527754,
+      "downloaded_at": "2026-11-24T19:53:29.005745+00:00",
+      "seconds": 1.0928014000237454,
+      "cache_hit": false
+    }
+  ],
+  "inspected_glbs": [
+    {
+      "id": "kaykit-barrel",
+      "version": 1,
+      "sha256": "a5eb9b84ea541f7480e38b2f8e2475437897aaa7b2ce70d44690040186dafa11",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 32724,
+      "triangles": 240,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.20147636532783508,
+        0.20147636532783508,
+        0.2117120772600174
+      ],
+      "import_seconds": 0.5630775000026915,
+      "inspection_process_seconds": 3.1029304999974556,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-bridge",
+      "version": 1,
+      "sha256": "5d7c38974113725bc84b83ddab1cf80b2037d37e0f81712ba42d774c5de44c7c",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 42732,
+      "triangles": 604,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        1.3333312273025513,
+        1.9244996309280396,
+        1.25
+      ],
+      "import_seconds": 0.5200774000259116,
+      "inspection_process_seconds": 3.176525299990317,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-cart",
+      "version": 1,
+      "sha256": "415e45d4d1206ffa971917186e9ec1e1be5b1c0ac068f74d315a25ad06f58b99",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 36200,
+      "triangles": 396,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.23800000548362732,
+        0.5056796669960022,
+        0.18841524422168732
+      ],
+      "import_seconds": 0.5218352000229061,
+      "inspection_process_seconds": 3.0878860999946482,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-crate",
+      "version": 1,
+      "sha256": "bdc1b844f5c687d2041535ee61c1a0e5b16eae5ed7b17bfa0ff6a154390f30c4",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 24180,
+      "triangles": 132,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.21000000834465027,
+        0.21000000834465027,
+        0.21000000834465027
+      ],
+      "import_seconds": 0.519201700022677,
+      "inspection_process_seconds": 3.0660523000115063,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-fence",
+      "version": 1,
+      "sha256": "ea0e7104d71df45638b233358b04407c59d3b5ee9bf23725bc8459f09da29973",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 32208,
+      "triangles": 212,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.10000002384185791,
+        1.1547009944915771,
+        0.5500127077102661
+      ],
+      "import_seconds": 0.5263310000009369,
+      "inspection_process_seconds": 3.2320227999880444,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-gate",
+      "version": 1,
+      "sha256": "3734190144f76db86666cfa6139e6025f58a25825875cb16c771e592aea6ba12",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 66192,
+      "triangles": 820,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        2.0,
+        0.895624041557312,
+        1.4140288829803467
+      ],
+      "import_seconds": 0.5910888999933377,
+      "inspection_process_seconds": 3.1833577000070363,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-knight",
+      "version": 1,
+      "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+      "license": "CC0-1.0",
+      "profile": "rigged",
+      "status": "ready",
+      "bytes": 3659532,
+      "triangles": 7032,
+      "textures": [
+        {
+          "name": "knight_texture",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        1.9425067901611328,
+        1.017024278640747,
+        2.3145346641540527
+      ],
+      "import_seconds": 2.7504738999996334,
+      "inspection_process_seconds": 7.457364800007781,
+      "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+      "skinned_mesh_count": 6,
+      "playable_actions": 69
+    },
+    {
+      "id": "kaykit-mage",
+      "version": 1,
+      "sha256": "cf898585da33fab50c724d31605fb931eb2912e6d2280092141e98ca81ad507d",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+      "license": "CC0-1.0",
+      "profile": "rigged",
+      "status": "ready",
+      "bytes": 3589240,
+      "triangles": 5763,
+      "textures": [
+        {
+          "name": "mage_texture",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        1.9425067901611328,
+        1.2673869132995605,
+        2.202704906463623
+      ],
+      "import_seconds": 2.930048700014595,
+      "inspection_process_seconds": 5.820657200005371,
+      "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+      "skinned_mesh_count": 6,
+      "playable_actions": 69
+    },
+    {
+      "id": "kaykit-rock",
+      "version": 1,
+      "sha256": "26aee5e322ce8de7724acc19fd83670a971e78a3ae96c500121b3c65ae10b25a",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 18380,
+      "triangles": 18,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.2982180118560791,
+        0.28362220525741577,
+        0.06930101662874222
+      ],
+      "import_seconds": 0.5207189000211656,
+      "inspection_process_seconds": 3.1758260000206064,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-tavern",
+      "version": 1,
+      "sha256": "754d849865cc2e745e37b7f5b81f7ecc04ff8bb8ed3dd2b90c7abc02f6a5495b",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 188056,
+      "triangles": 2992,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        1.1717281341552734,
+        1.332317590713501,
+        1.3966500759124756
+      ],
+      "import_seconds": 0.5431172999960836,
+      "inspection_process_seconds": 3.3456237000063993,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-tree",
+      "version": 1,
+      "sha256": "2befae74f3a41b99b4b1851e63fbf0a6e6712c9fc150c414583716751e875dfd",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 20516,
+      "triangles": 50,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        0.5739741325378418,
+        0.5470093488693237,
+        1.1964486837387085
+      ],
+      "import_seconds": 0.5332157999800984,
+      "inspection_process_seconds": 3.152827799989609,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    },
+    {
+      "id": "kaykit-wall",
+      "version": 1,
+      "sha256": "16d6c3a382837fb9d946e95085773b1b22d9947627394e157096ca2dd78dd76e",
+      "source": "https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38",
+      "license": "CC0-1.0",
+      "profile": "static",
+      "status": "ready",
+      "bytes": 48220,
+      "triangles": 504,
+      "textures": [
+        {
+          "name": "hexagons_medieval",
+          "size": [
+            1024,
+            1024
+          ],
+          "packed": true
+        }
+      ],
+      "dimensions": [
+        2.0,
+        0.800000011920929,
+        1.0999999046325684
+      ],
+      "import_seconds": 0.5428592000098433,
+      "inspection_process_seconds": 3.1344710999983363,
+      "skeleton_sha256": null,
+      "skinned_mesh_count": 0,
+      "playable_actions": 0
+    }
+  ],
+  "inspected_environment_media": [
+    {
+      "id": "polyhaven-aerial_grass_rock",
+      "files": [
+        {
+          "channel": "Diffuse",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "57b8041bfe0d0f01430e4dbaad45e7ddddf0a9fc97317f90dbc51f7b0d9e1b5d"
+        },
+        {
+          "channel": "Rough",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "b9f3f76aba74007f708333c0dbe73c52eb83ea0c4187a13e2e994f888a25114a"
+        },
+        {
+          "channel": "nor_gl",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "1aa3e23bff453f152e089b9f83aa36b4901651e019f7e2ca01d5331a9bbbda78"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-aerodynamics_workshop",
+      "files": [
+        {
+          "channel": "hdri",
+          "width": 1024,
+          "height": 512,
+          "sha256": "a023beb0e6c4835c39fd5b6a6b0617abeac29c6cc7a9831037d79a5ee98dab92"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-brick_wall_001",
+      "files": [
+        {
+          "channel": "Diffuse",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "6a1233ec0186703de830354d89f122991e61e67fb67e0846c7eaf6c5aefea902"
+        },
+        {
+          "channel": "Rough",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "a23342b02e6c5af106aaece16130aa9153a801cb1a84d5f3e0d06ce248677f38"
+        },
+        {
+          "channel": "nor_gl",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "8afbe3919308b168a6b7235fe7b930f670cfffa1a34de39ee790d55c9d7bda09"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-cobblestone_floor_01",
+      "files": [
+        {
+          "channel": "Diffuse",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "7630d6a59501cab4d2295b2be47bad892b8dae49895b4bee6bc26fd45c423e05"
+        },
+        {
+          "channel": "Rough",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "18a5c4320378bc7eb17b2bc14981331912b1f0ff3100ced0a97aa59234377d41"
+        },
+        {
+          "channel": "nor_gl",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "e8a07bd38fdaeb92a419bc4829631847df7c03fd657dd32b44f19e2550a4fb35"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-rocks_ground_04",
+      "files": [
+        {
+          "channel": "Diffuse",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "7399f1e11292899f143c12c79cd7c7aa30294fa5564052f92a45a1bf80c615ba"
+        },
+        {
+          "channel": "Rough",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "9c189349e48f630f5d504fcb051a042599703b45adf42236d10989527d2dc5f7"
+        },
+        {
+          "channel": "nor_gl",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "2bd220a803e5e6be9b7bde0312a20a06d239f6ca8b17b78215cc3b99818a82f7"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-studio_small_03",
+      "files": [
+        {
+          "channel": "hdri",
+          "width": 1024,
+          "height": 512,
+          "sha256": "30933d55e45f0795daf49f3cbefbe0e5ebcb821ee04fb0a2818c02ffc3938817"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven-wood_floor",
+      "files": [
+        {
+          "channel": "Diffuse",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "2a1c07687b6dbb214c4b9213739c6d92d425f1f0fc8ab3ac157f105d78240789"
+        },
+        {
+          "channel": "Rough",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "061f1e1293251b2d28c76e3fac1ea9452b0e8648bb8f9b3728e09db386166e5c"
+        },
+        {
+          "channel": "nor_gl",
+          "width": 1024,
+          "height": 1024,
+          "sha256": "452247f0d0d1b7fc7f8324ff3b6ed60bcc6de1405f4284eeb8d9bce90d4939c2"
+        }
+      ]
+    }
+  ],
+  "speech": {
+    "format": {
+      "duration_seconds": 4.27,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width": 2,
+      "frames": 102480,
+      "peak": 0.461395263671875,
+      "clipped_samples": 0,
+      "sha256": "1cb13c530e79c9e9fe429f4812231014b83a25876e7d0a14aa452be11b32d6e3"
+    },
+    "inference_seconds": 34.844456099992385,
+    "wav": "outputs/v04-voices/profiles/atlas-demo/cache/623a170070277f683eb52b99e29dc4a3b8a90f2859a7cbc7d04b381cc68f1e49/speech.wav",
+    "mouth_cue_count": 29
+  },
+  "renders": [
+    {
+      "project": "medieval-asset-showcase",
+      "video_file": "outputs/medieval-asset-showcase-b733ddd366a04f89adc66474ad88122e/video.mp4",
+      "scene_file": "outputs/medieval-asset-showcase-b733ddd366a04f89adc66474ad88122e/scene.blend",
+      "manifest": "outputs/medieval-asset-showcase-b733ddd366a04f89adc66474ad88122e/manifest.json",
+      "engine_source_sha256": "8875a26fb29a9bc8705ce33eb2612d1b159be7fbf94bdcd40bebfa161f65ebee",
+      "video": {
+        "width": 480,
+        "height": 270,
+        "frames": 48,
+        "fps": 12.0,
+        "duration": 4.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "56a41797f764e8700f349effafbf4c44631c4789a404a2d696f46702049ad044"
+      },
+      "timings_seconds": {
+        "blender_process": 56.75892120000208,
+        "encoding": 0.4404443000094034,
+        "decode_verification": 0.1345893999969121,
+        "total": 58.62340309997671
+      },
+      "inspected_frame": "outputs/medieval-asset-showcase-b733ddd366a04f89adc66474ad88122e/frames/000024.png",
+      "job_bytes": 16554386
+    },
+    {
+      "project": "source-rig-showcase",
+      "video_file": "outputs/source-rig-showcase-989dcb340456453b8ee545c0d860ca0c/video.mp4",
+      "scene_file": "outputs/source-rig-showcase-989dcb340456453b8ee545c0d860ca0c/scene.blend",
+      "manifest": "outputs/source-rig-showcase-989dcb340456453b8ee545c0d860ca0c/manifest.json",
+      "engine_source_sha256": "8875a26fb29a9bc8705ce33eb2612d1b159be7fbf94bdcd40bebfa161f65ebee",
+      "video": {
+        "width": 480,
+        "height": 270,
+        "frames": 48,
+        "fps": 12.0,
+        "duration": 4.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "1bdaea7ed84bf54e57fccec5d9e5852b5d6a08d15d1d9ea52262ff9bf2d09e29"
+      },
+      "timings_seconds": {
+        "blender_process": 42.49228799997945,
+        "encoding": 0.267832699988503,
+        "decode_verification": 0.09673649998148903,
+        "total": 43.79105300002266
+      },
+      "inspected_frame": "outputs/source-rig-showcase-989dcb340456453b8ee545c0d860ca0c/frames/000020.png",
+      "job_bytes": 11799214
+    },
+    {
+      "project": "atlas-talking-head",
+      "video_file": "outputs/atlas-talking-head-790ada2f6a3f4c3a956b1a9762aa82f1/video.mp4",
+      "scene_file": "outputs/atlas-talking-head-790ada2f6a3f4c3a956b1a9762aa82f1/scene.blend",
+      "manifest": "outputs/atlas-talking-head-790ada2f6a3f4c3a956b1a9762aa82f1/manifest.json",
+      "engine_source_sha256": "8875a26fb29a9bc8705ce33eb2612d1b159be7fbf94bdcd40bebfa161f65ebee",
+      "video": {
+        "width": 360,
+        "height": 360,
+        "frames": 58,
+        "fps": 12.0,
+        "duration": 4.833333,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 4.833,
+          "start_time": 0.0
+        },
+        "sha256": "d1abe62a8cacd7134cc7d99b3c4849592a3ea008c78b1f37112a952b0b47f61b"
+      },
+      "timings_seconds": {
+        "blender_process": 59.61819020000985,
+        "encoding": 0.2161725000187289,
+        "audio_mux": 0.39576350001152605,
+        "decode_verification": 0.13075720000779256,
+        "total": 61.40018029999919
+      },
+      "inspected_frame": "outputs/atlas-talking-head-790ada2f6a3f4c3a956b1a9762aa82f1/frames/000018.png",
+      "job_bytes": 9775597
+    },
+    {
+      "project": "medieval-courtyard",
+      "video_file": "outputs/medieval-courtyard-d82aefec350d42ec823ebb38f76a6606/video.mp4",
+      "scene_file": "outputs/medieval-courtyard-d82aefec350d42ec823ebb38f76a6606/scene.blend",
+      "manifest": "outputs/medieval-courtyard-d82aefec350d42ec823ebb38f76a6606/manifest.json",
+      "engine_source_sha256": "0b4803bfc5695693217e23cfb45f8dec80337e7d3815f2223c940723d0a2b0a6",
+      "video": {
+        "width": 480,
+        "height": 270,
+        "frames": 72,
+        "fps": 12.0,
+        "duration": 6.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 6.0,
+          "start_time": 0.0
+        },
+        "sha256": "cc4ce13c022d44dbe6fe254d949ec90db8455bf0a540985af28038c8118ca05f"
+      },
+      "timings_seconds": {
+        "blender_process": 77.18930330002331,
+        "encoding": 0.7910087000054773,
+        "audio_mux": 0.38576810000813566,
+        "decode_verification": 0.13527589998557232,
+        "total": 80.21215619999566
+      },
+      "inspected_frame": "outputs/medieval-courtyard-d82aefec350d42ec823ebb38f76a6606/frames/000018.png",
+      "job_bytes": 25748730
+    }
+  ],
+  "final_suite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "1",
+    "tests": "228",
+    "time": "169.510",
+    "timestamp": "2026-11-25T01:36:31.576456+05:30",
+    "report": "outputs/v05-final-tests.xml"
+  },
+  "final_focused_checks": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "16",
+    "time": "9.564",
+    "timestamp": "2026-11-25T01:37:10.875793+05:30",
+    "report": "outputs/v05-review-tests.xml"
+  },
+  "saved_scene_checks": [
+    "Packed and decoded Poly Haven HDRI and three ground maps in showcase",
+    "Two armatures with three NLA strips each, active mouth cue, terminal facial rest and local audio reference in courtyard"
+  ],
+  "render_timing_note": "Demo runs precede the final NLA terminal-frame review fix and retain their original engine hashes. Reopened Blender rig integration and installed wheel exercised the corrected raw endpoint.",
+  "installed_wheel_smoke": {
+    "video": "outputs/installed-v05/v05-installed-smoke-390408d2fb6843fe94a0692213cbd9ae/video.mp4",
+    "timings_seconds": {
+      "blender_process": 5.29471069999272,
+      "encoding": 0.08726029997342266,
+      "decode_verification": 0.05972540000220761,
+      "total": 6.31556499999715
+    },
+    "video_report": {
+      "width": 64,
+      "height": 64,
+      "frames": 4,
+      "fps": 4.0,
+      "duration": 1.0,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "7234e06e1d3bd1f849221a029529d9a9c5d762162974a72e5ace7ee8fe291dab"
+    },
+    "cwd": "outside checkout"
+  }
+}

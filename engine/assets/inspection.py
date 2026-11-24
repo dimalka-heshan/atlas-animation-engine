@@ -19,6 +19,7 @@ def inspect_asset(registry: AssetRegistry, asset_id: str, version: int, *, blend
     workspace.mkdir(parents=True)
     try:
         entry = registry.resolve(asset_id, version, require_inspection=False)
+        profile = entry["container"].get("profile", "static")
         source = workspace / "source.glb"
         shutil.copyfile(entry["path"], source)
         if file_hash(source) != entry["sha256"]:
@@ -26,11 +27,11 @@ def inspect_asset(registry: AssetRegistry, asset_id: str, version: int, *, blend
         worker = Path(__file__).resolve().parents[1] / "adapters" / "blender" / "inspect_asset.py"
         elapsed = run_logged([str(find_tool("blender", blender)), "--background", "--factory-startup",
             "--disable-autoexec", "--python-exit-code", "1", "--python", str(worker), "--",
-            str(source), str(workspace / "report.json")], workspace / "blender.log", timeout)
+            str(source), str(workspace / "report.json"), profile], workspace / "blender.log", timeout)
         report = json.loads((workspace / "report.json").read_text(encoding="utf-8"))
         if report["missing_textures"]:
             raise ValueError(f"Asset has missing textures: {report['missing_textures']}")
-        report.update(process_seconds=elapsed, source_sha256=entry["sha256"], inspection_profile="atlas-static-glb-1",
+        report.update(process_seconds=elapsed, source_sha256=entry["sha256"], inspection_profile=f"atlas-{profile}-glb-1",
                       log=str((workspace / "blender.log").relative_to(registry.root)))
         registry.set_inspection(asset_id, version, "ready", report)
         LOG.info("asset_inspected", extra={"asset_id": asset_id, "version": version})

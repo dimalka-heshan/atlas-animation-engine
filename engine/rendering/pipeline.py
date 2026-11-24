@@ -10,6 +10,7 @@ from pathlib import Path
 
 from engine import __version__
 from engine.assets.resolution import resolve_project_assets, snapshot_assets
+from engine.assets.environment_media import resolve_media, snapshot_media
 from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
 from engine.rendering.runtime import capture, find_tool, run_logged
@@ -30,7 +31,8 @@ def source_digest() -> str:
 
 def render_project(project: Project, output_root: Path, *, blender: Path | None = None,
                    ffmpeg: Path | None = None, ffprobe: Path | None = None,
-                   asset_library: Path | None = None, audio_library: Path | None = None) -> Path:
+                   asset_library: Path | None = None, audio_library: Path | None = None,
+                   asset_cache: Path | None = None) -> Path:
     """Render into a new job directory inside an explicitly approved output root.
 
     Returns the verified MP4 path; errors retain the project, logs and failed status.
@@ -60,6 +62,8 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
         expanded = expand_project(project)
         entries = resolve_project_assets(expanded, asset_library or Path("assets/library"))
         manifest["assets"] = snapshot_assets(entries, directory)
+        cache = asset_cache or Path("assets/acquisition")
+        manifest["environment_media"] = snapshot_media(resolve_media(expanded, cache), cache, directory)
         audio_entries = resolve_audio(expanded, audio_library or Path("assets/audio"))
         manifest["audio"] = snapshot_audio(audio_entries, directory)
         atomic_json(directory / "resolved.json", expanded.model_dump(mode="json"))

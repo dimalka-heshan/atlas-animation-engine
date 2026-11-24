@@ -32,7 +32,8 @@ def create_thumbnail(registry: AssetRegistry, asset_id: str, version: int, *, si
         worker = Path(__file__).resolve().parents[1] / "adapters" / "blender" / "thumbnail.py"
         elapsed = run_logged([str(find_tool("blender", blender)), "--background", "--factory-startup",
             "--disable-autoexec", "--threads", "4", "--python-exit-code", "1", "--python", str(worker),
-            "--", str(source), str(workspace), str(size)], workspace / "blender.log", timeout)
+            "--", str(source), str(workspace), str(size), entry["container"].get("profile", "static")],
+            workspace / "blender.log", timeout)
         report = json.loads((workspace / "render-report.json").read_text(encoding="utf-8"))
         image_path = workspace / "thumbnail.png"
         report.update(verify_png(image_path, size))

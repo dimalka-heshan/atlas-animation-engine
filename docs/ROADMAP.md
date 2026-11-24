@@ -1,10 +1,10 @@
-# Roadmap — V2 development order
+# Roadmap â€” V2 development order
 
 The V2 master brief supersedes the older phase numbering. ATLAS remains one Python/Blender codebase. Blender is the sole 3D execution and rendering backend; no alternative renderer is planned. Existing 0.3 asset and silent-video workflows remain supported.
 
-## Current implementation cycle: 0.4 voice/audio/facial foundation
+## Foundation through 0.5
 
-The fresh 0.3 baseline passed 148 tests with one Windows file-symlink privilege skip. The current cycle adds an isolated pinned Chatterbox-Turbo provider, voice profiles/cache, approved PCM audio versions, schema 1.2 audio events, FFmpeg mixing/verification and a Rhubarb-driven original simple facial character. Actual inference and final production evidence are recorded in STATUS; presence of an adapter alone is not an exit criterion.
+V0.4 verified isolated Turbo CPU speech, approved audio versions, mixed MP4 and the editable Rhubarb-driven original character. V0.5 adds official KayKit/Poly Haven acquisition, inspected source-rig animation, independent video evidence and a reusable medieval environment collection. STATUS defines the implemented scope. The next practical milestone is deterministic locomotion and navigation, better transitions, limited cross-rig retargeting, and coordinated character interactions.
 
 ## Ordered phases and exit criteria
 
@@ -12,7 +12,7 @@ The fresh 0.3 baseline passed 148 tests with one Windows file-symlink privilege 
 1. Local voice: isolated runtime, pinned Turbo source/model, device/download diagnostics, reference consent, profiles/history, segmentation, per-line cache and verified WAV. Exit: actual local Turbo narration on supported hardware, with measured inference and explicit limitations.
 2. Narrated video: schema1.2 dialogue/narration, measured event timing, mixing and audio-aware MP4 verification. Exit: an existing scene exported with actual generated narration while silent projects remain unchanged.
 3. Lip-sync: measured alignment adapter, audio-bound cue timelines, facial mappings, editable shape-key and basic jaw controls, silence/rest/smoothing. Exit: a compatible character visibly speaks a generated line. This foundation uses coarse English mouth cues, not precise phonemes or general humanoid rigging.
-4. Real asset libraries/rigs: accept multiple properly licensed packs, external textures, versioned rigged import profiles, skeletal/clip/facial inspection, character catalog. Add FBX only for a justified accepted pack. Exit: approved real rigged characters and animations import without weakening static checks.
+4. Asset libraries and rigs: V0.5 verified two providers, an embedded GLB rig profile, approved glTF dependency packing, two source-bound humanoids and reusable environment media. Remaining: more provider/format coverage, imported facial rigs, independent motion assets and broader mappings.
 5. Movement/interactions: compatible motion libraries, locomotion/path navigation, rig profiles, blending/retargeting, semantic actions with preconditions/contact/state. Exit: multiple compatible characters execute configured actions without per-video Python.
 6. Procedural worlds: modular cities/buildings/interiors, terrain/biomes/vegetation, deterministic layouts, interaction anchors and navigation metadata. Exit: distinct usable environments from reusable asset collections.
 7. Cinematic production: persistent multi-shot state, camera library/director, dialogue-driven framing, composition/occlusion, continuity, transitions and lighting. Exit: a coherent multi-shot acted conversation.

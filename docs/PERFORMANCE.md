@@ -56,3 +56,18 @@ Previews are 256x256 PNG, CPU Cycles, 24 samples, four threads. *The thumbnail r
 The installed package then rendered `06_batch_showcase.json`: two imported originals, Eevee, 480x270, 24 frames at 24 fps, one-second verified H.264/yuv420p MP4. Blender process took 39.23 seconds, encoding 0.44 seconds and complete production 41.17 seconds. Retained job size at measurement was 3,476,093 bytes (~3.32 MiB), including sources, frames, scene and video before terminal manifest replacement.
 
 Both distinct previews and video frame 12 were visually inspected and retained alongside [machine-readable evidence](evidence/2026-11-24-batch.json). Geometry is visible and framed; the models are simple originals and video sampling noise remains visible. Other tests ran during parts of these observations. These are one-run small-collection acceptance measurements, not controlled performance comparisons, large-library throughput or third-party pack acceptance. Peak memory and final-quality rendering remain unmeasured.
+
+## V0.4 and V0.5 observations
+
+V0.4 generated 4.27 seconds of mono 24 kHz Chatterbox-Turbo speech. CPU model load and two segment inferences took 34.84 seconds on the Intel Core 7 240H. The verified WAV contained 102,480 samples and zero clipped samples. The enrolled local model is approximately 2.99 GB and the runtime is separate. V0.5 reused that exact checked speech and its measured 29-cue Rhubarb timeline.
+
+The V0.5 starter acquisition stored 26,160,115 bytes of original archive and media blobs across 19 unique files. The 12 registry GLBs total 7,758,180 bytes. Inspection loads took about 0.52–0.59 seconds for the static objects and 2.75–2.93 seconds for the two humanoids in the observed Blender runs. Normalization preserves the rig and applies a parent transform. Its standalone cost was not sampled. The exact per-file transfer and inspection data appear in the evidence JSON. These single-machine observations include development and some concurrent load.
+
+| Preview | Frames at 12 fps | Duration | Total production |
+|---|---:|---:|---:|
+| Acquired assets | 48 | 4.00 s | 58.62 s |
+| Source rig showcase | 48 | 4.00 s | 43.79 s |
+| Talking character | 58 | 4.83 s | 61.40 s |
+| Medieval courtyard | 72 | 6.00 s | 80.21 s |
+
+The first, second and fourth previews are 480×270. The talking preview is 360×360. All are H.264/yuv420p with complete decode verification. The spoken previews have measured stereo 48 kHz AAC streams. Frame inspection confirms visible textured geometry, different body poses and an active mouth shape. It is visual spot checking, with no automated judgement of acting, style or historical accuracy.

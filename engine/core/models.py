@@ -63,6 +63,34 @@ class AssetEntity(AnimatedEntity):
     pivot: Literal["origin", "center", "base"] = "origin"
 
 
+class ClipEvent(Model):
+    name: Annotated[str, Field(min_length=1, max_length=63)]
+    start_frame: Frame
+    frame_count: Frame
+    speed: Annotated[Number, Field(ge=.1, le=4)] = 1
+    loop: bool = False
+    blend_frames: Annotated[StrictInt, Field(ge=0, le=120)] = 0
+
+
+class RiggedEntity(AssetEntity):
+    rigged: Literal[True]
+    clips: list[ClipEvent] = Field(default_factory=list, max_length=128)
+    equipment: dict[Literal["left_hand", "right_hand"], Identifier] = Field(default_factory=dict)
+
+
+class EnvironmentCollection(Model):
+    schema_version: Literal["1.0"] = "1.0"
+    id: Identifier
+    entities: list[AssetEntity] = Field(min_length=1, max_length=1000)
+
+    def apply(self, project: "Project") -> "Project":
+        if project.schema_version != "1.3":
+            raise ValueError("Environment collections require project schema_version 1.3")
+        data = project.model_dump(mode="json")
+        data["scene"]["entities"].extend(entity.model_dump(mode="json") for entity in self.entities)
+        return Project.model_validate(data)
+
+
 class Camera(Model):
     location: Vec3 = (8, -10, 7)
     target: Vec3 = (0, 0, 1)
@@ -96,6 +124,14 @@ class Environment(Model):
     ground: bool = True
     ground_size: Annotated[Number, Field(gt=0, le=10000)] = 200
     ground_material: Material = Field(default_factory=lambda: Material(color=(0.075, 0.1, 0.14), roughness=0.8))
+    hdri: "EnvironmentMedia | None" = None
+    ground_texture: "EnvironmentMedia | None" = None
+    texture_repeats_per_meter: Annotated[Number, Field(gt=0, le=100)] = 1
+
+
+class EnvironmentMedia(Model):
+    id: Annotated[str, Field(pattern=r"^polyhaven-[a-z0-9_]{1,80}$")]
+    fingerprint: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
 
 
 class Scatter(Model):
@@ -117,7 +153,7 @@ class Scatter(Model):
 
 
 class Scene(Model):
-    entities: list[Entity | AssetEntity | CharacterEntity] = Field(default_factory=list, max_length=10000)
+    entities: list[RiggedEntity | Entity | AssetEntity | CharacterEntity] = Field(default_factory=list, max_length=10000)
     scatter: list[Scatter] = Field(default_factory=list, max_length=100)
     environment: Environment = Field(default_factory=Environment)
     camera: Camera = Field(default_factory=Camera)
@@ -142,7 +178,7 @@ class RenderSettings(Model):
 
 
 class Project(Model):
-    schema_version: Literal["1.0", "1.1", "1.2"] = "1.0"
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
@@ -152,11 +188,28 @@ class Project(Model):
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
-        if self.audio and self.schema_version != "1.2":
-            raise ValueError("Audio requires schema_version 1.2")
+        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version != "1.3":
+            raise ValueError("Acquired environment media require schema_version 1.3")
+        if self.audio and self.schema_version not in {"1.2", "1.3"}:
+            raise ValueError("Audio requires schema_version 1.2 or later")
         characters = {entity.id for entity in self.scene.entities if isinstance(entity, CharacterEntity)}
-        if (characters or self.performances) and self.schema_version != "1.2":
-            raise ValueError("Characters and facial performances require schema_version 1.2")
+        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3"}:
+            raise ValueError("Characters and facial performances require schema_version 1.2 or later")
+        static_ids = {e.id for e in self.scene.entities if type(e) is AssetEntity}
+        attached = set()
+        for actor in (e for e in self.scene.entities if isinstance(e, RiggedEntity)):
+            if self.schema_version != "1.3":
+                raise ValueError("Rigged assets require schema_version 1.3")
+            for equipment in actor.equipment.values():
+                if equipment not in static_ids or equipment in attached:
+                    raise ValueError("Equipment must reference a unique explicit static asset entity")
+                attached.add(equipment)
+            previous_end = 1
+            for clip in actor.clips:
+                end = clip.start_frame + clip.frame_count
+                if clip.start_frame < previous_end or end > self.render.frames + 1 or clip.blend_frames >= clip.frame_count:
+                    raise ValueError("Clip events must be ordered, nonoverlapping and within render frames")
+                previous_end = end
         if self.audio and self.render.frames / self.render.fps > 180:
             raise ValueError("This audio production profile supports at most 180 seconds")
         if len({event.id for event in self.audio}) != len(self.audio):

@@ -42,3 +42,16 @@ Tests cover stable inventory, explicit selection, sidecars, independent duplicat
 Real Blender thumbnails verify dimensions, pixel variation, persisted source/image hashes, image tampering, missing executables and required inspection. PNG regressions reject uniform colored images, missing IEND and corrupt chunk CRC even when FFmpeg can decode them. Public ready-state persistence cannot bypass successful inspection. Review failures and the final full-suite output are retained under outputs/batch-review-red.log and outputs/batch-full-suite-final.log.
 
 The installed-wheel acceptance uses an original six-file collection outside the checkout working directory, explicitly selects five GLBs, expects three successes/two failures/one skip, and renders the two distinct approved assets through the regular production pipeline. Thumbnail images and a representative video frame are visually inspected. Performance observations cover this small collection only.
+
+## V0.4 and V0.5 regression commands
+
+```powershell
+$env:ATLAS_INTEGRATION = '1'
+$env:ATLAS_VOICE_INTEGRATION = '1'
+$env:ATLAS_ACQUIRED_INTEGRATION = '1'
+.\.venv\Scripts\python.exe -m pytest -q --junitxml=outputs/v05-final-tests.xml
+```
+
+Voice integration uses the pinned downloaded Turbo model and isolated Python. Rhubarb uses the installed executable and local fixture. The acquired-rig integration requires the locally downloaded and inspected KayKit Knight and crate. Set ATLAS_ACQUIRED_LIBRARY to override outputs/v05-library. The test reopens the generated blend and checks skin weights, actual per-frame pose and skin changes, packed images, editable action slots, hand attachment motion, clip boundary precedence and rest after the final clip. The suite normally does not perform any live catalog network requests.
+
+Offline tests cover ZIP traversal, special or executable members, bounded download integrity and cache hits, glTF dependency restrictions, catalog filtering/paging/seed stability, historical media replay and changed blobs, project version gating, clip intervals and environment collection reuse. Live acceptance additionally downloads official assets, decodes all seven acquired Poly Haven media sets in Blender, inspects all 12 acquired GLBs and verifies four complete MP4 previews. Exact final counts and skips appear in STATUS.

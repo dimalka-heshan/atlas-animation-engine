@@ -12,11 +12,11 @@ from asset_import import import_asset
 
 
 def main():
-    source, output, size = sys.argv[sys.argv.index("--") + 1:]
+    source, output, size, *options = sys.argv[sys.argv.index("--") + 1:]
     output, size = Path(output), int(size)
     started = time.perf_counter()
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    _, asset = import_asset(Path(source), "asset", "unit", "center")
+    _, asset = import_asset(Path(source), "asset", "unit", "center", profile=options[0] if options else "static")
     if asset["missing_textures"]:
         raise ValueError(f"Missing textures: {asset['missing_textures']}")
     scene = bpy.context.scene

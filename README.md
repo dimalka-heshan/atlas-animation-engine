@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven Blender animation engine. Version 0.4 adds isolated local Chatterbox-Turbo speech, approved audio timelines, narration mixing and editable audio-driven facial animation to the existing video and GLB asset pipeline.
+A local, configuration-driven Blender animation engine. Version 0.5 adds official asset acquisition, pinned environment media, source-rig inspection and editable skeletal clip playback. Local Chatterbox-Turbo speech, narration mixing and audio-driven facial animation remain available.
 
 Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 
@@ -112,6 +112,12 @@ Register generated speech or an approved recording with `audio import WAV --id I
 `lipsync align WAV --transcript TEXT --output timeline.json --executable RHUBARB` creates real audio-bound mouth cues. Embed that timeline in a schema 1.2 facial performance assigned to its dialogue event and actor. The original `atlas-face-1` character has editable shape keys; static GLBs do not become facial rigs. See [LIPSYNC](docs/LIPSYNC.md) for installation, mappings, silence and subframe timing.
 
 Examples 07/08 reuse the verified local Turbo demonstration clip `atlas-line@1`: a talking robot bust and the existing orbit scene with narration. Their source audio, exact timeline and local library are retained in this workspace under `outputs/v04-*`; the WAV/model weights are not bundled in Git. Regenerating speech changes its hash/duration: realign it and update the example's timeline and render duration before reuse. Both examples run through the ordinary `atlas render` command.
+
+## Acquired environments and characters
+
+The asset CLI can synchronize the KayKit starter catalog and the live Poly Haven material and HDRI catalogs, download approved sources, and register their production derivatives. Try `assets providers`, `assets sync`, `assets catalog` and `assets download-pack`. Schema 1.3 adds pinned rigged entities, clips, hand attachments and environment media. Existing scene schemas 1.0–1.2 remain valid.
+
+The [acquisition guide](docs/ACQUISITION.md) includes the starter download and inspection commands. The [character guide](docs/CHARACTERS.md) explains skeletal profiles, clip timing and compatibility. The [demo guide](docs/V05_DEMOS.md) reproduces all four previews through the normal CLI.
 
 ## Development
 
