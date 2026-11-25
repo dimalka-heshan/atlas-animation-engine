@@ -14,7 +14,9 @@ V0.6 verifies a KayKit-to-MPFB retarget, immutable cached movements, bounded rou
 
 V0.6.2 verifies shared production contracts and one stateful wrist-level prop handoff with approach, dialogue and measured release. Opt-in walking stabilization reduces measured ankle drift in the guided fixture. [V0.6.2 evidence](V062_DEMOS.md)
 
-V0.7 starts with a deterministic layout contract, reusable asset pins, named interaction anchors and spatial validation. [Ordered implementation checkpoints](superpowers/plans/2026-11-25-director-infrastructure.md)
+V0.6.3 takes priority over procedural worlds. It corrects upper-body retargeting for the supported rigs, rebakes the existing motions and verifies dialogue and handoff continuity. The next animation task is to qualify a captured gait cycle with clean loop boundaries and measure remaining foot slide and running flight. [V0.6.3 evidence](V063_REPORT.md)
+
+V0.7 follows the animation quality checkpoint with a deterministic layout contract, reusable asset pins, named interaction anchors and spatial validation. [Ordered implementation checkpoints](superpowers/plans/2026-11-25-director-infrastructure.md)
 
 ## Ordered phases and exit criteria
 

@@ -2,6 +2,8 @@
 
 ## Implemented flow
 
+V0.6.3 calibrates source and target arm frames from joint landmarks before it computes parent-relative pose-basis quaternions. Category refinements apply separately from the anatomical transfer. The production worker continues to materialize immutable motion snapshots into editable Blender Actions. Reviewed CMU BVH sources use Blender's bundled importer and enter the same cache and playback path. [Mathematical and production evidence](V063_REPORT.md)
+
 The director supplies versioned creative intent and requests declared production capabilities. Host services provide project preflight, movement compilation and bounded preview generation, using the same scene preparation pipeline as the existing CLI. Blender remains the execution backend. [Director contracts](DIRECTOR.md)
 
 Schema 1.6 expresses one prop handoff as named wrist and object anchors, an initial owner and explicit reach, contact, transfer and release frames. The host checks references, arrival and approved rig profiles. Blender evaluates a two-bone arm solve, then switches the prop's location constraint at the shared contact pose. The producer publishes the job only after contact and continuity checks and video verification. [Interaction setup](V062_DEMOS.md)

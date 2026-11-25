@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven Blender animation engine. Version 0.6.2 adds production capability discovery, a two-actor prop handoff, and experimental walking contact correction. [Current status](docs/STATUS.md) · [V0.6.2 demonstrations](docs/V062_DEMOS.md) · [Asset workflows](docs/V052_DEMOS.md)
+A local, configuration-driven Blender animation engine. Version 0.6.3 calibrates anatomical motion transfer for MPFB and adds reviewed human-capture clips. [Current status](docs/STATUS.md) · [Retargeting demonstrations](docs/V063_DEMOS.md) · [Director services](docs/DIRECTOR.md)
 
 Use `atlas capabilities` to discover machine-readable production contracts and `atlas director schema` to inspect the creative intent format. [Director services](docs/DIRECTOR.md)
 

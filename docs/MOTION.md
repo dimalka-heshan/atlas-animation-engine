@@ -1,13 +1,15 @@
 # Motion, retargeting and locomotion
 
+V0.6.3 uses anatomical joint frames and optional category refinement. Reviewed CMU MotionBuilder BVHs add captured human movements. Both are baked into the same versioned motion registry and played by the same Blender worker. [V0.6.3 report](V063_REPORT.md) · [Current bake and comparison commands](V063_DEMOS.md)
+
 Use `animations list --character kaykit-knight --library outputs/v05-library` to inspect available source clips. `characters rigs --library PATH` reports the canonical bone mapping and rest fingerprint from production inspection. Reuse the previously acquired CC0 Adventurers Knight and generate the MPFB game-engine target with the supplied human specs. [Source setup and commands](V06_DEMOS.md) · [KayKit license](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/blob/672074b73ba276876a19e8816ecdc5241817ab47/addons/kaykit_character_pack_adventures/LICENSE.txt)
 
 ## Supported inputs and cache
 
-- Source is an inspected KayKit rigged GLB with an embedded skeletal Action, approved provenance and CC0 license. Proven targets are the clothed MPFB game-engine curator and scholar with the expected shoe mesh. Both are meter-scale, Z-up and face negative Y. Standalone FBX, BVH, USD, arbitrary Blender or glTF rigs and motion-capture acquisitions are deferred.
-- `animations retarget SOURCE CLIP TARGET --id ID` samples the Action in offline Blender at 30 fps for up to 12 seconds. It transfers mapped rest-space quaternions, adjusts arm bases for the inspected rest poses, and scales pelvis displacement by leg length. It retains the source XY root trace and subtracts it from the target pelvis motion. The demonstration loops have zero source root displacement.
+- KayKit sources are inspected CC0 rigged GLBs with embedded skeletal Actions. The CMU command admits the reviewed file hashes listed in the source allowlist. Proven targets are the clothed MPFB game-engine curator and scholar with the expected shoe mesh. The normalized rigs are meter-scale, Z-up and face negative Y. General-purpose BVH, FBX and arbitrary rig import remain open.
+- `animations retarget SOURCE CLIP TARGET --id ID` samples the Action in offline Blender at 30 fps for up to 12 seconds. It aligns joint frames, transfers pose rotations through the target hierarchy and scales pelvis displacement by leg length. KayKit and captured walk clips retain the source XY root trace and subtract it from the target pelvis. Other reviewed human capture clips preserve horizontal movement. Captured takes play as one-shots with `loop=false`.
 - A motion pin contains `id` and `sha256`. The bake identity includes the source and target versions, asset and rest hashes, source Action, Blender build, relevant worker hashes, category and grounding settings. A repeated bake uses the cached record when it matches. New IDs may reference the same content. The job validates each exact pin and copies shared bytes once.
-- `motions providers`, `motions list` and `motions inspect ID SHA256` expose the provider, bake provenance, compatibility, speed and contact samples. The target version, asset hash and rest fingerprint must match the original bake. Submit a new bake when the character specification or assets change.
+- `motions providers`, `motions list` and `motions inspect ID SHA256` expose provider, bake provenance, compatibility, speed, contact and arm metrics. `motions list --include-legacy` includes historical bakes. The target version, asset hash and rest fingerprint must match the original bake. Submit a new bake when the character specification or assets change.
 
 ## Schema 1.5 projects
 

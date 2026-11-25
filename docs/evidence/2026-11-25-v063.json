@@ -1,0 +1,2783 @@
+{
+  "version": "0.6.3",
+  "baseline_commit": "72739100c78da33b56f4ee2a6c84d26c75c0d5aa",
+  "implementation_commit": "39fd5e0cc784624a7a39bcabe6e65dd1c384f717",
+  "tests": {
+    "baseline_default": {
+      "path": "outputs/v063-baseline.xml",
+      "seconds": 25.593,
+      "passed": 316,
+      "tests": 350,
+      "skipped": 34,
+      "errors": 0,
+      "failures": 0
+    },
+    "default_before_captured_travel_guard": {
+      "path": "outputs/v063-final-default.xml",
+      "seconds": 98.742,
+      "passed": 323,
+      "tests": 358,
+      "skipped": 35,
+      "errors": 0,
+      "failures": 0
+    },
+    "anatomy_handoff_and_wave": {
+      "path": "outputs/v063-final-focused.xml",
+      "seconds": 424.007,
+      "passed": 20,
+      "tests": 20,
+      "skipped": 0,
+      "errors": 0,
+      "failures": 0
+    },
+    "broader_integration_before_travel_followup": {
+      "path": "outputs/v063-release-tests.xml",
+      "seconds": 1579.217,
+      "passed": 353,
+      "tests": 357,
+      "skipped": 4,
+      "errors": 0,
+      "failures": 0
+    },
+    "captured_wave_and_travel": {
+      "path": "outputs/v063-cmu-final-tests.xml",
+      "seconds": 163.197,
+      "passed": 2,
+      "tests": 2,
+      "skipped": 0,
+      "errors": 0,
+      "failures": 0
+    },
+    "release_default": {
+      "path": "outputs/v063-complete-default.xml",
+      "seconds": 98.624,
+      "passed": 323,
+      "tests": 359,
+      "skipped": 36,
+      "errors": 0,
+      "failures": 0
+    }
+  },
+  "motions": [
+    {
+      "motion": {
+        "id": "curator-cmu-point",
+        "sha256": "1c0e23e0d595ee1e293f73fcfc703b33b51f2aa33707bd39370ed0e54d13cd76"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-22_21",
+        "version": 1,
+        "sha256": "55639435a749d1785fdcbf9d3a77fe4b114c3d72824b17562b9e401b9352fa94",
+        "clip": "22_21",
+        "clip_sha256": "55639435a749d1785fdcbf9d3a77fe4b114c3d72824b17562b9e401b9352fa94",
+        "skeleton_sha256": "681bac4f448224e613978449c643881700ee9d2c438be0bf8c3a10e4d999c28c",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/022/22_21.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "gesture",
+      "fps": 30,
+      "frames": 98,
+      "duration_seconds": 3.2333333333333334,
+      "process_seconds": 75.76836919999914,
+      "metrics": {
+        "leg_scale": 0.985726,
+        "source_root_ground_m": 0.003449,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.018342,
+        "source_root_path_length_m": 0.108625,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          0.42828312516212463,
+          0.4427128732204437
+        ],
+        "post_ground_z_range_m": [
+          0.42828312516212463,
+          0.4427128732204437
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              2.0744939517925363,
+              8.54126268206653
+            ],
+            "elbow_deg": [
+              49.1211495672226,
+              130.8000077379551
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              1.419907729568249,
+              14.746124672275863
+            ],
+            "elbow_deg": [
+              58.679896857817894,
+              130.90603959463039
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 8.430106808013331,
+          "left_forearm": 9.33892708878305,
+          "left_hand": 24.96605325072457,
+          "right_upper_arm": 7.711595509482608,
+          "right_forearm": 8.825548698775847,
+          "right_hand": 15.227873540583555
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "scholar-cmu-run",
+        "sha256": "a4b922dbc5b9649b5b6ad42d535d5cac2100e896f5150789bb9c474fced8d977"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-141_34",
+        "version": 1,
+        "sha256": "2c2b1e357e0e3636aaa9f510dd3cb3c51e05592a24bd2f8ad6e11d57fb36ee2c",
+        "clip": "141_34",
+        "clip_sha256": "2c2b1e357e0e3636aaa9f510dd3cb3c51e05592a24bd2f8ad6e11d57fb36ee2c",
+        "skeleton_sha256": "960c9c2efdfaa1a89df9edd81b89eef83ccfc2c1f65a57ea525c180d062117fa",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/141/141_34.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "run",
+      "fps": 30,
+      "frames": 79,
+      "duration_seconds": 2.6,
+      "process_seconds": 73.07933780003805,
+      "metrics": {
+        "leg_scale": 1.112788,
+        "source_root_ground_m": 4.412193,
+        "root_type": "root-motion-preserved",
+        "source_root_excursion_m": 4.589195,
+        "source_root_path_length_m": 4.839357,
+        "calibrated_speed_mps": 0.165309,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.08872479945421219,
+          0.1124231219291687
+        ],
+        "post_ground_z_range_m": [
+          -0.08872479945421219,
+          0.1124231219291687
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.3116528233392819,
+              56.40913098833581
+            ],
+            "elbow_deg": [
+              27.681518734274615,
+              106.21951612272404
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              1.9806233768155965,
+              42.068864839104585
+            ],
+            "elbow_deg": [
+              30.707840659271156,
+              74.4778033891664
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 18.680532892280112,
+          "left_forearm": 23.18761717609864,
+          "left_hand": 23.247830812284082,
+          "right_upper_arm": 15.290738126326119,
+          "right_forearm": 20.4235645257824,
+          "right_hand": 21.44142461206214
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "scholar-cmu-walk",
+        "sha256": "116bd29ed6eba5754ec61ea2749e9fd8a8c413606d9a08bf07b56b9878d8c743"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-141_19",
+        "version": 1,
+        "sha256": "1219b0ed7ef155e4c3acbd3e18525bfb926644bc1265482873fef21705aa1808",
+        "clip": "141_19",
+        "clip_sha256": "1219b0ed7ef155e4c3acbd3e18525bfb926644bc1265482873fef21705aa1808",
+        "skeleton_sha256": "960c9c2efdfaa1a89df9edd81b89eef83ccfc2c1f65a57ea525c180d062117fa",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/141/141_19.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "walk",
+      "fps": 30,
+      "frames": 299,
+      "duration_seconds": 9.933333333333334,
+      "process_seconds": 153.54469720000634,
+      "metrics": {
+        "leg_scale": 1.112788,
+        "source_root_ground_m": 1.41114,
+        "root_type": "root-motion-converted",
+        "source_root_excursion_m": 2.374204,
+        "source_root_path_length_m": 14.237141,
+        "calibrated_speed_mps": 0.516465,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.0422060564160347,
+          0.11965929716825485
+        ],
+        "post_ground_z_range_m": [
+          -9.66247171163559e-08,
+          9.988434612751007e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.02283844564201806,
+              17.44035804479472
+            ],
+            "elbow_deg": [
+              18.285739757275824,
+              51.72008777283123
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              0.027447116229465,
+              27.497673700017874
+            ],
+            "elbow_deg": [
+              16.415690311586985,
+              52.008345661467864
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 28.520479647693957,
+          "left_forearm": 29.713660463234408,
+          "left_hand": 24.611079600434582,
+          "right_upper_arm": 15.111912000910829,
+          "right_forearm": 18.53100292778812,
+          "right_hand": 18.733946509149128
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-cmu-sit",
+        "sha256": "f694031191e10b673c10ac534202d12488041049635327515b4fd2149ba34a7e"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-141_17",
+        "version": 1,
+        "sha256": "50480e797770f6ae881caba3f27746a750bbdae237342bb72b2723df9f0663c7",
+        "clip": "141_17",
+        "clip_sha256": "50480e797770f6ae881caba3f27746a750bbdae237342bb72b2723df9f0663c7",
+        "skeleton_sha256": "960c9c2efdfaa1a89df9edd81b89eef83ccfc2c1f65a57ea525c180d062117fa",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/141/141_17.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "sit",
+      "fps": 30,
+      "frames": 141,
+      "duration_seconds": 4.666666666666667,
+      "process_seconds": 90.457669800031,
+      "metrics": {
+        "leg_scale": 1.13573,
+        "source_root_ground_m": 0.314729,
+        "root_type": "root-motion-preserved",
+        "source_root_excursion_m": 1.350596,
+        "source_root_path_length_m": 3.237792,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          0.0037282893899828196,
+          0.38742902874946594
+        ],
+        "post_ground_z_range_m": [
+          0.0037282893899828196,
+          0.38742902874946594
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.4092513395418486,
+              34.99890035438052
+            ],
+            "elbow_deg": [
+              20.15310835371543,
+              76.74437434447844
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              0.026436248120534567,
+              59.5878265762096
+            ],
+            "elbow_deg": [
+              26.266168642011866,
+              65.76229759312254
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 21.684815991173988,
+          "left_forearm": 25.85800711130014,
+          "left_hand": 25.56172345084353,
+          "right_upper_arm": 12.784551634401385,
+          "right_forearm": 14.248780956521317,
+          "right_hand": 13.957182243394692
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-cmu-walk",
+        "sha256": "abf6115ab1101da53f9b5a1d1d754ea363638118d82a9ace6ec20fed762dc4e7"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-35_01",
+        "version": 1,
+        "sha256": "91d947f840845d00054dd331cb7e5c6a0195ee56406dc43273dbdc26467bc066",
+        "clip": "35_01",
+        "clip_sha256": "91d947f840845d00054dd331cb7e5c6a0195ee56406dc43273dbdc26467bc066",
+        "skeleton_sha256": "f9a8df3bc7f73dcfd58062ae244bb722eba5e03813aa326cf55c94c3cc3dc32b",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/035/35_01.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "walk",
+      "fps": 30,
+      "frames": 90,
+      "duration_seconds": 2.966666666666667,
+      "process_seconds": 89.0455568000325,
+      "metrics": {
+        "leg_scale": 0.96838,
+        "source_root_ground_m": 3.833887,
+        "root_type": "root-motion-converted",
+        "source_root_excursion_m": 3.833887,
+        "source_root_path_length_m": 3.843076,
+        "calibrated_speed_mps": 1.027511,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          0.024379689246416092,
+          0.09651903808116913
+        ],
+        "post_ground_z_range_m": [
+          -5.494803190231323e-08,
+          7.753260433673859e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.4771821685963271,
+              14.61088537801584
+            ],
+            "elbow_deg": [
+              19.865849380244914,
+              34.90903537623264
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              0.08156102397196484,
+              5.471444470354067
+            ],
+            "elbow_deg": [
+              21.470484504976227,
+              32.8255886227578
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 3.988391894660753,
+          "left_forearm": 4.551613575512962,
+          "left_hand": 5.456282775218058,
+          "right_upper_arm": 5.115757208942544,
+          "right_forearm": 5.850591745868661,
+          "right_hand": 4.88175948284883
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "scholar-cmu-wave",
+        "sha256": "d11898cb9d7a4b23f0d1ee7c0823cd979bf2fc6a9149233d374bf8f3ad5afd83"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "cmu-141_16",
+        "version": 1,
+        "sha256": "d428d2c4fa8873d077537567ad32c95b9687a479a10522d314b203fddea37daf",
+        "clip": "141_16",
+        "clip_sha256": "d428d2c4fa8873d077537567ad32c95b9687a479a10522d314b203fddea37daf",
+        "skeleton_sha256": "960c9c2efdfaa1a89df9edd81b89eef83ccfc2c1f65a57ea525c180d062117fa",
+        "family": "cmu-motionbuilder-bvh",
+        "source_url": "https://github.com/una-dinosauria/cmu-mocap/blob/09a07f54f3bbb58797325f009282d0b2048a2871/data/141/141_16.bvh",
+        "terms_url": "https://mocap.cs.cmu.edu/",
+        "creator": "CMU Graphics Lab, BVH conversion by Bruce Hahne",
+        "license_id": "LicenseRef-CMU-Mocap",
+        "attribution": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217.",
+        "restrictions": [
+          "No direct resale, including converted data"
+        ]
+      },
+      "target": {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "none",
+        "format": "bvh",
+        "mapping": "cmu-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "gesture",
+      "fps": 30,
+      "frames": 75,
+      "duration_seconds": 2.466666666666667,
+      "process_seconds": 78.57712479995098,
+      "metrics": {
+        "leg_scale": 1.112788,
+        "source_root_ground_m": 0.021917,
+        "root_type": "root-motion-preserved",
+        "source_root_excursion_m": 0.287388,
+        "source_root_path_length_m": 0.638164,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.026470104232430458,
+          0.08314649760723114
+        ],
+        "post_ground_z_range_m": [
+          -0.026470104232430458,
+          0.08314649760723114
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.1056707703285975,
+              6.412660769730645
+            ],
+            "elbow_deg": [
+              29.154665887294012,
+              38.95869551626822
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              5.521714865869425,
+              36.81501714331591
+            ],
+            "elbow_deg": [
+              33.9922703103606,
+              107.53516082103025
+            ],
+            "wrist_deg": [
+              0.0,
+              0.0
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 3.64160883334836,
+          "left_forearm": 4.825301480735559,
+          "left_hand": 4.630058992480644,
+          "right_upper_arm": 27.965138704079504,
+          "right_forearm": 33.71637714437219,
+          "right_hand": 67.92855476647367
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-gesture",
+        "sha256": "31fc4c05ce960a40def79e399a48e0d65e235a2b6392b846a57b8a9bcc4a253f"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Cheer",
+        "clip_sha256": "fa89542f85489549e20f606dcf111a7c1f0556b25e592c692b89d637ef0d7085",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          50.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "gesture",
+      "fps": 30,
+      "frames": 51,
+      "duration_seconds": 1.6666666666666667,
+      "process_seconds": 138.99830939999083,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.014901195652782917,
+          -0.008458351716399193
+        ],
+        "post_ground_z_range_m": [
+          -0.014901195652782917,
+          -0.008458351716399193
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              41.22939857812683,
+              82.83735435632589
+            ],
+            "elbow_deg": [
+              38.93756974116537,
+              99.30506290892085
+            ],
+            "wrist_deg": [
+              16.00574918779199,
+              42.990180522922394
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              47.020519472376975,
+              83.37424581143677
+            ],
+            "elbow_deg": [
+              29.739511080260108,
+              94.98876584406631
+            ],
+            "wrist_deg": [
+              19.798889620716693,
+              47.085811251166746
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 29.435078694567736,
+          "left_forearm": 29.264765580749348,
+          "left_hand": 53.38952162147246,
+          "right_upper_arm": 25.047574725793076,
+          "right_forearm": 26.449473421542553,
+          "right_hand": 53.38952162147246
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-idle",
+        "sha256": "4360e6ce45dcc7af40852c3fb126893f6463d8f772740b95aa8ea28d0cd085f4"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Idle",
+        "clip_sha256": "b641efc4c721e9b4fa25a09456130b935032220d2d4428244e1baef52ea78bbf",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          32.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "idle",
+      "fps": 30,
+      "frames": 33,
+      "duration_seconds": 1.0666666666666667,
+      "process_seconds": 78.99181679997128,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": null,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.012753905728459358,
+          -0.008640238083899021
+        ],
+        "post_ground_z_range_m": [
+          -6.05359673500061e-08,
+          5.8673322200775146e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              5.849275692747285,
+              5.903669871021449
+            ],
+            "elbow_deg": [
+              17.03109547844701,
+              17.952412865400863
+            ],
+            "wrist_deg": [
+              6.900806068954689,
+              6.921269315708048
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              9.156276077622648,
+              9.241726183491625
+            ],
+            "elbow_deg": [
+              17.539198373446137,
+              18.43430661700736
+            ],
+            "wrist_deg": [
+              6.653636037043914,
+              6.7194816219637765
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 0.05595291023658669,
+          "left_forearm": 0.06852804019207596,
+          "left_hand": 0.05595291023658669,
+          "right_upper_arm": 0.03956468205889273,
+          "right_forearm": 0.05595291023658669,
+          "right_hand": 0.03956468205889273
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-run",
+        "sha256": "5fc76f50933287125b7d0ac0be397e9b0d4c1fa6f88808f6b74058c7b1115767"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Running_B",
+        "clip_sha256": "7a8b3a54d219c9d5186dd6b288310a1a47c746dd89a73f491d1b2dd2ad3444bd",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          32.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "run",
+      "fps": 30,
+      "frames": 33,
+      "duration_seconds": 1.0666666666666667,
+      "process_seconds": 141.36646059999475,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": 3.327932,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.03661144897341728,
+          0.2879822254180908
+        ],
+        "post_ground_z_range_m": [
+          -5.541369318962097e-08,
+          1.0128132998943329e-07
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              0.07512356465812509,
+              21.719639146778224
+            ],
+            "elbow_deg": [
+              66.22511121128261,
+              83.43387527796727
+            ],
+            "wrist_deg": [
+              8.48660652016287,
+              15.779306218691266
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              0.07069461028126625,
+              21.71965201304003
+            ],
+            "elbow_deg": [
+              66.22504290939091,
+              83.44160705210773
+            ],
+            "wrist_deg": [
+              8.502489271304087,
+              15.76297182129118
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 4.289872211068759,
+          "left_forearm": 3.8055898172593863,
+          "left_hand": 3.3530951100329367,
+          "right_upper_arm": 4.290054698609449,
+          "right_forearm": 3.805384107473816,
+          "right_hand": 3.353328555987137
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-sit",
+        "sha256": "04266bbae7e9117dc349edacd3581cb589c103f2ba62ab1c8916e0f9bb9dfa52"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Sit_Chair_Down",
+        "clip_sha256": "43c837a7f3196d8d97c61d47a35446fe7d3e3b36ec417f0ac92ccca8b570de9d",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          24.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "sit",
+      "fps": 30,
+      "frames": 25,
+      "duration_seconds": 0.8,
+      "process_seconds": 130.94714720000047,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.008640238083899021,
+          0.5663288831710815
+        ],
+        "post_ground_z_range_m": [
+          -0.008640238083899021,
+          0.5663288831710815
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              7.268880183504135,
+              18.11149917139915
+            ],
+            "elbow_deg": [
+              28.061169676647896,
+              60.79922942519198
+            ],
+            "wrist_deg": [
+              4.987313205049985,
+              15.131442285348045
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              12.532755168750873,
+              20.898963745601183
+            ],
+            "elbow_deg": [
+              16.346741259463,
+              48.45422599100046
+            ],
+            "wrist_deg": [
+              0.6413296301024858,
+              16.35374049581497
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 17.485561178039774,
+          "left_forearm": 13.678963049808814,
+          "left_hand": 13.811159310421639,
+          "right_upper_arm": 13.256420694318201,
+          "right_forearm": 10.458966791124428,
+          "right_hand": 10.644298691851438
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-stand",
+        "sha256": "ae4efad5cd53a9231caa8e2538ef1a08e4bcf5e83e19acbae66130ac8942b07c"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Sit_Chair_StandUp",
+        "clip_sha256": "48a1b1beb2afeab60a784876bad36ee6ae8267f416b60f73baa98fdd774bea1b",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          24.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "sit",
+      "fps": 30,
+      "frames": 25,
+      "duration_seconds": 0.8,
+      "process_seconds": 72.91207190003479,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.008640238083899021,
+          0.5656329393386841
+        ],
+        "post_ground_z_range_m": [
+          -0.008640238083899021,
+          0.5656329393386841
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              11.509845812779238,
+              18.11149917139915
+            ],
+            "elbow_deg": [
+              36.388737803307954,
+              59.783047540855826
+            ],
+            "wrist_deg": [
+              8.50355221949367,
+              19.344953540930355
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              14.729630090129268,
+              20.410287982700492
+            ],
+            "elbow_deg": [
+              26.275705293640495,
+              48.45422599100046
+            ],
+            "wrist_deg": [
+              7.831831289153244,
+              26.245194838618048
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 7.476957489185116,
+          "left_forearm": 7.572718388150997,
+          "left_hand": 5.634333733150439,
+          "right_upper_arm": 7.164231918259859,
+          "right_forearm": 6.859307980878459,
+          "right_hand": 5.49047229531003
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-walk-base",
+        "sha256": "4a18694011e1d0bffe5d0afbcbdbac1ea5afb2dee47ae97b175c76f493de6da0"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Walking_A",
+        "clip_sha256": "8e51c001c4fdde98a3bf7695679382420a60cbeb8b36d84daf50c4513d2e7dd2",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          32.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "none",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "walk",
+      "fps": 30,
+      "frames": 33,
+      "duration_seconds": 1.0666666666666667,
+      "process_seconds": 79.93873980001081,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": 1.133342,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.020519983023405075,
+          0.08439408242702484
+        ],
+        "post_ground_z_range_m": [
+          -5.4249539971351624e-08,
+          8.824281394481659e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              13.89689349535156,
+              68.69123042954129
+            ],
+            "elbow_deg": [
+              67.94296525924334,
+              96.8718080171038
+            ],
+            "wrist_deg": [
+              25.655262862267584,
+              56.71092748992706
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              13.638247809848156,
+              68.19612632825923
+            ],
+            "elbow_deg": [
+              67.94297891962168,
+              96.87182167748215
+            ],
+            "wrist_deg": [
+              25.758110143242344,
+              56.88789769132209
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 7.777236035738621,
+          "left_forearm": 7.042065344814613,
+          "left_hand": 5.838265823832919,
+          "right_upper_arm": 7.777336749944731,
+          "right_forearm": 7.042398978336125,
+          "right_hand": 5.838534055115188
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "curator-walk",
+        "sha256": "b7b266b379163f7b0b734fcf42ef50dc25bed08689d9060067f516e16ffc753a"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Walking_A",
+        "clip_sha256": "8e51c001c4fdde98a3bf7695679382420a60cbeb8b36d84daf50c4513d2e7dd2",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          32.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "walk",
+      "fps": 30,
+      "frames": 33,
+      "duration_seconds": 1.0666666666666667,
+      "process_seconds": 141.38224760000594,
+      "metrics": {
+        "leg_scale": 2.245865,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": 1.133342,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.020519983023405075,
+          0.08439408242702484
+        ],
+        "post_ground_z_range_m": [
+          -5.4249539971351624e-08,
+          8.824281394481659e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              5.69851084810595,
+              12.395594357263324
+            ],
+            "elbow_deg": [
+              21.588595551198672,
+              27.374353174468094
+            ],
+            "wrist_deg": [
+              8.923898282715534,
+              13.970620900053113
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              5.666891762765715,
+              12.335082135292428
+            ],
+            "elbow_deg": [
+              21.58858530591492,
+              27.37433780654246
+            ],
+            "wrist_deg": [
+              8.941185491504838,
+              14.003302501457979
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 7.30260799458265,
+          "left_forearm": 6.491405448146822,
+          "left_hand": 6.904713017489097,
+          "right_upper_arm": 7.36816624296548,
+          "right_forearm": 6.539122966637064,
+          "right_hand": 6.967041742468075
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "scholar-reach",
+        "sha256": "eb8c2a34872c9f645428dc0278db65929cf87cf4b34ed55a2b0bfe1045c04b68"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Interact",
+        "clip_sha256": "e1d9a07c2856e2eaab262dc11198b182190d4b2d1f275ecb770d30b2d7fe15ba",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          39.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": false,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "gesture",
+      "fps": 30,
+      "frames": 40,
+      "duration_seconds": 1.3,
+      "process_seconds": 130.14080879994435,
+      "metrics": {
+        "leg_scale": 2.200499,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": null,
+        "ground_corrected": false,
+        "pre_ground_z_range_m": [
+          -0.013309216126799583,
+          -0.0019459098111838102
+        ],
+        "post_ground_z_range_m": [
+          -0.013309216126799583,
+          -0.0019459098111838102
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              39.0930814580285,
+              46.753309167927235
+            ],
+            "elbow_deg": [
+              36.30129772155345,
+              60.61910367640041
+            ],
+            "wrist_deg": [
+              1.7494354553007008,
+              41.59994332869049
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              47.02050945356533,
+              69.30656538896405
+            ],
+            "elbow_deg": [
+              62.38824561483877,
+              89.45459823887431
+            ],
+            "wrist_deg": [
+              11.185706034855148,
+              47.179780993767785
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 1.640875428952178,
+          "left_forearm": 4.138092890535688,
+          "left_hand": 7.882775227271578,
+          "right_upper_arm": 8.992287377575543,
+          "right_forearm": 9.638933176345388,
+          "right_hand": 14.17877915015343
+        }
+      }
+    },
+    {
+      "motion": {
+        "id": "scholar-walk",
+        "sha256": "2460cd6fb74cb0e7423023c01f586ea621bdafb6800be2b831147d8cb0914159"
+      },
+      "profile": "atlas-motion-2",
+      "source": {
+        "id": "kaykit-knight",
+        "version": 1,
+        "sha256": "60428e3abc09ba83e595d256e3af8c5c976b46cdae599f0802fc82b4a3445168",
+        "clip": "Walking_A",
+        "clip_sha256": "8e51c001c4fdde98a3bf7695679382420a60cbeb8b36d84daf50c4513d2e7dd2",
+        "skeleton_sha256": "5b06e71554eb7c1e9e37eacbbe7a70cf44369880de45edec571c3a6e1cf95b0d",
+        "family": "kaykit",
+        "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47",
+        "creator": "Kay Lousberg",
+        "license_id": "CC0-1.0",
+        "frames": [
+          0.0,
+          32.0
+        ]
+      },
+      "target": {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "family": "mpfb-game-engine"
+      },
+      "settings": {
+        "ground": true,
+        "refinement": "category",
+        "mapping": "kaykit-mpfb-anatomy-1",
+        "fps": 30,
+        "algorithm": "anatomical-frame-1",
+        "worker_sha256": "4cd425b08d4a7d4f38f6f09ccb3d7b418e4c0010a618a6317a6a7f5973cb723d",
+        "anatomy_sha256": "8269654b362f252c4f72ab1028cf00d5d6c0e19d754f9cee1d995234a4d846d0",
+        "importer_sha256": "640873bec7ab81a639658dcfe7e996cda00e8e2c83e8de7c802bcbdcc99077f3",
+        "skeleton_worker_sha256": "32cb4fd518409a63d278c60a6db85084e5037d25efba878eeb93405c790b4620",
+        "blender": [
+          "Blender 5.2.3 LTS",
+          "\tbuild date: 2026-10-22",
+          "\tbuild time: 01:37:16",
+          "\tbuild commit date: 2026-10-21",
+          "\tbuild commit time: 09:21",
+          "\tbuild hash: e13b728c6880",
+          "\tbuild branch: blender-v5.2-release"
+        ]
+      },
+      "category": "walk",
+      "fps": 30,
+      "frames": 33,
+      "duration_seconds": 1.0666666666666667,
+      "process_seconds": 136.1555679999874,
+      "metrics": {
+        "leg_scale": 2.200499,
+        "source_root_ground_m": 0.0,
+        "root_type": "in-place",
+        "source_root_excursion_m": 0.0,
+        "source_root_path_length_m": 0.0,
+        "calibrated_speed_mps": 1.120871,
+        "ground_corrected": true,
+        "pre_ground_z_range_m": [
+          -0.015559273771941662,
+          0.08538602292537689
+        ],
+        "post_ground_z_range_m": [
+          -6.05359673500061e-08,
+          5.541369318962097e-08
+        ],
+        "arm_angle_ranges": {
+          "left": {
+            "lateral_deg": [
+              5.698501409953997,
+              12.39559610556567
+            ],
+            "elbow_deg": [
+              21.588595551198672,
+              27.374368542393725
+            ],
+            "wrist_deg": [
+              9.900157711352968,
+              14.746868484130477
+            ]
+          },
+          "right": {
+            "lateral_deg": [
+              5.666893907682482,
+              12.335073395804622
+            ],
+            "elbow_deg": [
+              21.58858530591492,
+              27.374368542393725
+            ],
+            "wrist_deg": [
+              9.904745037154276,
+              14.778765467554438
+            ]
+          }
+        },
+        "peak_joint_step_deg": {
+          "left_upper_arm": 7.30260799458265,
+          "left_forearm": 6.491646716777549,
+          "left_hand": 6.910495191344155,
+          "right_upper_arm": 7.3682725402366795,
+          "right_forearm": 6.539003208354826,
+          "right_hand": 6.973221549319765
+        }
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "868912f497854bb401437db9b6327838b0a7a849e06c7713514438165f5e163f",
+      "project_id": "anatomical-motion-sampler",
+      "video": {
+        "width": 288,
+        "height": 180,
+        "frames": 137,
+        "fps": 24.0,
+        "duration": 5.708333,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "eb719df5fcc851b8cf707352bef1e6cb387dcd4906c7f50a3773e30d57885a83"
+      },
+      "timings_seconds": {
+        "blender_process": 682.013721700001,
+        "encoding": 0.84775160002755,
+        "decode_verification": 0.5463818000280298,
+        "total": 686.152909700002
+      },
+      "disk_bytes": 77849585,
+      "job": "outputs/v063-renders/anatomical-motion-sampler-95c96e0934994306b2f5fb9a4b686b9c",
+      "manifest_sha256": "a76045db4703326c95210060562458e1bd88404819ef1132c03d928bccab8f22",
+      "scene_build_seconds": 9.765818200015929,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "curator-gesture",
+          "sha256": "15fcaead0686a79d81b53ddcbd3da0e7b23ce0eeaa52922f8d12481401c7bdf2"
+        },
+        {
+          "id": "curator-idle",
+          "sha256": "ccf1d184da5b90b13d72b84b33c731e8031c15abe366c5298a088180030a3f8a"
+        },
+        {
+          "id": "curator-run",
+          "sha256": "7f5700a028e447b08574b47c08a67a22bc19b8664ed2a0ce87e0858aa657b430"
+        },
+        {
+          "id": "curator-sit",
+          "sha256": "e7a5c84511afb27a303909e168ebbf9ceb429489a4ed18a91e3eabbb2dfd98a4"
+        },
+        {
+          "id": "curator-stand",
+          "sha256": "d99beedcf3e0047d76091b9e53d775ea474f62a6bf1b5cc35ad2e68968730c4e"
+        },
+        {
+          "id": "curator-walk",
+          "sha256": "8165e04c24fedae56bc6a0fdc6cb519c5bfb5b3374740a15a569e618e3924d6a"
+        },
+        {
+          "id": "scholar-cmu-walk",
+          "sha256": "c5a4527ab7f4b8b5dd32a7618b3eafc762949b108b4d2b99e3c92b6badae2f3c"
+        },
+        {
+          "id": "scholar-cmu-wave",
+          "sha256": "1a79507d8786c34b59ccc6b7d777cce52e4be7fbf51787af759cc2b430c15c83"
+        },
+        {
+          "id": "scholar-reach",
+          "sha256": "069d1b4775ddc406363228cd94290724d00a2eeff447ed56d623c91c407fed7e"
+        }
+      ],
+      "retarget-scene-report": {
+        "curator": {
+          "frames": [
+            1,
+            137
+          ],
+          "ranges": {
+            "l": {
+              "lateral_deg": [
+                0.07511758156735228,
+                83.12131409762031
+              ],
+              "elbow_deg": [
+                17.488392011305,
+                99.30507656929919
+              ],
+              "wrist_deg": [
+                4.929268976822748,
+                41.6555171628723
+              ],
+              "forearm_roll_deg": [
+                -179.58248637552177,
+                179.64057999825405
+              ]
+            },
+            "r": {
+              "lateral_deg": [
+                0.05161745742234836,
+                83.37427540923524
+              ],
+              "elbow_deg": [
+                17.117922550723506,
+                92.41750698006916
+              ],
+              "wrist_deg": [
+                0.27553639450321993,
+                47.085787345504656
+              ],
+              "forearm_roll_deg": [
+                -179.47066785991274,
+                179.9201116660947
+              ]
+            }
+          },
+          "largest_joint_step_deg": {
+            "l": [
+              35.60010014139676,
+              38.57063261680812,
+              55.216080085836055
+            ],
+            "r": [
+              30.03200018945928,
+              39.6966700223342,
+              55.248525802074866
+            ]
+          },
+          "largest_circular_forearm_roll_step_deg": {
+            "l": 39.45686182719243,
+            "r": 34.11412883506125
+          },
+          "max_evaluated_hand_vertex_displacement_m": 0.9496517940039986
+        },
+        "scholar": {
+          "frames": [
+            1,
+            137
+          ],
+          "ranges": {
+            "l": {
+              "lateral_deg": [
+                0.038413810528151585,
+                46.66751916415285
+              ],
+              "elbow_deg": [
+                22.746970021223447,
+                60.619124166967914
+              ],
+              "wrist_deg": [
+                0.0,
+                41.59994332869049
+              ],
+              "forearm_roll_deg": [
+                -176.31011339283728,
+                171.8788574585729
+              ]
+            },
+            "r": {
+              "lateral_deg": [
+                0.1285621706262883,
+                69.2906925617407
+              ],
+              "elbow_deg": [
+                28.275979126044795,
+                106.13477396569169
+              ],
+              "wrist_deg": [
+                0.0,
+                47.085804420977574
+              ],
+              "forearm_roll_deg": [
+                -171.04018780971177,
+                174.68537489325917
+              ]
+            }
+          },
+          "largest_joint_step_deg": {
+            "l": [
+              148.92846875080602,
+              132.3042890776648,
+              179.55071338088504
+            ],
+            "r": [
+              134.73444793047713,
+              118.98231981276746,
+              130.56076526123246
+            ]
+          },
+          "largest_circular_forearm_roll_step_deg": {
+            "l": 121.77228223364239,
+            "r": 132.52723008364853
+          },
+          "max_evaluated_hand_vertex_displacement_m": 0.9230488329159139
+        }
+      }
+    },
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "868912f497854bb401437db9b6327838b0a7a849e06c7713514438165f5e163f",
+      "project_id": "anatomical-walk-comparison",
+      "video": {
+        "width": 336,
+        "height": 208,
+        "frames": 34,
+        "fps": 24.0,
+        "duration": 1.416667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "b286466cb07b9c4788692ffa7a00f956db41c1b6a4ba4293faa09c8a72bc6211"
+      },
+      "timings_seconds": {
+        "blender_process": 86.4675397000392,
+        "encoding": 0.49323480000020936,
+        "decode_verification": 0.528306899999734,
+        "total": 89.71997680002823
+      },
+      "disk_bytes": 48973496,
+      "job": "outputs/v063-renders/anatomical-walk-comparison-75619f06989e4035813c3094bea5ef91",
+      "manifest_sha256": "a4bb2fb1e3cc36746a7ff8eadf197661d8a1dac82a98580da4d24efa49302470",
+      "scene_build_seconds": 6.927305699966382,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "curator-walk",
+          "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"
+        },
+        {
+          "id": "curator-walk",
+          "sha256": "8165e04c24fedae56bc6a0fdc6cb519c5bfb5b3374740a15a569e618e3924d6a"
+        }
+      ],
+      "retarget-scene-report": {
+        "legacy": {
+          "frames": [
+            1,
+            34
+          ],
+          "ranges": {
+            "l": {
+              "lateral_deg": [
+                13.935964084830971,
+                68.65898172467554
+              ],
+              "elbow_deg": [
+                68.24589097912258,
+                96.87182850767131
+              ],
+              "wrist_deg": [
+                27.520172590605988,
+                57.79826286994182
+              ],
+              "forearm_roll_deg": [
+                -177.01633122762894,
+                178.66780274159822
+              ]
+            },
+            "r": {
+              "lateral_deg": [
+                13.686039364467533,
+                68.17432749362712
+              ],
+              "elbow_deg": [
+                67.94299941018919,
+                96.5876448268746
+              ],
+              "wrist_deg": [
+                27.46770136985466,
+                57.853423477678845
+              ],
+              "forearm_roll_deg": [
+                -177.8631757111754,
+                177.03627571269658
+              ]
+            }
+          },
+          "largest_joint_step_deg": {
+            "l": [
+              9.609622191045498,
+              8.274885358152071,
+              7.295740705697937
+            ],
+            "r": [
+              9.66434537406573,
+              8.435959210533438,
+              7.297565458758422
+            ]
+          },
+          "largest_circular_forearm_roll_step_deg": {
+            "l": 10.50104296351887,
+            "r": 10.059195060378926
+          },
+          "max_evaluated_hand_vertex_displacement_m": 0.48773312822123294
+        },
+        "corrected": {
+          "frames": [
+            1,
+            34
+          ],
+          "ranges": {
+            "l": {
+              "lateral_deg": [
+                5.702824957809009,
+                12.410857483694409
+              ],
+              "elbow_deg": [
+                21.649179329136686,
+                27.374353174468094
+              ],
+              "wrist_deg": [
+                8.929730410493079,
+                13.970607239674774
+              ],
+              "forearm_roll_deg": [
+                -179.3174096400635,
+                179.62753051676566
+              ]
+            },
+            "r": {
+              "lateral_deg": [
+                5.672196166291549,
+                12.346998698190419
+              ],
+              "elbow_deg": [
+                21.588576768178456,
+                27.31750892510066
+              ],
+              "wrist_deg": [
+                8.936987486486219,
+                13.976787707099989
+              ],
+              "forearm_roll_deg": [
+                -179.54326088799942,
+                179.9201116660947
+              ]
+            }
+          },
+          "largest_joint_step_deg": {
+            "l": [
+              8.423134369925464,
+              7.266482421899261,
+              7.813609885721281
+            ],
+            "r": [
+              8.90860379138074,
+              7.762618665774062,
+              8.326978132600019
+            ]
+          },
+          "largest_circular_forearm_roll_step_deg": {
+            "l": 1.6681802131151073,
+            "r": 1.7311062722345127
+          },
+          "max_evaluated_hand_vertex_displacement_m": 0.2339536969410061
+        }
+      }
+    },
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "7e339ae14cf94ca40c8eb3c4cf2f1ffc5a926c829680d1a5727e4dd3abcbf82d",
+      "project_id": "captured-conversational-gestures",
+      "video": {
+        "width": 288,
+        "height": 180,
+        "frames": 76,
+        "fps": 10.0,
+        "duration": 7.6,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 7.6,
+          "start_time": 0.0
+        },
+        "sha256": "c7d726f72b86be08735cf91dbcdb243321fbebd103d29c87f875c3a653eea2d2"
+      },
+      "timings_seconds": {
+        "blender_process": 722.9721097000293,
+        "encoding": 0.6951454000081867,
+        "audio_mux": 1.167451799963601,
+        "decode_verification": 0.29868140001781285,
+        "total": 734.5477575999685
+      },
+      "disk_bytes": 74955027,
+      "job": "outputs/v063-renders/captured-conversational-gestures-7954ccda510b4398a7304b236ebd0302",
+      "manifest_sha256": "baf439aa7de803e72b777ca31f1aca3606220c5e392f1d81c3b5d78de476e713",
+      "scene_build_seconds": 38.58589980000397,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "curator-cmu-point",
+          "sha256": "1c0e23e0d595ee1e293f73fcfc703b33b51f2aa33707bd39370ed0e54d13cd76"
+        },
+        {
+          "id": "scholar-cmu-wave",
+          "sha256": "d11898cb9d7a4b23f0d1ee7c0823cd979bf2fc6a9149233d374bf8f3ad5afd83"
+        }
+      ],
+      "capture-body-report": {
+        "curator": {
+          "frames": [
+            10,
+            40
+          ],
+          "start_pelvis_world": [
+            -0.550000011920929,
+            0.10946162045001984,
+            0.9279173016548157
+          ],
+          "end_pelvis_world": [
+            -0.5500722527503967,
+            0.10830920189619064,
+            0.9301499128341675
+          ],
+          "lowest_shoe_z_m": -2.812594175338745e-07,
+          "highest_lowest_shoe_z_m": 0.44250813126564026,
+          "both_shoes_above_25mm_frames": [
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ],
+          "peak_viseme": 0.8500000238418579
+        },
+        "scholar": {
+          "frames": [
+            11,
+            33
+          ],
+          "start_pelvis_world": [
+            0.7699999809265137,
+            0.10380016267299652,
+            0.9135876297950745
+          ],
+          "end_pelvis_world": [
+            0.77778559923172,
+            0.10676073282957077,
+            0.9126776456832886
+          ],
+          "lowest_shoe_z_m": -0.10165313631296158,
+          "highest_lowest_shoe_z_m": 0.0831465795636177,
+          "both_shoes_above_25mm_frames": [
+            13,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "peak_viseme": 0.0
+        }
+      }
+    },
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "8c0af1fb62d3ca9bc7875556c3cd739dd7c16137d4fd0092523daeeb11521cea",
+      "project_id": "captured-running-study",
+      "video": {
+        "width": 320,
+        "height": 180,
+        "frames": 60,
+        "fps": 24.0,
+        "duration": 2.5,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "b7ca8224f029eab19434b9f41e0a33ff2ff09826088c13d780a401ee6c800e77"
+      },
+      "timings_seconds": {
+        "blender_process": 556.0602340000332,
+        "encoding": 0.4103942000074312,
+        "decode_verification": 0.23862020001979545,
+        "total": 559.138815000013
+      },
+      "disk_bytes": 40854138,
+      "job": "outputs/v063-renders/captured-running-study-5c8552e28aa04c76862715b9bebf362e",
+      "manifest_sha256": "d65bbca8dcc11ec08eb615a380cc7aa167b19335d3fabbd977d10ce41ebcaf6b",
+      "scene_build_seconds": 18.84863680001581,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "scholar-cmu-run",
+          "sha256": "a4b922dbc5b9649b5b6ad42d535d5cac2100e896f5150789bb9c474fced8d977"
+        }
+      ],
+      "capture-body-report": {
+        "runner": {
+          "frames": [
+            1,
+            60
+          ],
+          "start_pelvis_world": [
+            -1.7999999523162842,
+            0.10380016267299652,
+            0.9135876297950745
+          ],
+          "end_pelvis_world": [
+            3.1692731380462646,
+            0.14959973096847534,
+            0.8944788575172424
+          ],
+          "lowest_shoe_z_m": -0.06187325343489647,
+          "highest_lowest_shoe_z_m": 0.10888681560754776,
+          "both_shoes_above_25mm_frames": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60
+          ],
+          "peak_viseme": 0.0
+        }
+      }
+    },
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "868912f497854bb401437db9b6327838b0a7a849e06c7713514438165f5e163f",
+      "project_id": "fort-anatomical-handoff",
+      "video": {
+        "width": 288,
+        "height": 162,
+        "frames": 84,
+        "fps": 10.0,
+        "duration": 8.4,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 8.4,
+          "start_time": 0.0
+        },
+        "sha256": "fe800f47d135d706fd6c5affc1c68e13d1361fc024d87ffcd7126141044b6440"
+      },
+      "timings_seconds": {
+        "blender_process": 1040.6234015999944,
+        "encoding": 0.9043818000354804,
+        "audio_mux": 1.0931123999762349,
+        "decode_verification": 0.625806299969554,
+        "total": 1048.6899759999942
+      },
+      "disk_bytes": 408187788,
+      "job": "outputs/v063-renders/fort-anatomical-handoff-96d4001ec68a413baf7d34b2e5272a53",
+      "manifest_sha256": "587a79726285b0868667ea7f6bbbc1965eb37ab363115841b87c5f71a7478069",
+      "scene_build_seconds": 20.23896099999547,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "curator-walk",
+          "sha256": "8165e04c24fedae56bc6a0fdc6cb519c5bfb5b3374740a15a569e618e3924d6a"
+        },
+        {
+          "id": "scholar-walk",
+          "sha256": "e91b16018180247e5441f694d37bca21336d17cf68141aa4a53b2d3edf24ee0a"
+        }
+      ],
+      "reopened-handoff": {
+        "samples": [
+          {
+            "frame": 1,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              -1.9913880825042725,
+              1.0516018867492676,
+              1.010033369064331
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              5.373314568109496
+            ]
+          },
+          {
+            "frame": 60.99,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              1.3362196683883667,
+              -1.1956918239593506,
+              1.290000319480896
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              1.1740753414387827e-06
+            ]
+          },
+          {
+            "frame": 61,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.2899998426437378
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              1.130918619692938e-06,
+              0.0
+            ]
+          },
+          {
+            "frame": 61.01,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.290000081062317
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              8.513246093443454e-07,
+              0.0
+            ]
+          },
+          {
+            "frame": 73,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.4599007368087769,
+              -1.4323339462280273,
+              0.9718414545059204
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.3693354637389067,
+              0.0
+            ]
+          }
+        ],
+        "max_contact_error_m": 1.2502775766493696e-06,
+        "switch_displacement_m": 9.830249847454215e-07,
+        "switch_quaternion_delta": 0.0,
+        "peak_viseme_during_contact": 0.8500000238418579
+      },
+      "reopened-movement": {
+        "armatures": 2,
+        "actors": {
+          "curator": {
+            "action": "ATLAS Motion curator-walk",
+            "blend_frames": [
+              4.0,
+              4.0
+            ],
+            "root_error_m": 4.768371586472142e-08,
+            "arrival_frame": 45,
+            "arrival": [
+              1.0642488203152745,
+              -0.8477596993858348
+            ],
+            "stop_distance_m": 0.8499999999999999,
+            "arrival_yaw_error_deg": 4.927057659642742e-07,
+            "full_weight_sample_count": 22,
+            "shoe_min_z_range_m": [
+              -0.014083496294915676,
+              -2.90765892714262e-05
+            ],
+            "distinct_left_calf_poses": 22,
+            "relative_contact_frames": {
+              "left": [
+                20,
+                26,
+                27,
+                28,
+                29,
+                30,
+                36,
+                37,
+                38,
+                39,
+                40
+              ],
+              "right": [
+                21,
+                22,
+                23,
+                24,
+                25,
+                31,
+                32,
+                33,
+                34,
+                35,
+                41
+              ]
+            },
+            "contact_ankle_speed_mps": {
+              "count": 16,
+              "mean": 0.9015618162838446,
+              "peak": 2.404216497623179
+            }
+          },
+          "scholar": {
+            "action": "ATLAS Motion scholar-walk",
+            "blend_frames": [
+              3.0,
+              3.0
+            ],
+            "root_error_m": 1.418588059544119e-07,
+            "arrival_frame": 13,
+            "arrival": [
+              1.75,
+              -1.35
+            ],
+            "stop_distance_m": null,
+            "arrival_yaw_error_deg": null,
+            "full_weight_sample_count": 6,
+            "shoe_min_z_range_m": [
+              -0.0011896146461367607,
+              -4.256376996636391e-06
+            ],
+            "distinct_left_calf_poses": 6,
+            "relative_contact_frames": {
+              "left": [
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10
+              ]
+            },
+            "contact_ankle_speed_mps": {
+              "count": 4,
+              "mean": 0.8400652173573684,
+              "peak": 1.6927086003865157
+            }
+          }
+        },
+        "face": {
+          "curator": {
+            "walking_frames_sampled": 28,
+            "peak_jaw": 0.20000000298023224,
+            "peak_viseme": 0.8500000238418579,
+            "blinks": [
+              {
+                "frame": 17,
+                "strength": 0.949999988079071
+              },
+              {
+                "frame": 43,
+                "strength": 0.949999988079071
+              },
+              {
+                "frame": 68,
+                "strength": 0.949999988079071
+              }
+            ],
+            "cues": 45,
+            "audio_sha256": "6390d32a1a44d795e98943c496eb4f7f18b216a051375f4b344cf7a47e8943f3"
+          }
+        },
+        "authored_windows": {},
+        "minimum_rendered_actor_center_distance_m": 0.8500000159082222
+      }
+    },
+    {
+      "engine_version": "0.6.3",
+      "engine_source_sha256": "868912f497854bb401437db9b6327838b0a7a849e06c7713514438165f5e163f",
+      "project_id": "guided-anatomical-walk",
+      "video": {
+        "width": 320,
+        "height": 180,
+        "frames": 56,
+        "fps": 12.0,
+        "duration": 4.666667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "f853b5bdb0d3ff8df420e41cc70788a84a217c289a410fd7d0280e16e710ca8d"
+      },
+      "timings_seconds": {
+        "blender_process": 151.42481459997362,
+        "encoding": 0.4828679999918677,
+        "decode_verification": 0.20226869999896735,
+        "total": 153.90546389995143
+      },
+      "disk_bytes": 36589746,
+      "job": "outputs/v063-renders/guided-anatomical-walk-0a5cc55dc0ea42fb837f2a9d31ef2d2b",
+      "manifest_sha256": "c9be2c21f86843b6542fb632419d9d4200c5c840ba0d5ab00d75c4367d393db4",
+      "scene_build_seconds": 5.42177030001767,
+      "blender": "5.2.3 LTS",
+      "motion_pins": [
+        {
+          "id": "curator-walk",
+          "sha256": "8165e04c24fedae56bc6a0fdc6cb519c5bfb5b3374740a15a569e618e3924d6a"
+        }
+      ],
+      "reopened-movement": {
+        "armatures": 1,
+        "actors": {
+          "walker": {
+            "action": "ATLAS Motion curator-walk",
+            "blend_frames": [
+              4.0,
+              4.0
+            ],
+            "root_error_m": 6.74349575232249e-08,
+            "arrival_frame": 51,
+            "arrival": [
+              1.3,
+              -2.45
+            ],
+            "stop_distance_m": null,
+            "arrival_yaw_error_deg": null,
+            "full_weight_sample_count": 39,
+            "shoe_min_z_range_m": [
+              -0.004064955748617649,
+              0.023395875468850136
+            ],
+            "distinct_left_calf_poses": 39,
+            "relative_contact_frames": {
+              "left": [
+                9,
+                10,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43
+              ],
+              "right": [
+                11,
+                12,
+                13,
+                14,
+                15,
+                22,
+                23,
+                24,
+                25,
+                26,
+                33,
+                34,
+                35,
+                36,
+                37,
+                44,
+                45,
+                46,
+                47
+              ]
+            },
+            "contact_ankle_speed_mps": {
+              "count": 31,
+              "mean": 0.607069262688355,
+              "peak": 2.3496793884853813
+            }
+          }
+        },
+        "face": {},
+        "authored_windows": {}
+      },
+      "retarget-scene-report": {
+        "walker": {
+          "frames": [
+            1,
+            56
+          ],
+          "ranges": {
+            "l": {
+              "lateral_deg": [
+                5.738797300658337,
+                12.40640957995014
+              ],
+              "elbow_deg": [
+                21.882461025143886,
+                44.25007380212836
+              ],
+              "wrist_deg": [
+                5.464110354875181,
+                13.93426294932749
+              ],
+              "forearm_roll_deg": [
+                -179.92470879756306,
+                179.96894579082442
+              ]
+            },
+            "r": {
+              "lateral_deg": [
+                5.673369447737355,
+                12.27901382282846
+              ],
+              "elbow_deg": [
+                21.613465977513982,
+                44.25010453797963
+              ],
+              "wrist_deg": [
+                5.464110354875181,
+                13.884540025943442
+              ],
+              "forearm_roll_deg": [
+                -178.44895121611594,
+                179.1670509307392
+              ]
+            }
+          },
+          "largest_joint_step_deg": {
+            "l": [
+              16.67020504630582,
+              15.513527159210286,
+              15.808307426039724
+            ],
+            "r": [
+              19.7594355022162,
+              24.13152936755721,
+              24.868698755154142
+            ]
+          },
+          "largest_circular_forearm_roll_step_deg": {
+            "l": 3.7548656279522845,
+            "r": 6.74151871323636
+          },
+          "max_evaluated_hand_vertex_displacement_m": 0.5278685758477859
+        }
+      },
+      "foot_contact": [
+        {
+          "actor": "walker",
+          "clip_start": 5,
+          "contact_pairs": 29,
+          "mean_ankle_drift_before_mps": 1.0677925201662295,
+          "mean_ankle_drift_after_mps": 0.6182279849843294,
+          "shoe_min_before_m": -0.0028034604620188475,
+          "shoe_min_after_m": -0.0028563139494508505
+        }
+      ]
+    }
+  ],
+  "repeat_cache_hit": true,
+  "illustration": {
+    "path": "docs/evidence/v063_arm_comparison.png",
+    "sha256": "4956df1f02869408cff8db4012a1aa82df03d7ca05aa34cb1b5c5e4430108512"
+  }
+}
