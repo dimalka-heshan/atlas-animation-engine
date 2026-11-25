@@ -10,6 +10,8 @@ from pathlib import Path
 
 from engine import __version__
 from engine.assets.resolution import resolve_project_assets, snapshot_assets, write_video_credits
+from engine.characters.locomotion import compile_movement
+from engine.characters.motion import resolve_motions, snapshot_motions
 from engine.assets.environment_media import resolve_media, snapshot_media
 from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
@@ -33,7 +35,7 @@ def source_digest() -> str:
 def render_project(project: Project, output_root: Path, *, blender: Path | None = None,
                    ffmpeg: Path | None = None, ffprobe: Path | None = None,
                    asset_library: Path | None = None, audio_library: Path | None = None,
-                   asset_cache: Path | None = None) -> Path:
+                   asset_cache: Path | None = None, motion_cache: Path | None = None) -> Path:
     """Render into a new job directory inside an explicitly approved output root.
 
     Returns the verified MP4 path; errors retain the project, logs and failed status.
@@ -60,15 +62,22 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
                         dependencies={"pydantic": importlib.metadata.version("pydantic")})
         atomic_json(directory / "project.json", project.model_dump(mode="json"))
         manifest["project_sha256"] = hashlib.sha256((directory / "project.json").read_bytes()).hexdigest()
-        expanded = expand_project(project)
-        entries = resolve_project_assets(expanded, asset_library or Path("assets/library"))
+        motions = resolve_motions(project, motion_cache or Path("assets/motions"))
+        expanded, plans = compile_movement(expand_project(project), motions)
+        entries = resolve_project_assets(expanded, asset_library or Path("assets/library"), motions,
+                                         movement_actions=project.actions)
+        if motions:
+            manifest["motions"] = snapshot_motions(motions, directory)
+        if plans:
+            manifest["movement"] = plans
+            atomic_json(directory / "movement-plan.json", plans)
         enforce_geometry_budget(expanded, entries)
         if project.quality:
             manifest["quality"] = project.quality.model_dump(mode="json")
         manifest["assets"] = snapshot_assets(entries, directory)
         cache = asset_cache or Path("assets/acquisition")
         manifest["environment_media"] = snapshot_media(resolve_media(expanded, cache), cache, directory)
-        write_video_credits(directory, manifest["assets"], manifest["environment_media"])
+        write_video_credits(directory, manifest["assets"], manifest["environment_media"], manifest.get("motions", ()))
         audio_entries = resolve_audio(expanded, audio_library or Path("assets/audio"))
         manifest["audio"] = snapshot_audio(audio_entries, directory)
         atomic_json(directory / "resolved.json", expanded.model_dump(mode="json"))

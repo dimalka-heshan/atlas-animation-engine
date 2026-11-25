@@ -100,9 +100,10 @@ def play_clips(rig, actions, clips, fps):
         track = rig.animation_data.nla_tracks.new(prev=previous)
         track.name = f"ATLAS {clip['start_frame']}: {name}"
         previous = track
-        if name not in actions:
+        key = clip["motion"]["sha256"] if clip.get("motion") else name
+        if key not in actions:
             raise ValueError(f"Unknown source-rig clip {name}")
-        action, slot, source_start, source_end = actions[name]
+        action, slot, source_start, source_end = actions[key]
         length = source_end - source_start
         if length <= 0:
             raise ValueError(f"Clip {name} has no duration")
@@ -130,3 +131,5 @@ def play_clips(rig, actions, clips, fps):
         # boundary by a subframe, leaving action scale and repeat unchanged.
         strip.frame_end_raw = end - max(.001, end / 2**22)
         strip.blend_in = clip["blend_frames"]
+        if clip.get("blend_out_frames"):
+            strip.blend_out = clip["blend_out_frames"]

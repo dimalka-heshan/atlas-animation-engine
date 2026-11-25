@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.5",
+  "id": "mpfb-walk-run-study",
+  "scene": {
+    "entities": [
+      {
+        "id": "curator",
+        "asset": {"id": "mpfb-curator", "version": 1},
+        "rigged": true,
+        "pivot": "base",
+        "location": [0, 3.2, 0],
+        "interpolation": "LINEAR",
+        "keyframes": [
+          {"frame": 4, "location": [0, 3.2, 0]},
+          {"frame": 17, "location": [0, 2, 0]},
+          {"frame": 33, "location": [0, -2, 0]},
+          {"frame": 46, "location": [0, -3.2, 0]}
+        ],
+        "clips": [
+          {"name": "HumanIdle", "start_frame": 1, "frame_count": 52, "loop": true},
+          {
+            "name": "curator-walk",
+            "motion": {"id": "curator-walk", "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"},
+            "start_frame": 4, "frame_count": 13, "speed": 0.9774,
+            "blend_frames": 2, "blend_out_frames": 1, "loop": true, "overlay": true
+          },
+          {
+            "name": "curator-run",
+            "motion": {"id": "curator-run", "sha256": "55240955f7797e969b8771dc7617346b0a6ac4cf98535ba30b199a3a83e6637d"},
+            "start_frame": 17, "frame_count": 16, "speed": 0.90146,
+            "blend_frames": 1, "blend_out_frames": 1, "loop": true, "overlay": true
+          },
+          {
+            "name": "curator-walk",
+            "motion": {"id": "curator-walk", "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"},
+            "start_frame": 33, "frame_count": 13, "speed": 0.9774,
+            "blend_frames": 1, "blend_out_frames": 2, "loop": true, "overlay": true
+          }
+        ]
+      }
+    ],
+    "environment": {
+      "ground_size": 60,
+      "background": [0.06, 0.08, 0.12],
+      "strength": 0.68,
+      "ground_material": {"color": [0.12, 0.16, 0.18], "roughness": 0.8}
+    },
+    "camera": {"location": [7.35, -5.8, 2.8], "target": [0, 0, 0.85], "lens": 43},
+    "lights": [
+      {"id": "key", "kind": "AREA", "location": [3, -4, 5], "target": [0, -1, 1], "energy": 580, "size": 5},
+      {"id": "rim", "kind": "AREA", "location": [-3, 4, 4], "target": [0, 1, 0.8], "energy": 410, "size": 4}
+    ]
+  },
+  "quality": {"profile": "realistic"},
+  "render": {"engine": "cycles", "width": 352, "height": 198, "samples": 3, "fps": 12, "frames": 52, "threads": 4}
+}

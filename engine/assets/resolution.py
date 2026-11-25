@@ -12,7 +12,7 @@ def project_asset_references(project: Project) -> list[tuple[str, int]]:
     return sorted({(entity.asset.id, entity.asset.version) for entity in entities if isinstance(entity, AssetEntity)})
 
 
-def resolve_project_assets(project: Project, library: Path) -> list[dict]:
+def resolve_project_assets(project: Project, library: Path, motions=None, *, movement_actions=None) -> list[dict]:
     references = project_asset_references(project)
     if not references:
         return []
@@ -22,6 +22,8 @@ def resolve_project_assets(project: Project, library: Path) -> list[dict]:
     entries = [registry.resolve(asset_id, version) for asset_id, version in references]
     pinned = {(entry["id"], entry["version"]): entry for entry in entries}
     human_faces = {p.actor_id for p in project.performances if p.profile == "mpfb-visemes-1"}
+    action_motions = {action.actor: action.motion for action in
+                      (project.actions if movement_actions is None else movement_actions)}
     for entity in [*project.scene.entities, *(group.prototype for group in project.scene.scatter)]:
         if not isinstance(entity, AssetEntity):
             continue
@@ -30,8 +32,8 @@ def resolve_project_assets(project: Project, library: Path) -> list[dict]:
         profile = entry["container"].get("profile", "static")
         if rigged != (profile in {"rigged", "human"}):
             raise ValueError(f"Asset profile does not match entity {entity.id}")
-        if profile == "human" and project.schema_version != "1.4":
-            raise ValueError("MPFB humans require schema 1.4")
+        if profile == "human" and project.schema_version not in {"1.4", "1.5"}:
+            raise ValueError("MPFB humans require schema 1.4 or later")
         if entity.id in human_faces and profile != "human":
             raise ValueError(f"Actor {entity.id} has no inspected MPFB human facial profile")
         if rigged:
@@ -39,8 +41,14 @@ def resolve_project_assets(project: Project, library: Path) -> list[dict]:
             if any(role not in report["humanoid_mapping"] for role in entity.equipment):
                 raise ValueError(f"Equipment bone role is unavailable on {entity.id}")
             clips = {clip["name"]: clip for clip in report["clips"]}
+            if entity.id in action_motions:
+                _target_motion(action_motions[entity.id], entity, entry, profile, report, motions)
             for event in entity.clips:
-                clip = clips.get(event.name)
+                if event.motion:
+                    baked = _target_motion(event.motion, entity, entry, profile, report, motions)
+                    clip = {"duration_seconds": (len(baked["frames"]) - 1) / baked["fps"]}
+                else:
+                    clip = clips.get(event.name)
                 if clip is None:
                     raise ValueError(f"Unknown clip {event.name} for pinned actor {entity.id}")
                 duration = event.frame_count / project.render.fps * event.speed
@@ -49,6 +57,19 @@ def resolve_project_assets(project: Project, library: Path) -> list[dict]:
                 if event.loop and duration / clip["duration_seconds"] > 1000:
                     raise ValueError(f"Clip {event.name} exceeds Blender's 1000-repeat limit")
     return entries
+
+
+def _target_motion(pin, entity, entry, profile, report, motions):
+    resolved = (motions or {}).get((pin.id, pin.sha256))
+    if not resolved:
+        raise ValueError(f"Resolve the pinned motion for {entity.id} before using it")
+    record = resolved[1]
+    target = record["target"]
+    if (profile != "human" or (target["id"], target["version"], target["sha256"]) !=
+            (entry["id"], entry["version"], entry["sha256"])
+            or target["skeleton_sha256"] != report["skeleton_sha256"]):
+        raise ValueError(f"Motion {pin.id} requires a bake for the exact pinned target {entity.id}")
+    return record["bake"]
 
 
 def snapshot_assets(entries: list[dict], directory: Path) -> list[dict]:
@@ -74,11 +95,12 @@ def snapshot_assets(entries: list[dict], directory: Path) -> list[dict]:
     return snapshots
 
 
-def write_video_credits(directory: Path, models: list[dict], media: list[dict]) -> None:
+def write_video_credits(directory: Path, models: list[dict], media: list[dict], motions: list[dict] = ()) -> None:
     license_urls = {"CC0-1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
                     "CC-BY-4.0": "https://creativecommons.org/licenses/by/4.0/"}
     lines = []
-    for record in [*(entry["provenance"] for entry in models), *(entry["catalog"] for entry in media)]:
+    for record in [*(entry["provenance"] for entry in models), *(entry["catalog"] for entry in media),
+                   *(entry["source"] | {"name": entry["source"]["clip"]} for entry in motions)]:
         license_id = record["license_id"]
         license_url = license_urls.get(license_id)
         credit = record.get("attribution") or record.get("credit")

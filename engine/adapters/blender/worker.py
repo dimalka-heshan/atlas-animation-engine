@@ -17,6 +17,7 @@ from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from asset_import import import_asset
 from facial import build_talking_head, apply_performance
+from motion_playback import read_bakes
 
 
 def material(spec, name):
@@ -211,6 +212,7 @@ def build(project, directory):
         sky.image = media_image(directory, media["hdri"], "hdri")
         world.node_tree.links.new(sky.outputs["Color"], background.inputs["Color"])
     asset_map = json.loads((directory / "asset-map.json").read_text(encoding="utf-8"))
+    motion_bakes = read_bakes(directory)
     entities, imported_assets, rig_equipment = {}, [], []
     for item in spec["entities"]:
         if "asset" in item:
@@ -220,7 +222,8 @@ def build(project, directory):
             if not source.is_relative_to(directory.resolve()):
                 raise ValueError("Asset snapshot escapes job directory")
             obj, report = import_asset(source, item["id"], item["normalize"], item["pivot"],
-                profile=entry["container"].get("profile", "static"), clips=item.get("clips", []), fps=settings["fps"])
+                profile=entry["container"].get("profile", "static"), clips=item.get("clips", []), fps=settings["fps"],
+                bakes=motion_bakes)
             if report["missing_textures"]:
                 raise ValueError(f"Missing asset textures: {report['missing_textures']}")
             apply_transform(obj, item)

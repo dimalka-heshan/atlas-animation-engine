@@ -15,6 +15,8 @@ from apps.cli.characters import add_character_commands, run_character_command
 from engine.audio.production import resolve_audio
 from engine.assets.resolution import resolve_project_assets
 from engine.assets.environment_media import resolve_media
+from engine.characters.locomotion import compile_movement
+from engine.characters.motion import resolve_motions
 from engine import __version__
 from engine.core.models import EnvironmentCollection, Project
 from engine.core.quality import PRESETS, enforce_geometry_budget
@@ -59,6 +61,13 @@ def parser() -> argparse.ArgumentParser:
     validate.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
     validate.add_argument("--environment-collection", type=Path)
     validate.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
+    navigation = sub.add_parser("navigation", help="validate and plan bounded actor routes")
+    plan = navigation.add_subparsers(dest="plan_command", required=True).add_parser("plan")
+    actions = sub.add_parser("actions", help="compile actor commands into transform and motion tracks")
+    compile_actions = actions.add_subparsers(dest="plan_command", required=True).add_parser("compile")
+    for command in (plan, compile_actions):
+        command.add_argument("project", type=Path)
+        command.add_argument("--asset-library", type=Path, default=Path("assets/library"))
     render = sub.add_parser("render", help="render and verify a new production job")
     render.add_argument("project", type=Path)
     render.add_argument("--output", type=Path, default=Path("outputs"))
@@ -68,6 +77,8 @@ def parser() -> argparse.ArgumentParser:
     render.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
     render.add_argument("--environment-collection", type=Path)
     render.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
+    for area in (validate, render, plan, compile_actions):
+        area.add_argument("--motion-cache", type=Path, default=Path("assets/motions"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
     verify.add_argument("--project", type=Path, required=True)
@@ -102,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
             result = run_voice_command(args)
         elif args.command == "lipsync":
             result = run_lipsync_command(args)
-        elif args.command in {"characters", "animations"}:
+        elif args.command in {"characters", "animations", "motions"}:
             result = run_character_command(args)
         else:
             project = load_project(args.project)
@@ -111,23 +122,31 @@ def main(argv: list[str] | None = None) -> int:
                 if collection.stat().st_size > 2 * 1024 * 1024:
                     raise ValueError("Environment collection exceeds 2 MiB")
                 project = EnvironmentCollection.model_validate_json(collection.read_text(encoding="utf-8-sig")).apply(project)
-            if args.command == "validate":
-                expanded = expand_project(project)
-                assets = resolve_project_assets(expanded, args.asset_library)
+            if args.command in {"validate", "navigation", "actions"}:
+                motions = resolve_motions(project, args.motion_cache)
+                expanded, plans = compile_movement(expand_project(project), motions)
+                assets = resolve_project_assets(expanded, args.asset_library, motions, movement_actions=project.actions)
                 enforce_geometry_budget(expanded, assets)
-                audio = resolve_audio(expanded, args.audio_library)
-                media = resolve_media(expanded, args.asset_cache)
-                result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
-                          "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
-                          "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets],
-                          "audio_events": len(audio), "environment_media": len(media)}
+                if args.command == "validate":
+                    audio = resolve_audio(expanded, args.audio_library)
+                    media = resolve_media(expanded, args.asset_cache)
+                    result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
+                              "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
+                              "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets],
+                              "audio_events": len(audio), "environment_media": len(media)}
+                    if motions or plans:
+                        result.update(motions=len(motions), movement=plans)
+                else:
+                    result = {"project": project.id, "movement": plans}
+                    if args.command == "actions":
+                        result["compiled_project"] = expanded.model_dump(mode="json")
             elif args.command == "verify":
                 result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"), expect_audio=bool(project.audio))
             else:
                 if args.engine:
                     project.render.engine = args.engine
                 path = render_project(project, args.output, blender=args.blender, asset_library=args.asset_library,
-                    audio_library=args.audio_library, asset_cache=args.asset_cache)
+                    audio_library=args.audio_library, asset_cache=args.asset_cache, motion_cache=args.motion_cache)
                 result = {"status": "succeeded", "video": str(path), "manifest": str(path.parent / "manifest.json")}
         print(json.dumps(result, indent=2))
         if args.command == "assets" and args.asset_command == "batch" and result["status"] != "succeeded":

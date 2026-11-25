@@ -26,7 +26,7 @@ def surface_channels(material):
     return sorted(channels)
 
 
-def import_asset(path, identifier, normalize="none", pivot="origin", *, profile="static", clips=(), fps=None):
+def import_asset(path, identifier, normalize="none", pivot="origin", *, profile="static", clips=(), fps=None, bakes=None):
     started = time.perf_counter()
     before = set(bpy.data.objects)
     scene = bpy.context.scene
@@ -118,6 +118,13 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
     normalization.scale = (factor,) * 3
     normalization.location = -origin * factor
     if rigged:
+        if bakes:
+            from motion_playback import materialize
+            for clip in clips:
+                if clip.get("motion"):
+                    key = clip["motion"]["sha256"]
+                    if key not in actions:
+                        actions[key] = materialize(rig, clip, bakes[key], rig_report["skeleton_sha256"])
         play_clips(rig, actions, clips, fps or previous_fps)
     report["normalization"] = {"profile": "atlas-parent-transform-1", "scale": factor, "origin": list(origin)}
     bpy.context.view_layer.update()

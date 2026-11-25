@@ -64,13 +64,21 @@ class AssetEntity(AnimatedEntity):
     pivot: Literal["origin", "center", "base"] = "origin"
 
 
+class MotionPin(Model):
+    id: Identifier
+    sha256: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
+
+
 class ClipEvent(Model):
-    name: Annotated[str, Field(min_length=1, max_length=63)]
+    name: Annotated[str, Field(min_length=1, max_length=64)]
     start_frame: Frame
     frame_count: Frame
     speed: Annotated[Number, Field(ge=.1, le=4)] = 1
     loop: bool = False
     blend_frames: Annotated[StrictInt, Field(ge=0, le=120)] = 0
+    blend_out_frames: Annotated[StrictInt, Field(ge=0, le=120)] = 0
+    motion: MotionPin | None = None
+    overlay: bool = False
 
 
 class RiggedEntity(AssetEntity):
@@ -79,13 +87,46 @@ class RiggedEntity(AssetEntity):
     equipment: dict[Literal["left_hand", "right_hand"], Identifier] = Field(default_factory=dict)
 
 
+Rectangle = tuple[Number, Number, Number, Number]
+
+
+class Navigation(Model):
+    bounds: Rectangle
+    obstacles: list[Rectangle] = Field(default_factory=list, max_length=64)
+    clearance: Annotated[Number, Field(ge=0, le=4)] = .28
+    actor_separation: Annotated[Number, Field(ge=.1, le=8)] = .55
+
+
+class MovementAction(Model):
+    actor: Identifier
+    kind: Literal["walk_to", "run_to", "follow_waypoints", "approach_actor"]
+    motion: MotionPin
+    destination: Vec3 | None = None
+    waypoints: list[Vec3] = Field(default_factory=list, max_length=32)
+    target_actor: Identifier | None = None
+    stop_distance: Annotated[Number, Field(ge=.1, le=20)] = 1
+    speed_mps: Annotated[Number, Field(ge=.25, le=8)] | None = None
+    start_frame: Frame = 1
+    blend_frames: Annotated[StrictInt, Field(ge=0, le=30)] = 4
+
+    @model_validator(mode="after")
+    def one_destination(self) -> Self:
+        expected = {"walk_to": "destination", "run_to": "destination", "follow_waypoints": "waypoints",
+                    "approach_actor": "target_actor"}[self.kind]
+        fields = {key for key, value in (("destination", self.destination), ("waypoints", self.waypoints),
+                                        ("target_actor", self.target_actor)) if value is not None and value != []}
+        if fields != {expected} or self.target_actor == self.actor:
+            raise ValueError(f"{self.kind} requires exactly its own destination or another actor")
+        return self
+
+
 class EnvironmentCollection(Model):
     schema_version: Literal["1.0"] = "1.0"
     id: Identifier
     entities: list[AssetEntity] = Field(min_length=1, max_length=1000)
 
     def apply(self, project: "Project") -> "Project":
-        if project.schema_version not in {"1.3", "1.4"}:
+        if project.schema_version not in {"1.3", "1.4", "1.5"}:
             raise ValueError("Environment collections require project schema_version 1.3 or later")
         data = project.model_dump(mode="json")
         data["scene"]["entities"].extend(entity.model_dump(mode="json") for entity in self.entities)
@@ -191,7 +232,7 @@ class QualitySettings(Model):
 
 
 class Project(Model):
-    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4"] = "1.0"
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4", "1.5"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
@@ -199,6 +240,8 @@ class Project(Model):
     audio: list["AudioEvent"] = Field(default_factory=list, max_length=100)
     performances: list["FacialPerformance"] = Field(default_factory=list, max_length=100)
     quality: QualitySettings | None = None
+    navigation: Navigation | None = None
+    actions: list[MovementAction] = Field(default_factory=list, max_length=32)
 
     @model_validator(mode="before")
     @classmethod
@@ -215,34 +258,57 @@ class Project(Model):
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
-        if self.quality is not None and self.schema_version != "1.4":
+        if self.quality is not None and self.schema_version not in {"1.4", "1.5"}:
             raise ValueError("Production quality profiles require schema 1.4")
-        if self.schema_version != "1.4" and any(
+        if self.schema_version not in {"1.4", "1.5"} and any(
                 light.temperature_kelvin is not None or light.cast_shadows is not None for light in self.scene.lights):
             raise ValueError("Light temperature and shadow overrides require schema 1.4")
-        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version not in {"1.3", "1.4"}:
+        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version not in {"1.3", "1.4", "1.5"}:
             raise ValueError("Acquired environment media require schema_version 1.3 or later")
-        if self.audio and self.schema_version not in {"1.2", "1.3", "1.4"}:
+        if self.audio and self.schema_version not in {"1.2", "1.3", "1.4", "1.5"}:
             raise ValueError("Audio requires schema_version 1.2 or later")
         characters = {entity.id for entity in self.scene.entities if isinstance(entity, CharacterEntity)}
-        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3", "1.4"}:
+        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3", "1.4", "1.5"}:
             raise ValueError("Characters and facial performances require schema_version 1.2 or later")
         static_ids = {e.id for e in self.scene.entities if type(e) is AssetEntity}
         attached = set()
         actors = {e.id: e for e in self.scene.entities if isinstance(e, RiggedEntity)}
+        if (self.navigation or self.actions) and self.schema_version != "1.5":
+            raise ValueError("Navigation and movement actions require schema 1.5")
+        if self.actions and not self.navigation:
+            raise ValueError("Movement actions require explicit navigation bounds")
+        if len({action.actor for action in self.actions}) != len(self.actions):
+            raise ValueError("Use one movement action per actor")
+        for action in self.actions:
+            actor = actors.get(action.actor)
+            if actor is None or (action.target_actor and action.target_actor not in actors):
+                raise ValueError("Movement actions require explicit rigged actors")
+            if actor.keyframes or actor.clips or actor.normalize != "none" or actor.pivot != "base" or actor.scale != (1, 1, 1):
+                raise ValueError("Movement requires a meter-scale, base-pivot actor with no manual clips or keys")
         for actor in actors.values():
-            if self.schema_version not in {"1.3", "1.4"}:
+            if self.schema_version not in {"1.3", "1.4", "1.5"}:
                 raise ValueError("Rigged assets require schema_version 1.3 or later")
             for equipment in actor.equipment.values():
                 if equipment not in static_ids or equipment in attached:
                     raise ValueError("Equipment must reference a unique explicit static asset entity")
                 attached.add(equipment)
-            previous_end = 1
+            last = {False: 1, True: 1}
+            base_clips = []
             for clip in actor.clips:
                 end = clip.start_frame + clip.frame_count
-                if clip.start_frame < previous_end or end > self.render.frames + 1 or clip.blend_frames >= clip.frame_count:
+                if (clip.motion or clip.overlay or clip.blend_out_frames) and self.schema_version != "1.5":
+                    raise ValueError("Motion pins and overlay blends require schema 1.5")
+                if (clip.start_frame < last[clip.overlay] or end > self.render.frames + 1
+                        or clip.blend_frames + clip.blend_out_frames >= clip.frame_count):
                     raise ValueError("Clip events must be ordered, nonoverlapping and within render frames")
-                previous_end = end
+                if clip.overlay:
+                    if not clip.motion or not any(begin <= clip.start_frame and end <= finish for begin, finish in base_clips):
+                        raise ValueError("A motion overlay requires an earlier base strip covering its entire interval")
+                else:
+                    if last[True] != 1:
+                        raise ValueError("Base clips must precede motion overlays")
+                    base_clips.append((clip.start_frame, end))
+                last[clip.overlay] = end
         if self.audio and self.render.frames / self.render.fps > 180:
             raise ValueError("This audio production profile supports at most 180 seconds")
         if len({event.id for event in self.audio}) != len(self.audio):
@@ -253,7 +319,7 @@ class Project(Model):
         active: dict[str, list[tuple[float, float]]] = {}
         for performance in self.performances:
             if performance.profile == "mpfb-visemes-1":
-                if self.schema_version != "1.4" or performance.actor_id not in actors or performance.controls is not None:
+                if self.schema_version not in {"1.4", "1.5"} or performance.actor_id not in actors or performance.controls is not None:
                     raise ValueError("MPFB facial performances require schema 1.4 and a pinned compatible rigged actor")
                 blinks = performance.blink_frames
                 if any(frame < 2 or frame >= self.render.frames for frame in blinks) or any(
