@@ -1,0 +1,584 @@
+{
+  "version": "0.5.1",
+  "base_commit": "77870fe40b2e5734a1ac0d6194d7febafa769452",
+  "implementation_commit": "6e5640188e3a40fac4fc2d7a192178ebd1766aa4",
+  "platform": {
+    "blender": "5.2.3 LTS",
+    "processor": "Intel Core 7 240H",
+    "graphics": "Intel integrated graphics",
+    "os": "Windows",
+    "memory_kib": 33271672
+  },
+  "fixtures": {
+    "characters": [
+      {
+        "id": "mpfb-curator",
+        "version": 1,
+        "sha256": "ff0602e5a8a33eda9e9a0d3cb11635aa402d7a8e89e4730f17648dd7b57d77b8",
+        "spec": "examples/humans/curator.json",
+        "generation_report": "outputs/v051-release-curator.json",
+        "generation_and_inspection_seconds": 17.26,
+        "bones": 53,
+        "skinned_meshes": 9,
+        "packed_images": 10,
+        "triangles_including_importer_bone_widget": 47682,
+        "height_meters": 1.7387,
+        "skeleton_sha256": "0942502879ff785cfd7962f414675a83a19874835faa2d0d0367ef4c85b9137e",
+        "clips": [
+          "HumanIdle",
+          "HumanPresent"
+        ],
+        "facial_shapes": [
+          "browInnerUp",
+          "eyeBlinkLeft",
+          "eyeBlinkRight",
+          "jawOpen",
+          "viseme_E",
+          "viseme_FF",
+          "viseme_I",
+          "viseme_O",
+          "viseme_PP",
+          "viseme_U",
+          "viseme_aa",
+          "viseme_nn"
+        ]
+      },
+      {
+        "id": "mpfb-scholar",
+        "version": 1,
+        "sha256": "c446e758bb50e6d55faf3588f406043fcf498e42d5ccaf0a957752c751c2bf8f",
+        "spec": "examples/humans/scholar.json",
+        "generation_report": "outputs/v051-release-scholar.json",
+        "generation_and_inspection_seconds": 17.31,
+        "bones": 53,
+        "skinned_meshes": 9,
+        "packed_images": 11,
+        "triangles_including_importer_bone_widget": 40496,
+        "height_meters": 1.7393,
+        "skeleton_sha256": "02d500b12a8ac0fbc8ec5376a62ddd210aa596237b8f22264f7b0c7773c83189",
+        "clips": [
+          "HumanIdle",
+          "HumanPresent"
+        ],
+        "facial_shapes": [
+          "browInnerUp",
+          "eyeBlinkLeft",
+          "eyeBlinkRight",
+          "jawOpen",
+          "viseme_E",
+          "viseme_FF",
+          "viseme_I",
+          "viseme_O",
+          "viseme_PP",
+          "viseme_U",
+          "viseme_aa",
+          "viseme_nn"
+        ]
+      },
+      {
+        "id": "mpfb-worker",
+        "version": 1,
+        "sha256": "5c0c2ab59695d79b4c8ed75f3f979dfc7d832f986b0bc906983bb32e51e29fad",
+        "spec": "examples/humans/worker.json",
+        "generation_report": "outputs/v051-release-worker.json",
+        "generation_and_inspection_seconds": 17.16,
+        "bones": 53,
+        "skinned_meshes": 9,
+        "packed_images": 11,
+        "triangles_including_importer_bone_widget": 40666,
+        "height_meters": 1.5695,
+        "skeleton_sha256": "baef4bf6b72d59703fea482a1ab8014ce7d74556d87b6f507d91c9d14c6e5355",
+        "clips": [
+          "HumanIdle",
+          "HumanPresent"
+        ],
+        "facial_shapes": [
+          "browInnerUp",
+          "eyeBlinkLeft",
+          "eyeBlinkRight",
+          "jawOpen",
+          "viseme_E",
+          "viseme_FF",
+          "viseme_I",
+          "viseme_O",
+          "viseme_PP",
+          "viseme_U",
+          "viseme_aa",
+          "viseme_nn"
+        ]
+      },
+      {
+        "id": "mpfb-student",
+        "version": 1,
+        "sha256": "0e31c381612028bf3d66a046c43bb65ef4cc8c40fb3a8a2d9cd95d0824e66e6e",
+        "spec": "examples/humans/student.json",
+        "generation_report": "outputs/v051-release-student.json",
+        "generation_and_inspection_seconds": 17.82,
+        "bones": 53,
+        "skinned_meshes": 9,
+        "packed_images": 11,
+        "triangles_including_importer_bone_widget": 43290,
+        "height_meters": 1.3369,
+        "skeleton_sha256": "10623ad7366b1d824f14802da4e10885240f1b0de6251845b2482819d2bbee03",
+        "clips": [
+          "HumanIdle",
+          "HumanPresent"
+        ],
+        "facial_shapes": [
+          "browInnerUp",
+          "eyeBlinkLeft",
+          "eyeBlinkRight",
+          "jawOpen",
+          "viseme_E",
+          "viseme_FF",
+          "viseme_I",
+          "viseme_O",
+          "viseme_PP",
+          "viseme_U",
+          "viseme_aa",
+          "viseme_nn"
+        ]
+      },
+      {
+        "id": "mpfb-host",
+        "version": 1,
+        "sha256": "b101337bc8544ad9e50c604b6495ba1bbf56ca477bae9000d52bf0fbc708840c",
+        "spec": "examples/humans/host.json",
+        "generation_report": "outputs/v051-release-host.json",
+        "generation_and_inspection_seconds": 18.59,
+        "bones": 53,
+        "skinned_meshes": 9,
+        "packed_images": 11,
+        "triangles_including_importer_bone_widget": 47932,
+        "height_meters": 2.0313,
+        "skeleton_sha256": "04b47d801f427cc7016d82dea63a4882199367f0e5aacc2ff102414ace0d27e6",
+        "clips": [
+          "HumanIdle",
+          "HumanPresent"
+        ],
+        "facial_shapes": [
+          "browInnerUp",
+          "eyeBlinkLeft",
+          "eyeBlinkRight",
+          "jawOpen",
+          "viseme_E",
+          "viseme_FF",
+          "viseme_I",
+          "viseme_O",
+          "viseme_PP",
+          "viseme_U",
+          "viseme_aa",
+          "viseme_nn"
+        ]
+      }
+    ],
+    "environment_models": [
+      {
+        "id": "polyhaven-wooden_crate_01",
+        "version": 1,
+        "sha256": "350649e8949a525434709f9f0e19a7c6ff998905bf9aac28dd476e299a19f767",
+        "triangles": 6576,
+        "packed_images": 3,
+        "source": "https://polyhaven.com/a/wooden_crate_01",
+        "license": "CC0-1.0"
+      },
+      {
+        "id": "polyhaven-wine_barrel_01",
+        "version": 1,
+        "sha256": "dfd78d88134dfd7e2042eeaf83c0ed9747172934be9dd3248b7e22f9f1745ab2",
+        "triangles": 10820,
+        "packed_images": 3,
+        "source": "https://polyhaven.com/a/wine_barrel_01",
+        "license": "CC0-1.0"
+      },
+      {
+        "id": "polyhaven-stone_01",
+        "version": 1,
+        "sha256": "f9af464c16e34dc8a89c14bd32415c50b0038400b095b1426159d7f58d0a88f0",
+        "triangles": 53520,
+        "packed_images": 3,
+        "source": "https://polyhaven.com/a/stone_01",
+        "license": "CC0-1.0"
+      },
+      {
+        "id": "polyhaven-coast_rocks_01",
+        "version": 1,
+        "sha256": "fb35c2d3f4fbb115e36585cb2909131ac8e6892fc7c924008335a819962c094c",
+        "triangles": 679936,
+        "packed_images": 3,
+        "source": "https://polyhaven.com/a/coast_rocks_01",
+        "license": "CC0-1.0"
+      },
+      {
+        "id": "smithsonian-rococo-side-chair",
+        "version": 1,
+        "sha256": "6306d15454a3767e9506cb9daef7a87eeca95bbe90f65923f9d7d66394f841d7",
+        "triangles": 150000,
+        "packed_images": 2,
+        "source": "https://3d.si.edu/object/3d/side-chair%3Aff607e3c-3d88-4422-a246-3976aa4839dc",
+        "license": "CC0-1.0"
+      }
+    ],
+    "hdri_files": [
+      {
+        "id": "polyhaven-kiara_1_dawn",
+        "source": "https://polyhaven.com/a/kiara_1_dawn",
+        "fingerprint": "9ae6168360144818228fc9d05a931c5ca1c103ef66c471ab71e0c7e2ce88c580",
+        "sha256": "ee70fb8c8fb3e34566802191d83b299e179ecc392b97639e6c750f66e161c8e2"
+      },
+      {
+        "id": "polyhaven-kiara_2_sunrise",
+        "source": "https://polyhaven.com/a/kiara_2_sunrise",
+        "fingerprint": "73e9f6081581e131c8a3c379b5f55e496ad07ffaeddbce99d80436c5b4a0152c",
+        "sha256": "e4cd96c6046b2c3b81bd74b0c8b0d680272420ebc00e88ab7ba1c9be5941069b"
+      },
+      {
+        "id": "polyhaven-studio_small_03",
+        "source": "https://polyhaven.com/a/studio_small_03",
+        "fingerprint": "f33909ff2aa6f1413f8af7f4ae7b58f6dc28bf551b0861aff64b8a5bcffc6ef9",
+        "sha256": "30933d55e45f0795daf49f3cbefbe0e5ebcb821ee04fb0a2818c02ffc3938817"
+      },
+      {
+        "id": "polyhaven-kloofendal_28d_misty_puresky",
+        "source": "https://polyhaven.com/a/kloofendal_28d_misty_puresky",
+        "fingerprint": "6857d7ee098cc4c02039755625ea2e9f8590212fc001b5bd9b85097e99ca4430",
+        "sha256": "43a9e877c0836c8559326d8fe766cd6c8cee8f24eb8dac246ac624b9e03aeb48"
+      },
+      {
+        "id": "polyhaven-kloofendal_38d_partly_cloudy_puresky",
+        "source": "https://polyhaven.com/a/kloofendal_38d_partly_cloudy_puresky",
+        "fingerprint": "a3020a9ad1e694497ec02a877b448fe20346f3d466c3b5dd58731641e2307ff1",
+        "sha256": "78882f3e560d7f6f2856f5ff071c52da51098507c391fdbb811dc9f79c403704"
+      }
+    ],
+    "material_ids": [
+      "ambientcg-pavingstones036",
+      "ambientcg-wood099"
+    ],
+    "material_verification_directory": "outputs/v051-acquisition/material-verification",
+    "collections": [
+      "stone_courtyard",
+      "timber_store",
+      "coastal_outlook"
+    ],
+    "voices": [
+      {
+        "id": "courtyard-question",
+        "archive_source": "urn:atlas:voice:ff805cd9d738fa7153d95348d77b140bb7ed9eae4e623b301ffc718db7c07af9",
+        "wav": {
+          "duration_seconds": 3.67,
+          "sample_rate": 24000,
+          "channels": 1,
+          "sample_width": 2,
+          "frames": 88080,
+          "peak": 0.329864501953125,
+          "clipped_samples": 0,
+          "sha256": "834e932deb1fadb36d040a80418df13c61de33596c6783826af9598b713005fe"
+        },
+        "inference_seconds": 27.4,
+        "method": "Chatterbox-Turbo CPU plus Rhubarb 1.14.0"
+      },
+      {
+        "id": "courtyard-reply",
+        "archive_source": "urn:atlas:voice:fa169808186a451968afa3823d6df37920beec6ae2516c2ab87532396b0ab78b",
+        "wav": {
+          "duration_seconds": 4.03,
+          "sample_rate": 24000,
+          "channels": 1,
+          "sample_width": 2,
+          "frames": 96720,
+          "peak": 0.337921142578125,
+          "clipped_samples": 0,
+          "sha256": "71df5dff3d0e1f58a916139f9330b871436f93bdefa184a138bee97f040b4d1e"
+        },
+        "inference_seconds": 17.76,
+        "method": "Chatterbox-Turbo CPU plus Rhubarb 1.14.0"
+      }
+    ]
+  },
+  "tests": {
+    "baseline": {
+      "file": "outputs/v051-baseline.xml",
+      "passed": 227,
+      "failed": 0,
+      "skipped": 1,
+      "elapsed_seconds": 163.728
+    },
+    "full": {
+      "file": "outputs/v051-final-tests.xml",
+      "passed": 243,
+      "failed": 0,
+      "skipped": 1,
+      "elapsed_seconds": 274.58
+    },
+    "post_review": {
+      "file": "outputs/v051-post-review-tests.xml",
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "elapsed_seconds": 62.824
+    },
+    "flythrough_cli": 5
+  },
+  "installed_demo": {
+    "manifest": "outputs/installed-v051/renders/installed-v051-human-f0594e720c3040e1a51e1f9d61e2d378/manifest.json",
+    "video": "outputs/installed-v051/renders/installed-v051-human-f0594e720c3040e1a51e1f9d61e2d378/video.mp4",
+    "editable_scene": "outputs/installed-v051/renders/installed-v051-human-f0594e720c3040e1a51e1f9d61e2d378/scene.blend",
+    "verified_video": {
+      "width": 64,
+      "height": 64,
+      "frames": 1,
+      "fps": 12.0,
+      "duration": 0.083333,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "sha256": "09579c73e6b3ac063d9487bdd9097e78bd57735117f366d01c5a9bcf6a97f888"
+    },
+    "engine_source_sha256": "8416ec25236ab924a423a48a33bb0d3bb326e4b610897b174446293394a664b1",
+    "blender_engine": "CYCLES",
+    "total_seconds": 5.21,
+    "mean_frame_seconds": 0.389
+  },
+  "storage_bytes": {
+    "provider_source_cache": 203237789,
+    "MPFB_archives": 326940065,
+    "isolated_Blender_profile": 380083133,
+    "approved_library_derivatives": 164402264,
+    "three_PCM_WAVs": 574692
+  },
+  "demos": {
+    "showcase": {
+      "manifest": "outputs/v051-renders/cast-showcase-977bad83dbe94e6a9a02600e5eddab7c/manifest.json",
+      "video": "outputs/v051-renders/cast-showcase-977bad83dbe94e6a9a02600e5eddab7c/video.mp4",
+      "editable_scene": "outputs/v051-renders/cast-showcase-977bad83dbe94e6a9a02600e5eddab7c/scene.blend",
+      "verified_video": {
+        "width": 640,
+        "height": 294,
+        "frames": 30,
+        "fps": 12.0,
+        "duration": 2.5,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "f9ebd67b20fdaa5f1012c7d585675505a8c4de8410cd19774b54c56a6e98c865"
+      },
+      "engine_source_sha256": "8416ec25236ab924a423a48a33bb0d3bb326e4b610897b174446293394a664b1",
+      "blender_engine": "BLENDER_EEVEE",
+      "total_seconds": 295.69,
+      "mean_frame_seconds": 8.804
+    },
+    "talking_human": {
+      "manifest": "outputs/v051-renders/mpfb-talking-human-f9f386a582094ebe892da23e73b620e6/manifest.json",
+      "video": "outputs/v051-renders/mpfb-talking-human-f9f386a582094ebe892da23e73b620e6/video.mp4",
+      "editable_scene": "outputs/v051-renders/mpfb-talking-human-f9f386a582094ebe892da23e73b620e6/scene.blend",
+      "verified_video": {
+        "width": 480,
+        "height": 270,
+        "frames": 116,
+        "fps": 24.0,
+        "duration": 4.833008,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 4.833,
+          "start_time": 0.0
+        },
+        "sha256": "60b6b2a61b51c69a8b47ba00a7fe340f9f44a3ab0eae2c01ad6b8fddbbd45225"
+      },
+      "engine_source_sha256": "8416ec25236ab924a423a48a33bb0d3bb326e4b610897b174446293394a664b1",
+      "blender_engine": "BLENDER_EEVEE",
+      "total_seconds": 333.0,
+      "mean_frame_seconds": 2.813,
+      "reopened_performance": {
+        "human": {
+          "body_action": "HumanIdle",
+          "peak_viseme": 0.8500000238418579,
+          "peak_jaw": 0.09000000357627869,
+          "peak_head_delta_radians": 0.0349799282848835,
+          "blink_samples": [
+            {
+              "frame": 30,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 86,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            }
+          ],
+          "audio_id": "atlas-line",
+          "cues": 29,
+          "audio_sha256": "1cb13c530e79c9e9fe429f4812231014b83a25876e7d0a14aa452be11b32d6e3"
+        }
+      }
+    },
+    "body_motion": {
+      "manifest": "outputs/v051-renders/mpfb-body-motion-784d5e47f2c34fc2810e63a98107d542/manifest.json",
+      "video": "outputs/v051-renders/mpfb-body-motion-784d5e47f2c34fc2810e63a98107d542/video.mp4",
+      "editable_scene": "outputs/v051-renders/mpfb-body-motion-784d5e47f2c34fc2810e63a98107d542/scene.blend",
+      "verified_video": {
+        "width": 384,
+        "height": 376,
+        "frames": 48,
+        "fps": 12.0,
+        "duration": 4.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "7379155e06acfcea0889fcca17926ac07bf4e2e13665acd1c515414bc035460b"
+      },
+      "engine_source_sha256": "8416ec25236ab924a423a48a33bb0d3bb326e4b610897b174446293394a664b1",
+      "blender_engine": "BLENDER_EEVEE",
+      "total_seconds": 286.98,
+      "mean_frame_seconds": 5.407
+    },
+    "courtyard_look": {
+      "manifest": "outputs/v051-renders/courtyard-flythrough-d797c4c8f65f4249a3c6d20eaaeaa4fd/manifest.json",
+      "video": "outputs/v051-renders/courtyard-flythrough-d797c4c8f65f4249a3c6d20eaaeaa4fd/video.mp4",
+      "editable_scene": "outputs/v051-renders/courtyard-flythrough-d797c4c8f65f4249a3c6d20eaaeaa4fd/scene.blend",
+      "verified_video": {
+        "width": 432,
+        "height": 244,
+        "frames": 30,
+        "fps": 10.0,
+        "duration": 3.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "c3a8636b74a5d6a1fc698ee4c0acc7af09dbb46101a80ad688ccfd10fd8c79af"
+      },
+      "engine_source_sha256": "8416ec25236ab924a423a48a33bb0d3bb326e4b610897b174446293394a664b1",
+      "blender_engine": "BLENDER_EEVEE",
+      "total_seconds": 138.49,
+      "mean_frame_seconds": 4.112
+    },
+    "courtyard_dialogue": {
+      "manifest": "outputs/v051-renders/courtyard-dialogue-574aec730a884dfda804ca829050f1b6/manifest.json",
+      "video": "outputs/v051-renders/courtyard-dialogue-574aec730a884dfda804ca829050f1b6/video.mp4",
+      "editable_scene": "outputs/v051-renders/courtyard-dialogue-574aec730a884dfda804ca829050f1b6/scene.blend",
+      "verified_video": {
+        "width": 480,
+        "height": 270,
+        "frames": 112,
+        "fps": 12.0,
+        "duration": 9.333333,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 9.333,
+          "start_time": 0.0
+        },
+        "sha256": "9af2242db3529d16880d92d2c12006a3e98af01a49226938b73e6f8e2e40797c"
+      },
+      "engine_source_sha256": "b911a6ed1c8112f6a22161fe331fe0b94f4fb1e84f135c17942b46d684a6b9cb",
+      "blender_engine": "BLENDER_EEVEE",
+      "total_seconds": 370.5,
+      "mean_frame_seconds": 3.15,
+      "reopened_performance": {
+        "curator": {
+          "body_action": "HumanPresent",
+          "peak_viseme": 0.8500000238418579,
+          "peak_jaw": 0.0,
+          "peak_head_delta_radians": 0.0349799282848835,
+          "blink_samples": [
+            {
+              "frame": 24,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 83,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            }
+          ],
+          "audio_id": "courtyard-question",
+          "cues": 22,
+          "audio_sha256": "834e932deb1fadb36d040a80418df13c61de33596c6783826af9598b713005fe"
+        },
+        "scholar": {
+          "body_action": "HumanIdle.001",
+          "peak_viseme": 0.8500000238418579,
+          "peak_jaw": 0.10952407121658325,
+          "peak_head_delta_radians": 0.0349799282848835,
+          "blink_samples": [
+            {
+              "frame": 38,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 80,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 103,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            }
+          ],
+          "audio_id": "courtyard-reply",
+          "cues": 25,
+          "audio_sha256": "71df5dff3d0e1f58a916139f9330b871436f93bdefa184a138bee97f040b4d1e"
+        }
+      }
+    },
+    "cinematic_cast_still": {
+      "manifest": "outputs/v051-renders/mpfb-cast-ef79bf7a15cb4670a351d65dc8635bf5/manifest.json",
+      "video": "outputs/v051-renders/mpfb-cast-ef79bf7a15cb4670a351d65dc8635bf5/video.mp4",
+      "editable_scene": "outputs/v051-renders/mpfb-cast-ef79bf7a15cb4670a351d65dc8635bf5/scene.blend",
+      "verified_video": {
+        "width": 1000,
+        "height": 460,
+        "frames": 1,
+        "fps": 24.0,
+        "duration": 0.041667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "64da918054ced8c00280ee1b23ea34709d5350ccb5d0e67abf7f9e42fb773b01"
+      },
+      "engine_source_sha256": "b911a6ed1c8112f6a22161fe331fe0b94f4fb1e84f135c17942b46d684a6b9cb",
+      "blender_engine": "CYCLES",
+      "total_seconds": 47.29,
+      "mean_frame_seconds": 27.786
+    },
+    "cinematic_courtyard_still": {
+      "manifest": "outputs/v051-renders/stone-courtyard-3bb6b6e6bda44168b4aa26e6444b0bfa/manifest.json",
+      "video": "outputs/v051-renders/stone-courtyard-3bb6b6e6bda44168b4aa26e6444b0bfa/video.mp4",
+      "editable_scene": "outputs/v051-renders/stone-courtyard-3bb6b6e6bda44168b4aa26e6444b0bfa/scene.blend",
+      "verified_video": {
+        "width": 960,
+        "height": 540,
+        "frames": 1,
+        "fps": 24.0,
+        "duration": 0.041667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "a2204dd4129cd0efd357389699754f657705eaeb46c7f0dffd353f275032872e"
+      },
+      "engine_source_sha256": "b911a6ed1c8112f6a22161fe331fe0b94f4fb1e84f135c17942b46d684a6b9cb",
+      "blender_engine": "CYCLES",
+      "total_seconds": 62.08,
+      "mean_frame_seconds": 42.259
+    }
+  }
+}

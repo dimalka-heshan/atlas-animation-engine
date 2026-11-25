@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven Blender animation engine. Version 0.5 adds official asset acquisition, pinned environment media, source-rig inspection and editable skeletal clip playback. Local Chatterbox-Turbo speech, narration mixing and audio-driven facial animation remain available.
+A local, configuration-driven Blender animation engine. Version 0.5.1 adds programmatic MPFB character generation, audio-driven human faces, photogrammetry and historical assets, and reusable Blender quality profiles. Start with the [V0.5.1 reproduction guide](docs/V051_DEMOS.md).
 
 Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 

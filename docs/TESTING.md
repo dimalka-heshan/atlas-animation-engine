@@ -29,6 +29,8 @@ Clean-install acceptance builds a wheel plus dependency wheels, installs into a 
 
 Record actual counts and artifact evidence in STATUS/PERFORMANCE. Automated visibility warnings inspect object centers only; they do not certify silhouette framing, absence of obstruction, scene beauty, smooth motion or physical realism.
 
+Set `ATLAS_MPFB_INTEGRATION=1` after running `characters install-mpfb`. The test generates or reuses a pinned real human, registers it in a disposable library, and reopens a Blender scene to verify the jaw, both blinks, resting mouth, weighted rig and independently changing head transform. Set `ATLAS_MPFB_RUNTIME` for an installation outside `outputs/v051-mpfb`.
+
 ## Asset regression coverage (0.2)
 
 Unit tests cover registry migrations/refusal of unknown versions, deduplication with independent provenance, immutable version history, deterministic literal search, missing/tampered blobs, approval/permission/attribution/restriction gates, malformed provenance URLs, SQLite integer bounds, and inspection evidence/hash binding. The bounded GLB profile rejects corrupt chunks, external/data URIs, unsupported animation/skins/extensions/morphs, missing texture sources, alternate/unreachable/cyclic scene nodes and nonsurface primitive modes. Schema tests preserve old projects and reject ambiguous/path-bearing/unpinned references. CLI tests execute actual register/search/show commands and check absent-library behavior.

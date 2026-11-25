@@ -1,13 +1,15 @@
 # Acquiring and reusing open assets
 
-ATLAS 0.5 ships two working provider adapters. The local SQLite catalog stores source metadata separately from immutable production asset versions. Network use is explicit through sync/download. Rendering from locally available, inspected assets and acquired media uses local files.
+The local SQLite catalog stores source metadata separately from immutable production asset versions. Network use is explicit through sync/download. Rendering from locally available, inspected assets and acquired media uses local files. The [high-fidelity source guide](HIGH_FIDELITY_SOURCES.md) covers the 0.5.1 Poly Haven model expansion, ambientCG materials and the curated Smithsonian derivative.
 
 | Provider | Implemented source and scope |
 |---|---|
 | KayKit | Curated, commit-pinned starter members from the official [Adventurers release](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47) and [Medieval Hexagon release](https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38). License text comes from each selected archive. |
-| Poly Haven | **Powered by Poly Haven**. Live HDRI and texture catalogs and official 1K file descriptors. Download one .hdr per environment or three JPEG channels per material (diffuse, roughness and OpenGL normal). See [API terms](https://github.com/Poly-Haven/Public-API/blob/master/ToS.md) and [asset license](https://polyhaven.com/license). |
+| Poly Haven | **Powered by Poly Haven**. Live models, HDRIs and textures with 1K, 2K and 4K derivatives where available. See [API terms](https://github.com/Poly-Haven/Public-API/blob/master/ToS.md) and [asset license](https://polyhaven.com/license). |
+| ambientCG | API v3 PBR texture sets in JPEG and PNG. See the [high-fidelity guide](HIGH_FIDELITY_SOURCES.md). |
+| Smithsonian Open Access | Reviewed CC0 Rococo chair with a pinned static GLB derivative. See the [high-fidelity guide](HIGH_FIDELITY_SOURCES.md). |
 
-Quaternius publishes [CC0 characters](https://quaternius.com/packs/universalbasecharacters) and compatible animations, but its selected pack uses an interactive download flow. Kenney's [Castle Kit](https://kenney.nl/assets/castle-kit) likewise exposes a website-mediated signed download. Use the documented local ZIP import for compatible files obtained through those interfaces. The [ambientCG API](https://docs.ambientcg.com/api/v2/) is a candidate for a future adapter. OpenGameArt licenses vary by asset. Sketchfab requires its authorized download workflow. MakeHuman/MPFB, Blender Studio and additional sources need format and source-specific license work. Only the first two provider adapters are implemented.
+Quaternius and Kenney starter packs may be imported through the documented local ZIP workflow after obtaining and checking the exact assets. OpenGameArt and Blender Studio assets have source-specific terms. Sketchfab requires its authorized download workflow. MPFB is installed through the [character generation workflow](V051_DEMOS.md).
 
 ## Starter acquisition
 
