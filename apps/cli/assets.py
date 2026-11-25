@@ -9,7 +9,7 @@ from engine.assets.inspection import inspect_asset
 from engine.assets.models import Provenance
 from engine.assets.registry import AssetRegistry, file_hash
 from engine.assets.thumbnails import create_thumbnail
-from engine.assets.providers import PACKS, PROVIDERS, RESOLUTIONS, acquire, search_catalog, synchronize
+from engine.assets.providers import PACKS, PROVIDERS, RESOLUTIONS, acquire, asset_variants, search_catalog, synchronize
 from engine.assets.acquisition import MIB, read_archive_model
 from engine.storage.jobs import atomic_json, contained_path
 
@@ -24,16 +24,21 @@ def add_asset_commands(subparsers):
     catalog.add_argument("query", nargs="?", default="")
     catalog.add_argument("--category", choices=["character", "environment", "hdri", "material"])
     catalog.add_argument("--style")
+    catalog.add_argument("--provider", choices=sorted(PROVIDERS))
     catalog.add_argument("--seed", type=int)
     catalog.add_argument("--offset", type=int, default=0)
     catalog.add_argument("--limit", type=int, default=50)
     download = commands.add_parser("download", help="acquire one eligible catalog asset")
     download.add_argument("id")
     download.add_argument("--budget-mib", type=int, default=64)
-    download.add_argument("--resolution", choices=RESOLUTIONS, type=str.lower, default="1k")
+    download.add_argument("--resolution", choices=(*RESOLUTIONS, "auto"), type=str.lower, default="1k")
+    download.add_argument("--max-texture-size", type=int, choices=[1024, 2048, 4096], default=4096,
+                          help="maximum texture tier when selecting a Poly Haven derivative automatically")
     download.add_argument("--format", dest="source_format", choices=["gltf", "glb", "jpg", "png", "hdr"], type=str.lower,
                           help="source derivative format (provider-specific default if omitted)")
     download.add_argument("--library", type=Path, default=Path("assets/library"))
+    variants = commands.add_parser("variants", help="estimate official Poly Haven derivative bytes before download")
+    variants.add_argument("id")
     pack = commands.add_parser("download-pack", help="acquire the reviewed starter subset of one KayKit pack")
     pack.add_argument("id", choices=sorted(PACKS))
     pack.add_argument("--budget-mib", type=int, default=64)
@@ -41,7 +46,7 @@ def add_asset_commands(subparsers):
     storage = commands.add_parser("storage", help="report local acquisition cache usage")
     licenses = commands.add_parser("licenses", help="list declared provenance for local production assets")
     licenses.add_argument("--library", type=Path, default=Path("assets/library"))
-    for command in (sync, catalog, download, pack, storage):
+    for command in (sync, catalog, download, pack, storage, variants):
         command.add_argument("--cache", type=Path, default=Path("assets/acquisition"))
     register = commands.add_parser("register", help="copy a local GLB with declared license provenance")
     register.add_argument("source", type=Path)
@@ -92,10 +97,12 @@ def run_asset_command(args: argparse.Namespace):
         return {"provider": result["provider"], "credit": result["credit"], "cataloged": len(result["entries"])}
     if args.asset_command == "catalog":
         return search_catalog(args.cache, args.query, category=args.category, style=args.style, seed=args.seed,
-                              offset=args.offset, limit=args.limit)
+                              provider=args.provider, offset=args.offset, limit=args.limit)
+    if args.asset_command == "variants":
+        return asset_variants(args.id, args.cache)
     if args.asset_command == "download":
         return acquire(args.id, args.cache, args.library, args.budget_mib * MIB,
-                       resolution=args.resolution, source_format=args.source_format)
+                       resolution=args.resolution, source_format=args.source_format, max_texture_size=args.max_texture_size)
     if args.asset_command == "download-pack":
         selected = [entry for entry in PROVIDERS["kaykit"].discover() if entry["pack"] == args.id]
         records = [acquire(entry["id"], args.cache, args.library, args.budget_mib * MIB) for entry in selected]

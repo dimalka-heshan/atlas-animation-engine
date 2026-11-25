@@ -55,14 +55,20 @@ def fetch_bytes(url, limit=8 * MIB):
     return data
 
 
-def download(url: str, root: Path, budget: int, *, expected_size=None, expected_md5=None) -> tuple[Path, dict]:
-    check_url(url)
+def download(url: str, root: Path, budget: int, *, expected_size=None, expected_md5=None,
+             cache_key=None, recorded_url=None, validate_url=None, open_url=None) -> tuple[Path, dict]:
+    (validate_url or check_url)(url)
+    if recorded_url is not None:
+        origin = urlsplit(recorded_url)
+        if (origin.scheme != "https" or not origin.hostname or origin.query or origin.fragment
+                or origin.username is not None or origin.password is not None or origin.port not in {None, 443}):
+            raise ValueError("Persistent source identity must be a public HTTPS URL without credentials or parameters")
     if not 1 <= budget <= 512 * MIB:
         raise ValueError("Download budget must be 1 byte to 512 MiB")
     if expected_size is not None and not 1 <= expected_size <= budget:
         raise ValueError("File size exceeds the configured download budget")
     started = time.monotonic()
-    key = hashlib.sha256(url.encode()).hexdigest()
+    key = hashlib.sha256((cache_key or url).encode()).hexdigest()
     pointer = contained_path(root, f"downloads/{key}.json")
     if pointer.is_file():
         previous = json.loads(pointer.read_text(encoding="utf-8"))
@@ -82,7 +88,7 @@ def download(url: str, root: Path, budget: int, *, expected_size=None, expected_
     for attempt in range(3):
         temporary = None
         try:
-            with request(url) as response, tempfile.NamedTemporaryFile(dir=blobs, delete=False) as stream:
+            with (open_url or request)(url) as response, tempfile.NamedTemporaryFile(dir=blobs, delete=False) as stream:
                 temporary = Path(stream.name)
                 if response.headers.get("Content-Encoding", "identity") != "identity":
                     raise ValueError("Unexpected compressed provider download")
@@ -106,7 +112,7 @@ def download(url: str, root: Path, budget: int, *, expected_size=None, expected_
             identity = digest.hexdigest()
             blob = contained_path(root, f"blobs/{identity}")
             temporary.replace(blob)
-            record = {"url": url, "sha256": identity, "md5": md5.hexdigest(), "bytes": size,
+            record = {"url": recorded_url or url, "sha256": identity, "md5": md5.hexdigest(), "bytes": size,
                       "downloaded_at": utc_now(), "seconds": time.monotonic() - started, "cache_hit": False}
             atomic_json(pointer, record)
             return blob, record
@@ -228,7 +234,7 @@ def read_archive_model(path: Path, member: str) -> bytes:
         return archive_model(archive, members, member)
 
 
-def archive_model(archive: ZipFile, members: dict, member: str) -> bytes:
+def archive_model(archive: ZipFile, members: dict, member: str, *, texture_subdirectory: bool = False) -> bytes:
     suffix = PurePosixPath(member).suffix.lower()
     if member not in members or suffix not in {".gltf", ".glb"}:
         raise ValueError("Selected archive member must be an existing GLB or glTF")
@@ -241,4 +247,4 @@ def archive_model(archive: ZipFile, members: dict, member: str) -> bytes:
         resource = members.get(str(parent / name))
         return archive.read(resource) if resource else None
 
-    return pack_gltf(body, dependency)
+    return pack_gltf(body, dependency, texture_subdirectory=texture_subdirectory)

@@ -31,6 +31,7 @@ class Provider(Protocol):
 
 RESOLUTIONS = ("1k", "2k", "4k")
 CC0 = "https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt"
+POLYHAVEN_FORMATS = {"hdri": "hdr", "material": "jpg", "environment": "gltf"}
 
 
 def cc0_text():
@@ -121,24 +122,61 @@ class PolyHaven:
                     continue
                 results.append({"id": f"polyhaven-{slug.lower()}", "provider": self.id, "name": item["name"],
                     "slug": slug, "category": category, "style": "photorealistic",
+                    "description": item.get("description", ""), "category_path": item.get("category", ""),
+                    "source_attributes": item.get("attributes", {}), "thumbnail_url": item.get("thumbnail_url"),
+                    "source_polygon_estimate": item.get("polycount"), "source_max_resolution": item.get("max_resolution"),
+                    "source_format": POLYHAVEN_FORMATS[category], "source_files_revision": item.get("files_hash"),
                     "tags": sorted(set(item.get("tags", []) + item.get("categories", []))),
                     "creator": ", ".join(sorted(item.get("authors", {}))) or "Poly Haven",
-                    "source_url": f"https://polyhaven.com/a/{slug}", "license_id": "CC0-1.0",
+                    "source_url": f"https://polyhaven.com/a/{slug}", "license_id": "CC0-1.0", "license_url": CC0,
                     "revision": str(item.get("date_published", "")), "credit": self.label})
         return results
 
-    def acquire(self, entry, cache, library, budget, *, resolution="1k", source_format=None):
+    @staticmethod
+    def file_index(entry):
         slug = entry["slug"]
         if not re.fullmatch(r"[A-Za-z0-9_]{1,80}", slug) or entry["id"] != f"polyhaven-{slug.lower()}":
             raise ValueError("Invalid Poly Haven asset identity")
-        files = json.loads(fetch_bytes(f"https://api.polyhaven.com/files/{slug}"))
+        return json.loads(fetch_bytes(f"https://api.polyhaven.com/files/{slug}"))
+
+    @staticmethod
+    def variants(files, category):
+        extension = POLYHAVEN_FORMATS[category]
+        variants = []
+        for resolution in RESOLUTIONS:
+            try:
+                if category == "environment":
+                    model = files["gltf"][resolution][extension]
+                    sources = [model, *model["include"].values()]
+                else:
+                    channels = ("hdri",) if category == "hdri" else ("Diffuse", "Rough", "nor_gl")
+                    sources = [files[channel][resolution][extension] for channel in channels]
+                sizes = [source["size"] for source in sources]
+            except (KeyError, TypeError, AttributeError):
+                continue
+            if all(type(size) is int and size > 0 for size in sizes):
+                variants.append({"resolution": resolution, "format": extension, "bytes": sum(sizes),
+                                 "files": len(sources)})
+        return variants
+
+    @staticmethod
+    def pick_variant(variants, budget, max_texture_size):
+        for entry in reversed(variants):
+            pixels = int(entry["resolution"].removesuffix("k")) * 1024
+            if pixels <= max_texture_size and entry["bytes"] <= budget and entry["bytes"] <= 128 * MIB:
+                return entry["resolution"]
+        raise ValueError("No supported Poly Haven variant fits the byte budget and selected texture tier")
+
+    def acquire(self, entry, cache, library, budget, *, resolution="1k", source_format=None, max_texture_size=4096):
+        files = self.file_index(entry)
         category = entry["category"]
-        formats = {"hdri": "hdr", "material": "jpg", "environment": "gltf"}
-        if category not in formats:
+        if category not in POLYHAVEN_FORMATS:
             raise ValueError("Unsupported Poly Haven asset category")
-        extension = formats[category]
+        extension = POLYHAVEN_FORMATS[category]
         if source_format not in {None, extension}:
             raise ValueError(f"Poly Haven {category} supports the {extension} source format")
+        if resolution == "auto":
+            resolution = self.pick_variant(self.variants(files, category), budget, max_texture_size)
         if category == "environment":
             return self._acquire_model(entry, files, cache, library, budget, resolution)
         wanted = ["hdri"] if category == "hdri" else ["Diffuse", "Rough", "nor_gl"]
@@ -347,24 +385,29 @@ class Smithsonian:
 PROVIDERS: dict[str, Provider] = {p.id: p for p in (KayKit(), PolyHaven(), AmbientCG(), Smithsonian())}
 
 
-def synchronize(provider: str, root: Path) -> dict:
-    adapter = PROVIDERS[provider]
-    entries = adapter.discover()
+def store_catalog(provider: str, root: Path, entries: list[dict], credit: str, *, replace: bool) -> dict:
     if len({entry["id"] for entry in entries}) != len(entries):
         raise ValueError("Provider returned duplicate catalog IDs")
-    result = {"provider": provider, "credit": adapter.label, "synced_at": utc_now(), "entries": entries}
+    result = {"provider": provider, "credit": credit, "synced_at": utc_now(), "entries": entries}
     root.mkdir(parents=True, exist_ok=True)
     with _catalog_db(root) as db:
         db.execute("""CREATE TABLE IF NOT EXISTS catalog (
             id TEXT PRIMARY KEY, provider TEXT NOT NULL, category TEXT NOT NULL,
             style TEXT NOT NULL, text TEXT NOT NULL, record TEXT NOT NULL)""")
         db.execute("CREATE INDEX IF NOT EXISTS by_provider_category ON catalog(provider, category, id)")
-        db.execute("DELETE FROM catalog WHERE provider = ?", (provider,))
-        db.executemany("INSERT INTO catalog VALUES (?,?,?,?,?,?)", [
+        if replace:
+            db.execute("DELETE FROM catalog WHERE provider = ?", (provider,))
+        db.executemany("INSERT OR REPLACE INTO catalog VALUES (?,?,?,?,?,?)", [
             (e["id"], provider, e["category"], e["style"],
-             " ".join([e["id"], e["name"], e["category"], e["style"], *e["tags"]]).casefold(),
+             " ".join([e["id"], e["name"], e["category"], e["style"], e.get("description") or "",
+                       e.get("category_path") or "", *e["tags"]]).casefold(),
              json.dumps(e | {"catalog_synced_at": result["synced_at"]}, ensure_ascii=False)) for e in entries])
     return result
+
+
+def synchronize(provider: str, root: Path) -> dict:
+    adapter = PROVIDERS[provider]
+    return store_catalog(provider, root, adapter.discover(), adapter.label, replace=True)
 
 
 @contextmanager
@@ -381,7 +424,8 @@ def _catalog_exists(root):
     return contained_path(root, "catalog.sqlite3").is_file()
 
 
-def search_catalog(root: Path, query="", *, category=None, style=None, seed=None, offset=0, limit=50) -> list[dict]:
+def search_catalog(root: Path, query="", *, category=None, style=None, provider=None, seed=None, offset=0,
+                   limit=50) -> list[dict]:
     if offset < 0 or not 1 <= limit <= 1000:
         raise ValueError("Catalog page requires nonnegative offset and limit 1–1000")
     if len(query) > 500:
@@ -390,7 +434,7 @@ def search_catalog(root: Path, query="", *, category=None, style=None, seed=None
         return []
     where = ["instr(text, ?) > 0" for _ in query.split()]
     params = query.casefold().split()
-    for column, value in (("category", category), ("style", style)):
+    for column, value in (("category", category), ("style", style), ("provider", provider)):
         if value is not None:
             where.append(f"{column} = ?")
             params.append(value)
@@ -407,13 +451,10 @@ def search_catalog(root: Path, query="", *, category=None, style=None, seed=None
     return [json.loads(row[0]) | {"catalog_match": "all query terms matched source metadata"} for row in rows]
 
 
-def acquire(asset_id: str, cache: Path, library: Path, budget: int = 64 * MIB, *,
-            resolution: str = "1k", source_format: str | None = None) -> dict:
+def catalog_entry(asset_id: str, cache: Path) -> dict:
     provider = asset_id.partition("-")[0]
     if provider not in PROVIDERS or not re.fullmatch(r"[a-z0-9_-]{1,100}", asset_id):
         raise ValueError("Unknown catalog asset ID")
-    if resolution not in RESOLUTIONS:
-        raise ValueError("Resolution must be 1k, 2k or 4k")
     if not _catalog_exists(cache):
         raise ValueError(f"Synchronize {provider} before acquiring assets")
     with _catalog_db(cache) as db:
@@ -422,9 +463,28 @@ def acquire(asset_id: str, cache: Path, library: Path, budget: int = 64 * MIB, *
         raise ValueError(f"Asset absent from catalog: {asset_id}")
     entry = json.loads(row[0])
     entry.pop("catalog_synced_at", None)
+    if entry.get("id") != asset_id or entry.get("provider") != provider:
+        raise ValueError("Catalog record identity does not match its index")
+    return entry
+
+
+def asset_variants(asset_id: str, cache: Path) -> list[dict]:
+    entry = catalog_entry(asset_id, cache)
+    if entry["provider"] != "polyhaven":
+        raise ValueError("Resolution variant preflight is supported for Poly Haven assets")
+    return PolyHaven.variants(PolyHaven.file_index(entry), entry["category"])
+
+
+def acquire(asset_id: str, cache: Path, library: Path, budget: int = 64 * MIB, *,
+            resolution: str = "1k", source_format: str | None = None, max_texture_size: int = 4096) -> dict:
+    entry = catalog_entry(asset_id, cache)
+    provider = entry["provider"]
+    if resolution not in RESOLUTIONS and (provider != "polyhaven" or resolution != "auto"):
+        raise ValueError("Resolution must be 1k, 2k or 4k, or auto for Poly Haven")
+    options = {"max_texture_size": max_texture_size} if provider == "polyhaven" else {}
     try:
         result = PROVIDERS[provider].acquire(entry, cache, library, budget, resolution=resolution,
-                                             source_format=source_format)
+                                             source_format=source_format, **options)
     except (BadZipFile, KeyError, TypeError, UnicodeError) as exc:
         raise ValueError(f"Malformed provider asset or response: {asset_id}: {exc}") from exc
     if "fingerprint" in result:
