@@ -17,7 +17,9 @@ from mathutils import Vector
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from asset_import import import_asset
 from facial import build_talking_head, apply_performance
+from handoff import build_handoff
 from motion_playback import read_bakes
+from walk_contact import stabilize_walk
 
 
 def material(spec, name):
@@ -213,7 +215,7 @@ def build(project, directory):
         world.node_tree.links.new(sky.outputs["Color"], background.inputs["Color"])
     asset_map = json.loads((directory / "asset-map.json").read_text(encoding="utf-8"))
     motion_bakes = read_bakes(directory)
-    entities, imported_assets, rig_equipment = {}, [], []
+    entities, imported_assets, rig_equipment, rig_mappings = {}, [], [], {}
     for item in spec["entities"]:
         if "asset" in item:
             reference = item["asset"]
@@ -229,6 +231,8 @@ def build(project, directory):
             apply_transform(obj, item)
             animate(obj, item)
             imported_assets.append({"entity": item["id"], "asset": reference, **report})
+            if item.get("rigged"):
+                rig_mappings[item["id"]] = report["humanoid_mapping"]
             if item.get("equipment"):
                 rig = next(child for child in obj.children_recursive if child.type == "ARMATURE")
                 rig_equipment.append((rig, report["humanoid_mapping"], item["equipment"]))
@@ -250,6 +254,13 @@ def build(project, directory):
         event = audio_events[performance["audio_event_id"]]
         apply_performance(entities[performance["actor_id"]],
                           performance | {"start_seconds": event["start_seconds"]}, settings["fps"])
+    corrections = [stabilize_walk(scene, entities[item["id"]], rig_mappings[item["id"]], clip)
+                   for item in spec["entities"] for clip in item.get("clips", []) if clip.get("foot_lock")]
+    if corrections:
+        (directory / "foot-contact-report.json").write_text(json.dumps(corrections, indent=2), encoding="utf-8")
+    if project.get("handoff"):
+        report = build_handoff(scene, entities, rig_mappings, project["handoff"])
+        (directory / "handoff-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     if environment["ground"]:
         bpy.ops.mesh.primitive_plane_add(size=environment["ground_size"])
         ground = bpy.context.object

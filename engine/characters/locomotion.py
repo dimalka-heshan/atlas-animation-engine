@@ -141,5 +141,6 @@ def compile_movement(project, motions):
         if count:
             pin = plan["motion"]
             actor["clips"].append({"name": pin["id"], "motion": pin, "start_frame": first, "frame_count": count,
-                "loop": True, "speed": plan["playback"], "blend_frames": blend, "blend_out_frames": blend, "overlay": True})
+                "loop": True, "speed": plan["playback"], "blend_frames": blend, "blend_out_frames": blend,
+                "overlay": True, "foot_lock": actions[identifier].foot_lock})
     return Project.model_validate(effective), [paths[id] for id in sorted(paths)]

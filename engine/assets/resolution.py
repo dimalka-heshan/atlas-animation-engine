@@ -32,7 +32,7 @@ def resolve_project_assets(project: Project, library: Path, motions=None, *, mov
         profile = entry["container"].get("profile", "static")
         if rigged != (profile in {"rigged", "human"}):
             raise ValueError(f"Asset profile does not match entity {entity.id}")
-        if profile == "human" and project.schema_version not in {"1.4", "1.5"}:
+        if profile == "human" and project.schema_version not in {"1.4", "1.5", "1.6"}:
             raise ValueError("MPFB humans require schema 1.4 or later")
         if entity.id in human_faces and profile != "human":
             raise ValueError(f"Actor {entity.id} has no inspected MPFB human facial profile")
@@ -45,7 +45,18 @@ def resolve_project_assets(project: Project, library: Path, motions=None, *, mov
                 _target_motion(action_motions[entity.id], entity, entry, profile, report, motions)
             for event in entity.clips:
                 if event.motion:
-                    baked = _target_motion(event.motion, entity, entry, profile, report, motions)
+                    record = _target_motion(event.motion, entity, entry, profile, report, motions)
+                    baked = record["bake"]
+                    if event.foot_lock:
+                        transforms = [entity, *entity.keyframes]
+                        moving_off_plane = any(
+                            (key.location is not None and abs(key.location[2]) > 1e-7)
+                            or (key.rotation is not None and any(abs(angle) > 1e-7 for angle in key.rotation[:2]))
+                            or (key.scale is not None and key.scale != (1, 1, 1)) for key in transforms)
+                        if (record["category"] != "walk" or not baked["metrics"]["ground_corrected"]
+                                or entity.normalize != "none" or entity.pivot != "base"
+                                or not project.scene.environment.ground or moving_off_plane):
+                            raise ValueError(f"Foot locking requires a meter-scale grounded walk on {entity.id}")
                     clip = {"duration_seconds": (len(baked["frames"]) - 1) / baked["fps"]}
                 else:
                     clip = clips.get(event.name)
@@ -69,7 +80,7 @@ def _target_motion(pin, entity, entry, profile, report, motions):
             (entry["id"], entry["version"], entry["sha256"])
             or target["skeleton_sha256"] != report["skeleton_sha256"]):
         raise ValueError(f"Motion {pin.id} requires a bake for the exact pinned target {entity.id}")
-    return record["bake"]
+    return record
 
 
 def snapshot_assets(entries: list[dict], directory: Path) -> list[dict]:

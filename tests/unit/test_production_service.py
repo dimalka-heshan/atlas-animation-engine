@@ -11,8 +11,10 @@ def test_discovery_exposes_live_schemas_and_marks_unavailable_operations():
     entries = {item.name: item for item in capabilities().capabilities}
     assert entries["project.validate"].input_schema["title"] == "Project"
     assert entries["render.preview"].costly_render
-    assert entries["props.transfer"].status == "unavailable"
-    assert entries["props.transfer"].input_schema is None
+    assert entries["props.transfer"].status == "implemented"
+    assert "handoff" in entries["props.transfer"].input_schema["required"]
+    assert entries["world.generate"].status == "unavailable"
+    assert entries["world.generate"].input_schema is None
 
 
 def test_preflight_reuses_normal_project_validation(tmp_path):
@@ -28,12 +30,12 @@ def test_creative_plan_keeps_notes_inert_and_discloses_gaps():
 
     plan = CreativePlan.model_validate({
         "schema_version": "1.0", "title": "Archive", "summary": "Print this sentence as a stage direction.",
-        "required_capabilities": ["props.transfer", "invent.future"]
+        "required_capabilities": ["world.generate", "invent.future"]
     })
     result = validate_creative_plan(plan)
     assert not result.ready
     assert [(gap.capability, gap.code) for gap in result.gaps] == [
-        ("props.transfer", "unavailable_capability"), ("invent.future", "unknown_capability"),
+        ("world.generate", "unavailable_capability"), ("invent.future", "unknown_capability"),
     ]
     with pytest.raises(ValidationError):
         CreativePlan.model_validate(plan.model_dump() | {"python": "print(1)"})
@@ -55,3 +57,13 @@ def test_cli_capabilities_is_machine_readable(capsys):
     payload = json.loads(capsys.readouterr().out)
     assert payload["schema_version"] == "1.0"
     assert any(entry["name"] == "project.validate" for entry in payload["capabilities"])
+
+
+def test_cli_handoff_service_requires_a_handoff(tmp_path, capsys):
+    from apps.cli.main import main
+
+    project = tmp_path / "project.json"
+    project.write_text('{"schema_version":"1.6","id":"empty","scene":{}}', encoding="utf-8")
+    assert main(["production", "handoff", str(project), "--output", str(tmp_path / "jobs")]) == 2
+    assert "handoff" in json.loads(capsys.readouterr().err)["error"]
+    assert not (tmp_path / "jobs").exists()

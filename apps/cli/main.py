@@ -15,8 +15,8 @@ from apps.cli.characters import add_character_commands, run_character_command
 from engine import __version__
 from engine.core.models import EnvironmentCollection, Project
 from engine.core.quality import PRESETS
-from engine.production import (CreativePlan, ProductionError, ProductionWorkspace, capabilities, compile_actions,
-                               preflight, preview, validate_creative_plan)
+from engine.production import (CreativePlan, HandoffProject, ProductionError, ProductionWorkspace, capabilities,
+                               compile_actions, handoff_preview, preflight, preview, validate_creative_plan)
 from engine.rendering.pipeline import render_project
 from engine.rendering.runtime import doctor, find_tool
 from engine.rendering.video import verify_video
@@ -32,10 +32,10 @@ class JsonFormatter(logging.Formatter):
         return json.dumps(data)
 
 
-def load_project(path: Path) -> Project:
+def load_project(path: Path, model: type[Project] = Project) -> Project:
     if path.stat().st_size > 10_000_000:
         raise ValueError("Project JSON exceeds the 10 MB input limit")
-    return Project.model_validate_json(path.read_text(encoding="utf-8-sig"))
+    return model.model_validate_json(path.read_text(encoding="utf-8-sig"))
 
 
 def workspace_for(args) -> ProductionWorkspace:
@@ -76,9 +76,11 @@ def parser() -> argparse.ArgumentParser:
         command.add_argument("--asset-library", type=Path, default=Path("assets/library"))
     render = sub.add_parser("render", help="render and verify a new production job")
     production = sub.add_parser("production", help="run bounded production services")
-    preview_parser = production.add_subparsers(dest="production_command", required=True).add_parser("preview")
+    production_commands = production.add_subparsers(dest="production_command", required=True)
+    preview_parser = production_commands.add_parser("preview")
+    handoff_parser = production_commands.add_parser("handoff")
     render.add_argument("--engine", choices=["cycles", "eevee"])
-    for command in (render, preview_parser):
+    for command in (render, preview_parser, handoff_parser):
         command.add_argument("project", type=Path)
         command.add_argument("--output", type=Path, default=Path("outputs"))
         command.add_argument("--blender", type=Path)
@@ -86,7 +88,7 @@ def parser() -> argparse.ArgumentParser:
         command.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
         command.add_argument("--environment-collection", type=Path)
         command.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
-    for area in (validate, render, preview_parser, plan, compile_actions):
+    for area in (validate, render, preview_parser, handoff_parser, plan, compile_actions):
         area.add_argument("--motion-cache", type=Path, default=Path("assets/motions"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
@@ -135,7 +137,8 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command in {"characters", "animations", "motions"}:
             result = run_character_command(args)
         else:
-            project = load_project(args.project)
+            is_handoff = args.command == "production" and args.production_command == "handoff"
+            project = load_project(args.project, HandoffProject if is_handoff else Project)
             collection = getattr(args, "environment_collection", None)
             if collection:
                 if collection.stat().st_size > 2 * 1024 * 1024:
@@ -149,7 +152,8 @@ def main(argv: list[str] | None = None) -> int:
                 result = compile_actions(project, workspace_for(args)).model_dump(mode="json",
                     exclude={"compiled_project"} if args.command == "navigation" else None)
             elif args.command == "production":
-                result = preview(project, workspace_for(args), blender=args.blender).model_dump(mode="json")
+                operation = handoff_preview if is_handoff else preview
+                result = operation(project, workspace_for(args), blender=args.blender).model_dump(mode="json")
             elif args.command == "verify":
                 result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"), expect_audio=bool(project.audio))
             else:

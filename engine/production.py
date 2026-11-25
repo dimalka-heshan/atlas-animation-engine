@@ -9,9 +9,10 @@ from engine import __version__
 from engine.assets.environment_media import resolve_media
 from engine.assets.resolution import resolve_project_assets
 from engine.audio.production import resolve_audio
+from engine.characters.interaction import validate_handoff
 from engine.characters.locomotion import compile_movement
 from engine.characters.motion import resolve_motions
-from engine.core.models import AssetReference, Model, MotionPin, Project
+from engine.core.models import AssetReference, Model, MotionPin, Project, PropHandoff
 from engine.core.quality import enforce_geometry_budget
 from engine.worlds.placement import expand_project
 
@@ -123,6 +124,15 @@ class PreviewResult(Model):
     manifest: Path
 
 
+class HandoffProject(Project):
+    schema_version: Literal["1.6"] = "1.6"
+    handoff: PropHandoff
+
+
+class HandoffResult(PreviewResult):
+    handoff_report: Path
+
+
 class Capability(Model):
     name: CapabilityName
     description: str
@@ -176,7 +186,20 @@ def capabilities() -> CapabilityCatalog:
                     artifacts=["video.mp4", "manifest.json", "scene.blend", "Numbered PNG frames"]),
         _capability("director.validate_plan", "Validate intent and return capability gaps without executing.",
                     CreativePlan, CreativePlanReview, "atlas director validate", limitations=["Intent intake only"]),
-        Capability(name="props.transfer", description="Transfer ownership of a prop between two actors.", status="unavailable"),
+        _capability("props.transfer", "Reach, transfer and release one declared prop between two arrived actors.",
+                    HandoffProject, HandoffResult, "atlas production handoff", costly_render=True,
+                    required_assets=["Two approved MPFB actors", "One static prop or configured primitive"],
+                    supported_rigs=["MPFB game-engine"], supported_environments=["Stationary interaction stage"],
+                    preconditions=["Schema 1.6 handoff", "Declared initial owner and grip anchors", "Both actors within arm reach"],
+                    limitations=["Wrist position constraints", "Fixed prop orientation", "One transfer per shot"],
+                    artifacts=["video.mp4", "scene.blend", "handoff-report.json", "manifest.json"]),
+        Capability(name="motion.walk_contact", description="Stabilize sampled ankles on flat-ground walking clips.",
+                   status="experimental", command="atlas production preview", costly_render=True,
+                   input_schema=Project.model_json_schema(), output_schema=PreviewResult.model_json_schema(),
+                   supported_rigs=["MPFB game-engine"], supported_environments=["Z=0 ground plane"],
+                   preconditions=["Schema 1.6 foot_lock", "Pinned grounded walking bake"],
+                   limitations=["Partial slide correction", "Excludes running and terrain"],
+                   artifacts=["foot-contact-report.json", "scene.blend", "manifest.json"]),
         Capability(name="world.generate", description="Generate a persistent procedural world.", status="unavailable"),
         Capability(name="timeline.assemble", description="Assemble multiple shots into a cinematic timeline.", status="unavailable"),
         Capability(name="director.compile_story", description="Resolve creative intent into executable production.", status="unavailable"),
@@ -200,6 +223,7 @@ def prepare_scene(project: Project, workspace: ProductionWorkspace) -> PreparedS
     expanded, plans = compile_movement(expand_project(project), motions)
     assets = resolve_project_assets(expanded, workspace.asset_library, motions, movement_actions=project.actions)
     enforce_geometry_budget(expanded, assets)
+    validate_handoff(expanded, assets)
     return PreparedScene(expanded, plans, assets, motions)
 
 
@@ -233,3 +257,10 @@ def preview(project: Project, workspace: ProductionWorkspace, *, blender: Path |
                           asset_cache=workspace.asset_cache, audio_library=workspace.audio_library,
                           motion_cache=workspace.motion_cache)
     return PreviewResult(video=path, manifest=path.parent / "manifest.json")
+
+
+def handoff_preview(project: Project, workspace: ProductionWorkspace, *, blender: Path | None = None) -> HandoffResult:
+    if project.handoff is None:
+        raise ProductionError("handoff_required", "Supply a schema 1.6 project with a declared handoff.")
+    result = preview(project, workspace, blender=blender)
+    return HandoffResult(video=result.video, manifest=result.manifest, handoff_report=result.video.parent / "handoff-report.json")

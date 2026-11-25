@@ -79,6 +79,7 @@ class ClipEvent(Model):
     blend_out_frames: Annotated[StrictInt, Field(ge=0, le=120)] = 0
     motion: MotionPin | None = None
     overlay: bool = False
+    foot_lock: bool = False
 
 
 class RiggedEntity(AssetEntity):
@@ -108,6 +109,7 @@ class MovementAction(Model):
     speed_mps: Annotated[Number, Field(ge=.25, le=8)] | None = None
     start_frame: Frame = 1
     blend_frames: Annotated[StrictInt, Field(ge=0, le=30)] = 4
+    foot_lock: bool = False
 
     @model_validator(mode="after")
     def one_destination(self) -> Self:
@@ -117,6 +119,50 @@ class MovementAction(Model):
                                         ("target_actor", self.target_actor)) if value is not None and value != []}
         if fields != {expected} or self.target_actor == self.actor:
             raise ValueError(f"{self.kind} requires exactly its own destination or another actor")
+        if self.foot_lock and self.kind == "run_to":
+            raise ValueError("Foot locking is available for flat-ground walking")
+        return self
+
+
+class HandAnchor(Model):
+    name: Identifier
+    actor: Identifier
+    hand: Literal["left", "right"]
+
+
+class PropAnchor(Model):
+    name: Identifier
+    offset: Vec3 = (0, 0, 0)
+
+
+class PropHandoff(Model):
+    prop: Identifier
+    initial_owner: Identifier
+    grip: PropAnchor
+    receive_grip: PropAnchor
+    giver: HandAnchor
+    receiver: HandAnchor
+    contact: Vec3
+    reach_start: Frame
+    contact_start: Frame
+    transfer_frame: Frame
+    contact_end: Frame
+    release_end: Frame
+
+    @model_validator(mode="after")
+    def check_transition(self) -> Self:
+        if self.initial_owner != self.giver.actor:
+            raise ValueError("The giver must be the prop's initial owner")
+        if self.giver.actor == self.receiver.actor:
+            raise ValueError("A handoff requires two distinct actors")
+        if len({self.giver.name, self.receiver.name, self.grip.name, self.receive_grip.name}) != 4:
+            raise ValueError("Use four distinct handoff anchor names")
+        if self.grip.offset == self.receive_grip.offset:
+            raise ValueError("Use distinct prop grip positions")
+        if not self.reach_start < self.contact_start < self.transfer_frame < self.contact_end < self.release_end:
+            raise ValueError("Handoff reach, contact, transfer and release frames must be strictly ordered")
+        if self.release_end - self.reach_start > 240:
+            raise ValueError("Handoff reach through release is limited to 240 frames")
         return self
 
 
@@ -126,7 +172,7 @@ class EnvironmentCollection(Model):
     entities: list[AssetEntity] = Field(min_length=1, max_length=1000)
 
     def apply(self, project: "Project") -> "Project":
-        if project.schema_version not in {"1.3", "1.4", "1.5"}:
+        if project.schema_version not in {"1.3", "1.4", "1.5", "1.6"}:
             raise ValueError("Environment collections require project schema_version 1.3 or later")
         data = project.model_dump(mode="json")
         data["scene"]["entities"].extend(entity.model_dump(mode="json") for entity in self.entities)
@@ -232,7 +278,7 @@ class QualitySettings(Model):
 
 
 class Project(Model):
-    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4", "1.5"] = "1.0"
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
@@ -242,6 +288,7 @@ class Project(Model):
     quality: QualitySettings | None = None
     navigation: Navigation | None = None
     actions: list[MovementAction] = Field(default_factory=list, max_length=32)
+    handoff: PropHandoff | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -258,35 +305,37 @@ class Project(Model):
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
-        if self.quality is not None and self.schema_version not in {"1.4", "1.5"}:
+        if self.quality is not None and self.schema_version not in {"1.4", "1.5", "1.6"}:
             raise ValueError("Production quality profiles require schema 1.4")
-        if self.schema_version not in {"1.4", "1.5"} and any(
+        if self.schema_version not in {"1.4", "1.5", "1.6"} and any(
                 light.temperature_kelvin is not None or light.cast_shadows is not None for light in self.scene.lights):
             raise ValueError("Light temperature and shadow overrides require schema 1.4")
-        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version not in {"1.3", "1.4", "1.5"}:
+        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version not in {"1.3", "1.4", "1.5", "1.6"}:
             raise ValueError("Acquired environment media require schema_version 1.3 or later")
-        if self.audio and self.schema_version not in {"1.2", "1.3", "1.4", "1.5"}:
+        if self.audio and self.schema_version not in {"1.2", "1.3", "1.4", "1.5", "1.6"}:
             raise ValueError("Audio requires schema_version 1.2 or later")
         characters = {entity.id for entity in self.scene.entities if isinstance(entity, CharacterEntity)}
-        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3", "1.4", "1.5"}:
+        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3", "1.4", "1.5", "1.6"}:
             raise ValueError("Characters and facial performances require schema_version 1.2 or later")
         static_ids = {e.id for e in self.scene.entities if type(e) is AssetEntity}
         attached = set()
         actors = {e.id: e for e in self.scene.entities if isinstance(e, RiggedEntity)}
-        if (self.navigation or self.actions) and self.schema_version != "1.5":
+        if (self.navigation or self.actions) and self.schema_version not in {"1.5", "1.6"}:
             raise ValueError("Navigation and movement actions require schema 1.5")
         if self.actions and not self.navigation:
             raise ValueError("Movement actions require explicit navigation bounds")
         if len({action.actor for action in self.actions}) != len(self.actions):
             raise ValueError("Use one movement action per actor")
         for action in self.actions:
+            if action.foot_lock and self.schema_version != "1.6":
+                raise ValueError("Foot locking requires schema 1.6")
             actor = actors.get(action.actor)
             if actor is None or (action.target_actor and action.target_actor not in actors):
                 raise ValueError("Movement actions require explicit rigged actors")
             if actor.keyframes or actor.clips or actor.normalize != "none" or actor.pivot != "base" or actor.scale != (1, 1, 1):
                 raise ValueError("Movement requires a meter-scale, base-pivot actor with no manual clips or keys")
         for actor in actors.values():
-            if self.schema_version not in {"1.3", "1.4", "1.5"}:
+            if self.schema_version not in {"1.3", "1.4", "1.5", "1.6"}:
                 raise ValueError("Rigged assets require schema_version 1.3 or later")
             for equipment in actor.equipment.values():
                 if equipment not in static_ids or equipment in attached:
@@ -296,7 +345,11 @@ class Project(Model):
             base_clips = []
             for clip in actor.clips:
                 end = clip.start_frame + clip.frame_count
-                if (clip.motion or clip.overlay or clip.blend_out_frames) and self.schema_version != "1.5":
+                if clip.foot_lock and (self.schema_version != "1.6" or not clip.motion):
+                    raise ValueError("Foot locking requires a pinned walking motion and schema 1.6")
+                if clip.foot_lock and clip.frame_count > 360:
+                    raise ValueError("Foot locking accepts up to 360 frames per walking clip")
+                if (clip.motion or clip.overlay or clip.blend_out_frames) and self.schema_version not in {"1.5", "1.6"}:
                     raise ValueError("Motion pins and overlay blends require schema 1.5")
                 if (clip.start_frame < last[clip.overlay] or end > self.render.frames + 1
                         or clip.blend_frames + clip.blend_out_frames >= clip.frame_count):
@@ -309,6 +362,20 @@ class Project(Model):
                         raise ValueError("Base clips must precede motion overlays")
                     base_clips.append((clip.start_frame, end))
                 last[clip.overlay] = end
+        if self.handoff:
+            event = self.handoff
+            if self.schema_version != "1.6":
+                raise ValueError("Prop handoff requires schema 1.6")
+            for anchor in (event.giver, event.receiver):
+                if anchor.actor not in actors:
+                    raise ValueError("Handoff anchors must reference explicit rigged actors")
+                if f"{anchor.hand}_hand" in actors[anchor.actor].equipment:
+                    raise ValueError("A handoff hand cannot also carry legacy equipment")
+            prop = next((entity for entity in self.scene.entities if entity.id == event.prop), None)
+            if type(prop) not in {Entity, AssetEntity} or prop.keyframes or event.prop in attached:
+                raise ValueError("Handoff prop must be an explicit static entity without keys or equipment attachment")
+            if event.release_end > self.render.frames:
+                raise ValueError("Handoff release ends outside the render interval")
         if self.audio and self.render.frames / self.render.fps > 180:
             raise ValueError("This audio production profile supports at most 180 seconds")
         if len({event.id for event in self.audio}) != len(self.audio):
@@ -319,7 +386,7 @@ class Project(Model):
         active: dict[str, list[tuple[float, float]]] = {}
         for performance in self.performances:
             if performance.profile == "mpfb-visemes-1":
-                if self.schema_version not in {"1.4", "1.5"} or performance.actor_id not in actors or performance.controls is not None:
+                if self.schema_version not in {"1.4", "1.5", "1.6"} or performance.actor_id not in actors or performance.controls is not None:
                     raise ValueError("MPFB facial performances require schema 1.4 and a pinned compatible rigged actor")
                 blinks = performance.blink_frames
                 if any(frame < 2 or frame >= self.render.frames for frame in blinks) or any(

@@ -99,6 +99,10 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
             if not image.is_file() or image.stat().st_size < 50:
                 raise RuntimeError(f"Missing or empty rendered frame: {image}")
         manifest["blender"] = json.loads((directory / "blender-report.json").read_text(encoding="utf-8"))
+        if project.handoff:
+            manifest["handoff"] = json.loads((directory / "handoff-report.json").read_text(encoding="utf-8"))
+        if (directory / "foot-contact-report.json").is_file():
+            manifest["foot_contact"] = json.loads((directory / "foot-contact-report.json").read_text(encoding="utf-8"))
         manifest["timings_seconds"]["encoding"] = encode_video(directory, project.render, executables["ffmpeg"])
         if audio_entries:
             manifest["timings_seconds"]["audio_mux"] = mux_audio(directory, project.render.frames / project.render.fps,
