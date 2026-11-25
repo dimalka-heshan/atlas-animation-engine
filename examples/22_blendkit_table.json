@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.4",
+  "id": "blendkit-table",
+  "seed": 415,
+  "quality": {"profile": "realistic", "exposure": -0.15},
+  "scene": {
+    "entities": [
+      {
+        "id": "wooden_table",
+        "asset": {"id": "blendkit-small-wooden-table", "version": 1},
+        "location": [0, -0.06, 0],
+        "pivot": "base"
+      },
+      {
+        "id": "decorative_screen",
+        "asset": {"id": "polyhaven-chinese_screen_panels", "version": 1},
+        "location": [0, 0.59, 0],
+        "rotation": [0, 0, -4],
+        "pivot": "base"
+      },
+      {
+        "id": "plaster_wall",
+        "primitive": "cube",
+        "location": [0, 0.88, 1.5],
+        "scale": [3, 0.035, 1.5],
+        "bevel": 0,
+        "smooth": false,
+        "material": {"color": [0.075, 0.098, 0.09], "roughness": 0.91}
+      }
+    ],
+    "environment": {
+      "background": [0.11, 0.125, 0.13],
+      "strength": 0.38,
+      "ground_size": 12,
+      "ground_material": {"color": [0.13, 0.11, 0.09], "roughness": 0.72}
+    },
+    "camera": {
+      "location": [1.13, -2.12, 0.88],
+      "target": [0.04, 0.09, 0.28],
+      "lens": 48,
+      "keyframes": [{"frame": 24, "location": [0.76, -2.28, 0.88]}]
+    },
+    "lights": [
+      {
+        "id": "window_key",
+        "kind": "AREA",
+        "location": [-1.5, -1.05, 1.9],
+        "target": [0, 0.12, 0.42],
+        "energy": 160,
+        "temperature_kelvin": 4900,
+        "size": 1.45
+      },
+      {
+        "id": "soft_fill",
+        "kind": "AREA",
+        "location": [1.25, -0.72, 1.2],
+        "target": [0.05, 0.05, 0.3],
+        "energy": 45,
+        "temperature_kelvin": 6500,
+        "size": 1.8
+      },
+      {
+        "id": "screen_light",
+        "kind": "AREA",
+        "location": [0.28, 0.2, 1.95],
+        "target": [0.14, 0.6, 0.9],
+        "energy": 28,
+        "temperature_kelvin": 4100,
+        "size": 0.9
+      }
+    ]
+  },
+  "render": {"width": 360, "height": 202, "frames": 24, "fps": 12, "samples": 16, "engine": "eevee"}
+}

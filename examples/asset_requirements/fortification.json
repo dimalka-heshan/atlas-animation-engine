@@ -1,0 +1,11 @@
+{
+  "category": "architecture",
+  "subcategory": "castle",
+  "style": "realistic",
+  "commercial_use_required": true,
+  "require_ready": true,
+  "minimum_quality": "high",
+  "max_polygons": 50000,
+  "max_texture_size": 2048,
+  "preferred_providers": ["polyhaven", "sketchfab", "blendkit"]
+}

@@ -1,10 +1,12 @@
 """Bounded acquisition of official source files and dependency-free GLB derivation."""
+from contextlib import closing
 import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
 import re
 import shutil
+import sqlite3
 import stat
 import struct
 import tempfile
@@ -24,6 +26,37 @@ HOSTS = frozenset({"api.polyhaven.com", "dl.polyhaven.org", "cdn.polyhaven.com",
                    "ambientcg.com", "acg-download.struffelproductions.com",
                    "3d-api.si.edu",
                    "files.makehumancommunity.org", "files2.makehumancommunity.org"})
+
+
+def cache_limit() -> int:
+    try:
+        count = int(os.environ.get("ATLAS_ASSET_CACHE_MIB", "5120"))
+    except ValueError as exc:
+        raise ValueError("ATLAS_ASSET_CACHE_MIB must be a positive integer") from exc
+    if not 1 <= count <= 1024 * 1024:
+        raise ValueError("ATLAS_ASSET_CACHE_MIB must be between 1 and 1048576")
+    return count * MIB
+
+
+def cache_blobs(root: Path):
+    directory = contained_path(root, "blobs")
+    return [path for path in directory.iterdir() if re.fullmatch(r"[a-f0-9]{64}", path.name)
+            and not path.is_symlink() and path.is_file()] if directory.is_dir() else []
+
+
+def publish_blob(root: Path, staged: Path, digest: str) -> Path:
+    if not re.fullmatch(r"[a-f0-9]{64}", digest):
+        raise ValueError("Invalid content hash")
+    blob = contained_path(root, f"blobs/{digest}")
+    with closing(sqlite3.connect(contained_path(root, "budget.sqlite3"), timeout=30)) as db, db:
+        db.execute("BEGIN IMMEDIATE")
+        if blob.is_file() and file_hash(blob) == digest:
+            return blob
+        used = sum(path.stat().st_size for path in cache_blobs(root) if path != blob)
+        if used + staged.stat().st_size > cache_limit():
+            raise ValueError("Archive or texture exceeds the total cache budget (ATLAS_ASSET_CACHE_MIB)")
+        staged.replace(blob)
+    return blob
 
 
 def check_url(url: str) -> None:
@@ -110,8 +143,7 @@ def download(url: str, root: Path, budget: int, *, expected_size=None, expected_
             if expected_md5 is not None and md5.hexdigest() != expected_md5.lower():
                 raise ValueError("Provider file checksum mismatch")
             identity = digest.hexdigest()
-            blob = contained_path(root, f"blobs/{identity}")
-            temporary.replace(blob)
+            blob = publish_blob(root, temporary, identity)
             record = {"url": recorded_url or url, "sha256": identity, "md5": md5.hexdigest(), "bytes": size,
                       "downloaded_at": utc_now(), "seconds": time.monotonic() - started, "cache_hit": False}
             atomic_json(pointer, record)
@@ -222,6 +254,30 @@ def scale_static_glb(path: Path, meters_per_unit: float) -> bytes:
     roots = scene["nodes"]
     scene["nodes"] = [len(nodes)]
     nodes.append({"scale": [meters_per_unit] * 3, "children": roots})
+    return _encode_glb(doc, binary)
+
+
+def isolate_root_mesh(path: Path, name: str, *, profile="static") -> bytes:
+    """Derive a named static module while preserving its exact material and binary resources."""
+    if profile not in {"static", "pbr"}:
+        raise ValueError("A static GLB profile is required to derive a module")
+    inspect_glb(path, profile)
+    with path.open("rb") as handle:
+        handle.seek(12)
+        size, _ = struct.unpack("<II", handle.read(8))
+        doc = json.loads(handle.read(size))
+        binary = handle.read()[8:]
+    roots = doc["scenes"][0]["nodes"]
+    matches = [doc["nodes"][index] for index in roots if doc["nodes"][index].get("name") == name]
+    if len(matches) != 1 or "mesh" not in matches[0] or matches[0].get("children") or "matrix" in matches[0]:
+        raise ValueError("Select a unique root mesh without children or a baked matrix")
+    node = matches[0]
+    mesh = doc["meshes"][node["mesh"]]
+    node.pop("translation", None)
+    node["mesh"] = 0
+    doc.update(nodes=[node], meshes=[mesh], scenes=[{"nodes": [0]}], scene=0)
+    if doc.get("buffers"):
+        binary = binary[:doc["buffers"][0]["byteLength"]]
     return _encode_glb(doc, binary)
 
 

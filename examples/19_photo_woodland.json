@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.4",
+  "id": "photo-woodland",
+  "seed": 282,
+  "quality": {
+    "profile": "realistic",
+    "exposure": -0.12
+  },
+  "scene": {
+    "entities": [],
+    "environment": {
+      "hdri": {
+        "id": "polyhaven-misty_pines",
+        "fingerprint": "338e7dfb2d5eb5684d330ae9287d3a714a0e9bd4a518231da7809d40f4e30be6"
+      },
+      "ground_texture": {
+        "id": "polyhaven-forest_ground_04",
+        "fingerprint": "be3ab5251bc502d44a9114adaa95d23382796e930153c5b1bce9de27ed143c41"
+      },
+      "ground_size": 95,
+      "strength": 0.72,
+      "texture_repeats_per_meter": 0.45
+    },
+    "camera": {
+      "location": [
+        0.64,
+        -4.08,
+        1.72
+      ],
+      "target": [
+        0,
+        0.5,
+        0.49
+      ],
+      "lens": 46,
+      "depth_of_field": true,
+      "fstop": 7.5,
+      "keyframes": [
+        {
+          "frame": 24,
+          "location": [
+            -0.55,
+            -3.95,
+            1.64
+          ]
+        }
+      ]
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -3,
+          -2,
+          4
+        ],
+        "target": [
+          0,
+          0.1,
+          0.5
+        ],
+        "energy": 185,
+        "temperature_kelvin": 5200,
+        "size": 4.6
+      }
+    ]
+  },
+  "render": {
+    "width": 400,
+    "height": 226,
+    "frames": 24,
+    "fps": 12,
+    "samples": 5,
+    "engine": "cycles",
+    "threads": 6
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0",
+  "id": "stone-fort-approach",
+  "entities": [
+    {
+      "id": "gateway",
+      "asset": {
+        "id": "fort-gate",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        0,
+        2.4,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
+    {
+      "id": "west-rampart",
+      "asset": {
+        "id": "fort-wall",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        -7.95,
+        2.4,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
+    {
+      "id": "east-rampart",
+      "asset": {
+        "id": "fort-wall",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        7.95,
+        2.4,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
+    {
+      "id": "west-tower",
+      "asset": {
+        "id": "fort-tower",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        -13.2,
+        3.8,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.47,
+        0.47,
+        0.47
+      ]
+    },
+    {
+      "id": "east-tower",
+      "asset": {
+        "id": "fort-tower",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        13.2,
+        3.8,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.47,
+        0.47,
+        0.47
+      ]
+    },
+    {
+      "id": "interior-stair",
+      "asset": {
+        "id": "fort-stairs",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        3.9,
+        7.7,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        90
+      ],
+      "scale": [
+        0.64,
+        0.64,
+        0.64
+      ]
+    },
+    {
+      "id": "gothic-sculpture",
+      "asset": {
+        "id": "polyhaven-gothic_statue",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        2.0,
+        0.7,
+        0.0
+      ],
+      "rotation": [
+        0,
+        0,
+        -12
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "path-stone",
+      "asset": {
+        "id": "polyhaven-boulder_01",
+        "version": 1
+      },
+      "pivot": "base",
+      "location": [
+        -2.7,
+        0.7,
+        -0.15
+      ],
+      "rotation": [
+        0,
+        0,
+        18
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    }
+  ]
+}

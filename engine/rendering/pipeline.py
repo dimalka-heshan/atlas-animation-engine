@@ -9,7 +9,7 @@ import uuid
 from pathlib import Path
 
 from engine import __version__
-from engine.assets.resolution import resolve_project_assets, snapshot_assets
+from engine.assets.resolution import resolve_project_assets, snapshot_assets, write_video_credits
 from engine.assets.environment_media import resolve_media, snapshot_media
 from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
@@ -68,6 +68,7 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
         manifest["assets"] = snapshot_assets(entries, directory)
         cache = asset_cache or Path("assets/acquisition")
         manifest["environment_media"] = snapshot_media(resolve_media(expanded, cache), cache, directory)
+        write_video_credits(directory, manifest["assets"], manifest["environment_media"])
         audio_entries = resolve_audio(expanded, audio_library or Path("assets/audio"))
         manifest["audio"] = snapshot_audio(audio_entries, directory)
         atomic_json(directory / "resolved.json", expanded.model_dump(mode="json"))

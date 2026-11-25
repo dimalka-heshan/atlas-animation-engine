@@ -72,3 +72,24 @@ def snapshot_assets(entries: list[dict], directory: Path) -> list[dict]:
                            f"License: {meta['license_id']}\nAttribution: {meta['attribution'] or '(none declared)'}\n")
         (directory / "attributions.txt").write_text("\n".join(notices), encoding="utf-8")
     return snapshots
+
+
+def write_video_credits(directory: Path, models: list[dict], media: list[dict]) -> None:
+    license_urls = {"CC0-1.0": "https://creativecommons.org/publicdomain/zero/1.0/",
+                    "CC-BY-4.0": "https://creativecommons.org/licenses/by/4.0/"}
+    lines = []
+    for record in [*(entry["provenance"] for entry in models), *(entry["catalog"] for entry in media)]:
+        license_id = record["license_id"]
+        license_url = license_urls.get(license_id)
+        credit = record.get("attribution") or record.get("credit")
+        name = record.get("name") or record.get("id") or "Asset"
+        creator = record.get("creator")
+        fields = [f"{name} by {creator}" if creator else name]
+        if record.get("source_url"):
+            fields.append(record["source_url"])
+        fields.append(f"{license_id} {license_url}" if license_url else license_id)
+        if credit:
+            fields.append(credit)
+        lines.append(" | ".join(" ".join(item.split()) for item in fields))
+    if lines:
+        (directory / "video-credits.txt").write_text("\n".join(dict.fromkeys(lines)) + "\n", encoding="utf-8")

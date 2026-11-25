@@ -13,11 +13,13 @@ from urllib.parse import urlsplit
 from zipfile import BadZipFile, ZipFile
 
 from engine.assets.acquisition import (
-    MIB, archive_model, download, fetch_bytes, pack_gltf, scale_static_glb, unpack_models,
+    MIB, archive_model, download, fetch_bytes, pack_gltf, publish_blob, scale_static_glb, unpack_models,
 )
 from engine.assets.environment_media import media_fingerprint
+from engine.assets.glb import PBR_EXTENSIONS
 from engine.assets.models import Provenance
 from engine.assets.registry import AssetRegistry, file_hash
+from engine.assets.sketchfab import Sketchfab
 from engine.storage.jobs import atomic_json, contained_path, utc_now
 
 
@@ -214,7 +216,10 @@ class PolyHaven:
         def read_dependency(name):
             return downloads[name][0].read_bytes() if name in includes else None
 
-        body = pack_gltf(downloads[model_name][0].read_bytes(), read_dependency, texture_subdirectory=True)
+        raw = downloads[model_name][0].read_bytes()
+        body = pack_gltf(raw, read_dependency, texture_subdirectory=True)
+        extensions = set(json.loads(raw).get("extensionsUsed", []))
+        profile = "pbr" if extensions and extensions <= PBR_EXTENSIONS else "static"
         records = [details | {"member": name} for name, (_, details) in downloads.items()]
         provenance = Provenance(name=entry["name"], creator=entry["creator"], source_url=entry["source_url"],
             license_id="CC0-1.0", license_text=cc0_text(), approval="approved", render_allowed=True,
@@ -224,7 +229,7 @@ class PolyHaven:
         with tempfile.TemporaryDirectory(prefix="atlas-asset-") as temp:
             source = Path(temp) / "asset.glb"
             source.write_bytes(body)
-            record = AssetRegistry(library).register(source, entry["id"], provenance)
+            record = AssetRegistry(library).register(source, entry["id"], provenance, profile=profile)
         return {"catalog": entry, "files": records, "asset": record, "resolution": resolution,
                 "source_format": "gltf", "status": "registered-glb"}
 
@@ -249,7 +254,7 @@ def _cache_texture(data: bytes, cache: Path) -> str:
             handle.write(data)
             handle.flush()
             os.fsync(handle.fileno())
-        temporary.replace(blob)
+        publish_blob(cache, temporary, digest)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
@@ -382,10 +387,12 @@ class Smithsonian:
                 "status": "registered-glb"}
 
 
-PROVIDERS: dict[str, Provider] = {p.id: p for p in (KayKit(), PolyHaven(), AmbientCG(), Smithsonian())}
+PROVIDERS: dict[str, Provider] = {p.id: p for p in (KayKit(), PolyHaven(), AmbientCG(), Smithsonian(), Sketchfab())}
 
 
 def store_catalog(provider: str, root: Path, entries: list[dict], credit: str, *, replace: bool) -> dict:
+    if any(entry.get("provider") != provider or not entry["id"].startswith(provider + "-") for entry in entries):
+        raise ValueError("Provider catalog records must use their own ID namespace")
     if len({entry["id"] for entry in entries}) != len(entries):
         raise ValueError("Provider returned duplicate catalog IDs")
     result = {"provider": provider, "credit": credit, "synced_at": utc_now(), "entries": entries}

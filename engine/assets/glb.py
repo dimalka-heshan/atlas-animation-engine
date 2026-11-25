@@ -1,7 +1,7 @@
 """Bounded GLB container inspection before invoking Blender's importer.
 
 This is a conservative capability boundary, not a complete glTF schema validator.
-Only embedded static meshes without extensions are supported in this release.
+Import profiles admit embedded data and narrowly scoped capabilities.
 """
 import json
 import struct
@@ -9,10 +9,11 @@ from pathlib import Path
 
 MAX_GLB_BYTES = 256 * 1024 * 1024
 MAX_JSON_BYTES = 8 * 1024 * 1024
+PBR_EXTENSIONS = frozenset({"KHR_materials_ior", "KHR_materials_specular"})
 
 
 def inspect_glb(path: Path, profile: str = "static") -> dict:
-    if profile not in {"static", "rigged", "human"}:
+    if profile not in {"static", "pbr", "rigged", "human"}:
         raise ValueError("Unknown GLB import profile")
     size = path.stat().st_size
     if not 20 <= size <= MAX_GLB_BYTES:
@@ -55,12 +56,22 @@ def inspect_glb(path: Path, profile: str = "static") -> dict:
 
 
 def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "static") -> dict:
+    declared_extensions = set(doc.get("extensionsUsed", []))
+    required_extensions = set(doc.get("extensionsRequired", []))
+    materials = doc.get("materials", [])
+    allowed_materials = {id(material) for material in materials} if profile == "pbr" else set()
+    if (declared_extensions and profile != "pbr" or not declared_extensions <= PBR_EXTENSIONS
+            or not required_extensions <= declared_extensions):
+        raise ValueError("GLB extensions are not supported by this importer profile")
+
     def walk(value):
         if isinstance(value, dict):
             if "uri" in value:
                 raise ValueError("GLB contains a URI dependency; only embedded BIN/bufferView resources are supported")
             if value.get("extensions"):
-                raise ValueError("GLB extensions are not supported by this importer profile")
+                if id(value) not in allowed_materials:
+                    raise ValueError("GLB extensions are not supported at this location")
+                _validate_pbr_extensions(value["extensions"], declared_extensions)
             for item in value.values():
                 walk(item)
         elif isinstance(value, list):
@@ -68,9 +79,7 @@ def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "st
                 walk(item)
 
     walk(doc)
-    if doc.get("extensionsUsed") or doc.get("extensionsRequired"):
-        raise ValueError("GLB extensions are not supported by this importer profile")
-    if profile == "static" and (doc.get("animations") or doc.get("skins")):
+    if profile in {"static", "pbr"} and (doc.get("animations") or doc.get("skins")):
         raise ValueError("Animated/skinned GLBs are unsupported; use a static mesh asset")
     _check_scene(doc, rigged=profile in {"rigged", "human"})
     buffers = doc.get("buffers", [])
@@ -122,6 +131,25 @@ def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "st
             "texture_count": len(doc.get("images", [])), "animation_count": len(doc.get("animations", [])),
             "skin_count": len(doc.get("skins", [])),
             "external_dependencies": []}
+
+
+def _validate_pbr_extensions(extensions, declared):
+    if not isinstance(extensions, dict) or not extensions.keys() <= declared:
+        raise ValueError("Unknown or undeclared PBR material extensions")
+
+    def bounded(number, minimum, maximum):
+        return type(number) in {int, float} and minimum <= number <= maximum
+
+    ior = extensions.get("KHR_materials_ior", {})
+    if not isinstance(ior, dict) or ior.keys() - {"ior"} or not bounded(ior.get("ior", 1.5), 1, 3):
+        raise ValueError("Only a bounded index of refraction is supported")
+    specular = extensions.get("KHR_materials_specular", {})
+    if not isinstance(specular, dict) or specular.keys() - {"specularFactor", "specularColorFactor"}:
+        raise ValueError("Only scalar and RGB specular factors are supported")
+    color = specular.get("specularColorFactor", [1, 1, 1])
+    if (not bounded(specular.get("specularFactor", 1), 0, 1) or not isinstance(color, list)
+            or len(color) != 3 or not all(bounded(value, 0, 1) for value in color)):
+        raise ValueError("Invalid bounded specular factors")
 
 
 def _check_scene(doc: dict, *, rigged: bool = False) -> None:

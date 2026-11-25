@@ -57,6 +57,8 @@ bpy.context.scene.frame_set(31)
 assert abs(rig.pose.bones['Bone'].rotation_euler.x) < 1e-5
 print('ATLAS_FACIAL_VERIFIED')
 ''', encoding='utf-8')
-    result = subprocess.run([str(find_tool('blender')), '--background', '--python-exit-code', '1', '--python', str(script)], capture_output=True, text=True, timeout=120)
+    result = subprocess.run([str(find_tool('blender')), '--background', '--factory-startup', '--disable-autoexec',
+                             '--python-exit-code', '1', '--python', str(script)],
+                            capture_output=True, encoding='utf-8', errors='replace', timeout=120)
     assert result.returncode == 0, result.stdout + result.stderr
     assert 'ATLAS_FACIAL_VERIFIED' in result.stdout

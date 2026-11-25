@@ -6,6 +6,26 @@ import bpy
 from mathutils import Vector
 
 
+def surface_channels(material):
+    if not material.use_nodes:
+        return []
+    channels = set()
+    for shader in (node for node in material.node_tree.nodes if node.type == "BSDF_PRINCIPLED"):
+        for name in ("Base Color", "Roughness", "Normal", "Metallic", "Alpha", "Emission Color"):
+            pending = [link.from_node for link in shader.inputs[name].links]
+            visited = set()
+            while pending:
+                node = pending.pop()
+                if node in visited:
+                    continue
+                visited.add(node)
+                if node.type == "TEX_IMAGE" and node.image:
+                    channels.add(name)
+                    break
+                pending.extend(link.from_node for socket in node.inputs for link in socket.links)
+    return sorted(channels)
+
+
 def import_asset(path, identifier, normalize="none", pivot="origin", *, profile="static", clips=(), fps=None):
     started = time.perf_counter()
     before = set(bpy.data.objects)
@@ -29,7 +49,7 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
     allowed = {"MESH", "EMPTY"} | ({"ARMATURE"} if rigged else set())
     if not meshes or any(obj.type not in allowed for obj in objects):
         raise ValueError("GLB object types exceed the selected import profile")
-    if profile == "static" and any(obj.animation_data or (obj.type == "MESH" and obj.data.shape_keys) for obj in objects):
+    if not rigged and any(obj.animation_data or (obj.type == "MESH" and obj.data.shape_keys) for obj in objects):
         raise ValueError("Imported animation or morph targets are unsupported")
     rig_report = {}
     if rigged:
@@ -70,6 +90,8 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
               "bounds": {"min": list(low), "max": list(high)}, "dimensions": list(dimensions),
               "material_count": len(materials), "materials": sorted(mat.name for mat in materials),
               "texture_count": len(images), "textures": textures,
+              "surface_channels": {mat.name: surface_channels(mat) for mat in sorted(materials, key=lambda value: value.name)},
+              "max_uv_sets": max(len(mesh.data.uv_layers) for mesh in meshes),
               "missing_textures": missing, "skeleton_count": 0, "animation_count": 0,
               "coordinate_system": "right-handed Z-up meters", **rig_report}
     # Reserve the public entity name independently of names inside the imported file.
