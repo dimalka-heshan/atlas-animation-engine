@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven Blender animation engine. Version 0.5.2 adds Sketchfab discovery and OAuth, reviewed Blendkit native import, expanded Poly Haven models, and selection based on verified asset quality. Start with [V0.5.2 setup and renders](docs/V052_DEMOS.md). [MPFB character generation and local voice](docs/V051_DEMOS.md) remain available.
+A local, configuration-driven Blender animation engine. Version 0.6 adds licensed skeletal motion transfer to MPFB humans, reusable baked motions, obstacle-aware walking, and movement during dialogue. [V0.6 setup and renders](docs/V06_DEMOS.md) · [Delivery report](docs/V06_REPORT.md) · [V0.5.2 asset workflows](docs/V052_DEMOS.md)
 
 Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 
@@ -91,7 +91,7 @@ Copy an example JSON and change its `id`, geometry, materials, transforms, keys,
 
 Default rendering is CPU Cycles at 320x180, 48 frames, 24 fps, 16 samples, 8 threads. Examples use Eevee at 480x270 or 270x480 for three seconds. For final output, increase resolution and samples in JSON after checking a preview. Both dimensions must be even. Higher settings can substantially increase render time and disk usage.
 
-Seeded scatter provides minimum XY center spacing within each group; it does not test mesh collisions or avoid other groups. Primitive assets need no external files; imported static GLBs require an approved, inspected registry version. General character rigs, semantic actions and multi-shot editing remain deferred.
+Seeded scatter provides minimum XY center spacing within each group. Primitive assets need no external files, and imported static GLBs require an approved, inspected registry version. Schema 1.5 movement actions support approved MPFB targets on flat ground with explicit bounds and obstacles. [Motion and locomotion](docs/MOTION.md)
 
 ## Local speech, narration and talking characters
 

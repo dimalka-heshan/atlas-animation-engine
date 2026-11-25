@@ -1,5 +1,7 @@
 # Performance evidence
 
+V0.6 records measured Blender process, cache reuse, preview wall time, and local disk usage on the Intel CPU. Motion preparation and shoe correction run in the same bake process. [V0.6 measurements](V06_REPORT.md)
+
 See [V0.5.2 measured performance](V052_REPORT.md) for provider transfers, the photographic woodland, Blendkit interior and narrated fort. Cycles on CPU gave more consistent preview throughput than concurrent Eevee jobs on the integrated GPU during the new production tests.
 
 Measured on 2026-11-23 (user date), Windows 11 Pro 64-bit, Intel Core 7 240H with 16 logical CPUs, 33,271,672 KiB visible RAM (~31.73 GiB), Intel integrated Graphics. Windows reports ~2 GiB adapter memory; that value is not a measurement of usable shared GPU memory.

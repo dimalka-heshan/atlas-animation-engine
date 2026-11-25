@@ -1,8 +1,8 @@
-# Development handoff — ATLAS 0.5
+# Development handoff — ATLAS 0.6
 
-Repository `C:/Dimalka/yt/blender`. For the current V0.5.2 implementation and fixtures, use [the delivery report](V052_REPORT.md) and [reproduction guide](V052_DEMOS.md). `engine/assets/sketchfab.py` owns authorized HTTPS and OAuth. `engine/assets/blendkit.py` and `engine/adapters/blender/convert_native.py` own user-mediated licensed conversion. `engine/assets/selection.py` ranks pinned candidates using the provider catalog and Blender-measured quality. Downloaded sources, voice weights, editable native assets and videos stay in local `outputs/`.
+Repository `C:/Dimalka/yt/blender`. The V0.6 implementation is on GitHub `main` at `f1c0389`. See the [delivery report](V06_REPORT.md), [preview commands](V06_DEMOS.md) and [motion interfaces](MOTION.md). The release motion cache is `outputs/v06-release-motions`. Use the jobs listed in the report to inspect the editable scenes and evidence. Keep acquired sources, motion blobs, model weights, WAVs and full renders out of Git.
 
-The rest of this handoff records the V0.5 baseline and the proposed navigation slice.
+The working interfaces below record the foundation. V0.5.2 provider and conversion details are in its [delivery report](V052_REPORT.md).
 
 ## Working interfaces
 
@@ -21,6 +21,6 @@ Main artifact inventory is docs/evidence/2026-11-25-v05.json. The 19 acquisition
 
 ## Exact next work
 
-Use the two acquired humanoids to develop a validated locomotion/controller slice. Measure source root transforms and distinguish in-place loops from root-motion clips. Build deterministic waypoint traversal with controlled heading and frame-correct clip transitions. Verify an independently reopened Blender scene and a short two-actor render before claiming navigation or atomic pick-up actions. The next larger sequence is compatible retargeting, conflict-checked interactions and multi-character acting.
+Start **V0.6.2 Intelligent Character Interactions, Object Manipulation, Semantic Action Planning and Multi-Character Acting** from example 24. Define a named prop anchor and preconditions for reach, ownership and release. Compile an approach, turn, dialogue and single handoff to explicit synchronized events. Reopen the saved scene and measure hand–prop error and ownership across the transfer. Preserve the current exact-pin checks and flat route tests.
 
-Broader asset providers, alternate import profiles, cross-file clip transfer, external facial rig support, procedural cities, multi-shot direction, queues and dashboard remain incomplete. Keep API experiments and larger downloads opt-in. Runtime tests used Windows, Blender 5.2.3, FFmpeg and Intel CPU/integrated graphics. No GPU Turbo throughput or production-scale catalog performance is claimed.
+Resolve horizontal foot slide and gait phase changes in a short saved-scene study before marking the moving actor ready for close-up production. General motion formats and additional rig families remain open. Runtime tests used Windows, Blender 5.2.3 LTS, FFmpeg and Intel CPU rendering.

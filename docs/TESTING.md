@@ -1,5 +1,7 @@
 # Testing
 
+V0.6 motion tests cover hashed aliases, exact target versions, collision and route rejection, alternate approach stops, scheduled facing, overlap and root timing. With `ATLAS_MOTION_INTEGRATION=1`, a real KayKit clip is baked onto MPFB, resolved from cache, rendered through the production pipeline and checked after reopening the scene. [Fixture setup and test commands](V06_DEMOS.md)
+
 V0.5.2 provider tests use offline HTTP and archive fixtures by default. `ATLAS_INTEGRATION=1` runs the native conversion tests with real Blender, including packed image and material retention, rejected input, and saved-scene verification. The delivery report records separate permitted live discovery, actual acquisitions, and demo jobs. [V0.5.2 results](V052_REPORT.md)
 
 ## Commands

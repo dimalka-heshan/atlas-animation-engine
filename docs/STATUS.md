@@ -1,6 +1,8 @@
-# Status — ATLAS 0.5.0 — 2026-11-25
+# Status — ATLAS 0.6.0 — 2026-11-25
 
-The current delivery is [ATLAS 0.5.2](V052_REPORT.md). [ATLAS 0.5.1 evidence](V051_REPORT.md) and the sections below preserve earlier verified baselines.
+V0.6 transfers licensed KayKit motion to inspected MPFB humans and compiles explicit flat-ground routes to editable Blender Actions. The preview jobs demonstrate obstacle avoidance, independent movement, and an approach with dialogue. The report records gait issues, tested limitations and evidence. [V0.6 delivery](V06_REPORT.md) · [Reproduction](V06_DEMOS.md)
+
+[V0.5.2](V052_REPORT.md), [V0.5.1](V051_REPORT.md) and the sections below preserve earlier verified baselines.
 
 ATLAS renders approved acquired environments and source-rig animation through the existing JSON and Blender pipeline. Two official providers supplied real assets for four verified previews. V0.4 speech, audio and facial workflows remain integrated.
 

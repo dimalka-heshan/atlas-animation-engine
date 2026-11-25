@@ -6,6 +6,8 @@
 
 V0.5.2 stores discovery rows and approved production versions in their existing separate SQLite databases. The selector joins them by identity and checks local hashes and inspection proofs before returning a pin. A separate optical PBR profile admits two bounded, parameter-only material extensions. Blendkit native conversion runs in a fresh offline Blender profile, then registers a standalone GLB through the existing static pipeline. The job snapshots assets, media and video credits before production.
 
+Schema 1.5 resolves exact motion pins, compiles semantic movement on the host, and writes ordinary entity transform keys and clip windows. The host copies each motion payload once per SHA-256 and retains the exact aliases used. The Blender worker imports the pinned target, verifies its rest fingerprint and creates editable Actions on its rig. Existing facial shape-key animation remains independent of the body track. [Motion architecture](MOTION.md)
+
 The host runs Python/Pydantic; Blender runs trusted stdlib + bpy entrypoints. Blender needs no pip packages. Portable models never import bpy. No generated script or expression from project JSON is executed. Blender is the sole 3D execution and rendering backend. Portable validated models remain independent of bpy for testing and orchestration, not for a planned second renderer.
 
 ## Public interfaces

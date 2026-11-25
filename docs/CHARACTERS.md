@@ -1,5 +1,7 @@
 # Source rigs and animation clips
 
+V0.6 adds a measured transfer from the CC0 KayKit Knight skeleton to generated MPFB game-engine humanoids. The existing source-rig and MPFB facial controls remain available. [Rig profiles, motion pins and playback](MOTION.md)
+
 Schema 1.3 adds a rigged asset entity. The source GLB version pins the skeleton and all compatible embedded actions. The strict static GLB importer stays the default for old projects. The separate rigged profile currently supports one embedded armature, skinned meshes, inverse bind matrices and ordered transform animations with LINEAR or STEP sampling. External resources, extensions, morph targets, arbitrary rig scripts and multiple armatures are rejected. Blender verifies actual weights, materials and images before registry readiness.
 
 ```powershell

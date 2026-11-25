@@ -4,9 +4,15 @@ The V2 master brief supersedes the older phase numbering. ATLAS remains one Pyth
 
 ## Foundation through 0.5
 
-V0.5.2 adds reviewed Blender-native imports, reusable fort modules, a photographic woodland, and authorized Sketchfab discovery. The next larger milestone remains actor navigation, motion retargeting and interactions. Expand the licensed architecture library in parallel with those tasks, beginning with a small set of historically documented models. [V0.5.2 status](V052_REPORT.md)
+V0.5.2 adds reviewed Blender-native imports, reusable fort modules, a photographic woodland, and authorized Sketchfab discovery. [V0.5.2 status](V052_REPORT.md)
 
-V0.4 verified isolated Turbo CPU speech, approved audio versions, mixed MP4 and the editable Rhubarb-driven original character. V0.5 adds official KayKit/Poly Haven acquisition, inspected source-rig animation, independent video evidence and a reusable medieval environment collection. STATUS defines the implemented scope. The next practical milestone is deterministic locomotion and navigation, better transitions, limited cross-rig retargeting, and coordinated character interactions.
+V0.4 verified isolated Turbo CPU speech and Rhubarb facial animation. V0.5 added official KayKit and Poly Haven acquisition and inspected source-rig playback.
+
+## V0.6 and V0.6.2
+
+V0.6 verifies a KayKit-to-MPFB retarget, immutable cached movements, bounded routes, approach distances and simultaneous speech. Broader capture and rig support, terrain IK and phase-matched gait transitions remain open. [V0.6 status](V06_REPORT.md)
+
+V0.6.2 starts with stateful interactions at named object and actor anchors. Verify a two-actor approach, turn and dialogue with one contact-constrained object handoff before expanding manipulation or semantic planning.
 
 ## Ordered phases and exit criteria
 
