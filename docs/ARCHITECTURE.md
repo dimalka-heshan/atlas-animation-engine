@@ -4,6 +4,8 @@
 
 The director supplies versioned creative intent and requests declared production capabilities. Host services provide project preflight, movement compilation and bounded preview generation, using the same scene preparation pipeline as the existing CLI. Blender remains the execution backend. [Director contracts](DIRECTOR.md)
 
+Schema 1.6 expresses one prop handoff as named wrist and object anchors, an initial owner and explicit reach, contact, transfer and release frames. The host checks references, arrival and approved rig profiles. Blender evaluates a two-bone arm solve, then switches the prop's location constraint at the shared contact pose. The producer publishes the job only after contact and continuity checks and video verification. [Interaction setup](V062_DEMOS.md)
+
 `apps/cli` loads JSON -> `engine/core/models.py` validates a Project -> `engine/worlds/placement.py` expands deterministic scatter -> `engine/rendering/pipeline.py` persists a job and calls the Blender worker -> `engine/rendering/video.py` encodes and checks the result -> `engine/storage/jobs.py` records status and atomically writes the manifest.
 
 V0.5.2 stores discovery rows and approved production versions in their existing separate SQLite databases. The selector joins them by identity and checks local hashes and inspection proofs before returning a pin. A separate optical PBR profile admits two bounded, parameter-only material extensions. Blendkit native conversion runs in a fresh offline Blender profile, then registers a standalone GLB through the existing static pipeline. The job snapshots assets, media and video credits before production.

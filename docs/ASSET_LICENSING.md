@@ -1,5 +1,7 @@
 # Asset licensing and provenance
 
+The V0.6.2 exchange reuses the approved MPFB actors, CC0 KayKit walking motions and previously approved Poly Haven environment. The parcel is an original configured primitive. Existing license snapshots and video credits apply to the interaction job. [Interaction reproduction](V062_DEMOS.md)
+
 V0.6 motion uses the CC0 KayKit Knight asset and retains the original revision, creator, asset hash and clip name in each motion record. Render manifests preserve these fields and production job credits include the source clip. The source archive and baked motion files stay in the local cache. [KayKit license at the acquired revision](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/blob/672074b73ba276876a19e8816ecdc5241817ab47/addons/kaykit_character_pack_adventures/LICENSE.txt)
 
 The primitive examples use generated geometry and numeric materials. Version 0.2 also includes an original locally generated GLB lantern and its provenance sidecar, with no downloaded models, textures, fonts, audio or asset packs. Asset-backed manifests record its source hash, pinned version, declared rights and inspection evidence; primitive-only manifests retain an empty asset list.

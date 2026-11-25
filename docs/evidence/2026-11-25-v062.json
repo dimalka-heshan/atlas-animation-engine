@@ -1,0 +1,721 @@
+{
+  "release": "0.6.2",
+  "baseline_commit": "bba27762ad5447ed94feaa0d4080e985e8b4cb61",
+  "director_contract_commit": "0e3f5711f09e1dbccf782640931e8bfc1ec35f0a",
+  "tests": {
+    "baseline_default": {
+      "junit": "outputs/director-baseline.xml",
+      "seconds": 19.726,
+      "tests": 332,
+      "skipped": 33,
+      "failures": 0,
+      "errors": 0,
+      "passed": 299
+    },
+    "handoff_and_retarget": {
+      "junit": "outputs/v062-integration.xml",
+      "seconds": 196.917,
+      "tests": 2,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "passed": 2
+    },
+    "release_default": {
+      "junit": "outputs/v062-release-default.xml",
+      "seconds": 34.195,
+      "tests": 350,
+      "skipped": 34,
+      "failures": 0,
+      "errors": 0,
+      "passed": 316
+    },
+    "release_blender_and_motion": {
+      "junit": "outputs/v062-verified.xml",
+      "seconds": 448.194,
+      "tests": 350,
+      "skipped": 4,
+      "failures": 0,
+      "errors": 0,
+      "passed": 346
+    }
+  },
+  "jobs": [
+    {
+      "job": "outputs/director-service-check/production-service-proof-8027143e91b54618a973eb9f369c1454",
+      "manifest_sha256": "34c686bdd1a3c3dd69e4d6a16c42f6d1de79e1b033a3b0122148d59e02ef1049",
+      "blender": "5.2.3 LTS",
+      "build_seconds": 0.17824139998992905,
+      "project_id": "production-service-proof",
+      "engine_version": "0.6.0",
+      "engine_source_sha256": "e834fa04690ae9b1ac38fcf38d2552263085c59b8723352cf5192a6d9b954f6c",
+      "video": {
+        "width": 80,
+        "height": 64,
+        "frames": 3,
+        "fps": 10.0,
+        "duration": 0.3,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "16c9c5d0635f16291e5d3074a7e0197677ad5d96021bff91d1e3ec8e9ce137aa"
+      },
+      "timings_seconds": {
+        "blender_process": 2.9543599999742582,
+        "encoding": 0.11832609999692068,
+        "decode_verification": 0.11370929999975488,
+        "total": 4.11345349997282
+      },
+      "disk_bytes": 121505
+    },
+    {
+      "job": "outputs/v062-renders/fort-archive-handoff-30c791ad997642e29fa85b4a7767e59e",
+      "manifest_sha256": "9881266373866b400f70121c6d4f07cc6a694967f793a72645d9d10f0b720041",
+      "blender": "5.2.3 LTS",
+      "build_seconds": 14.972845100041013,
+      "project_id": "fort-archive-handoff",
+      "engine_version": "0.6.0",
+      "engine_source_sha256": "33616757cec657eecf79364e2af7890255aab30b53d6d066ee695e6f5ef45131",
+      "video": {
+        "width": 320,
+        "height": 180,
+        "frames": 84,
+        "fps": 10.0,
+        "duration": 8.4,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 8.4,
+          "start_time": 0.0
+        },
+        "sha256": "5b07a27920eda4db33f2ed576a9245697a65f193c9b6ae9de6960ac5e5062eb0"
+      },
+      "timings_seconds": {
+        "blender_process": 732.6302252000314,
+        "encoding": 0.575972200022079,
+        "audio_mux": 0.7253586999722756,
+        "decode_verification": 0.161510499950964,
+        "total": 736.1974329000222
+      },
+      "disk_bytes": 409797476,
+      "handoff": {
+        "prop": "archive-parcel",
+        "owners": [
+          {
+            "frame": 1,
+            "actor": "curator"
+          },
+          {
+            "frame": 61,
+            "actor": "scholar"
+          }
+        ],
+        "contact_frames": [
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64
+        ],
+        "wrist_error_m": [
+          1.2502775766493696e-06,
+          1.1740753414387827e-06
+        ],
+        "switch_displacement_m": 9.830249847454215e-07,
+        "release_error_m": 0.0,
+        "switch_samples": [
+          {
+            "frame": 60.99,
+            "prop_world": [
+              1.3362196683883667,
+              -1.1956918239593506,
+              1.290000319480896
+            ],
+            "wrist_error_m": [
+              0.0,
+              1.1740753414387827e-06
+            ]
+          },
+          {
+            "frame": 61,
+            "prop_world": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.2899998426437378
+            ],
+            "wrist_error_m": [
+              1.130918619692938e-06,
+              0.0
+            ]
+          },
+          {
+            "frame": 61.01,
+            "prop_world": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.290000081062317
+            ],
+            "wrist_error_m": [
+              8.513246093443454e-07,
+              0.0
+            ]
+          }
+        ],
+        "tolerance_m": {
+          "wrist": 0.012,
+          "switch": 0.003
+        }
+      },
+      "movement": [
+        {
+          "actor": "curator",
+          "kind": "approach_actor",
+          "motion": {
+            "id": "curator-walk",
+            "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"
+          },
+          "points": [
+            [
+              -1.8,
+              1.25
+            ],
+            [
+              1.0642488203152745,
+              -0.8477596993858348
+            ]
+          ],
+          "frames": [
+            16,
+            45
+          ],
+          "distance_m": 3.5502840817383596,
+          "speed_mps": 1.2242358902546069,
+          "playback": 1.080199878107938,
+          "facing": [
+            1.75,
+            -1.35
+          ],
+          "stop_distance_m": 0.8499999999999999
+        },
+        {
+          "actor": "scholar",
+          "kind": "walk_to",
+          "motion": {
+            "id": "scholar-walk",
+            "sha256": "3bcdcaa2d88ce8d25ce2d8694f03c150ad6e90e716938337bbfef781b92a53c1"
+          },
+          "points": [
+            [
+              2.65,
+              -2.00915493
+            ],
+            [
+              1.75,
+              -1.35
+            ]
+          ],
+          "frames": [
+            2,
+            13
+          ],
+          "distance_m": 1.1155649787185435,
+          "speed_mps": 1.0141499806532213,
+          "playback": 0.904787420366145,
+          "facing": null,
+          "stop_distance_m": null
+        }
+      ],
+      "reopened-handoff": {
+        "samples": [
+          {
+            "frame": 1,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              -1.9913880825042725,
+              1.0516018867492676,
+              1.010033369064331
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              5.373314568109496
+            ]
+          },
+          {
+            "frame": 60.99,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              1.3362196683883667,
+              -1.1956918239593506,
+              1.290000319480896
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              1.1740753414387827e-06
+            ]
+          },
+          {
+            "frame": 61,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.2899998426437378
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              1.130918619692938e-06,
+              0.0
+            ]
+          },
+          {
+            "frame": 61.01,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.336220383644104,
+              -1.1956923007965088,
+              1.290000081062317
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              8.513246093443454e-07,
+              0.0
+            ]
+          },
+          {
+            "frame": 73,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.4599007368087769,
+              -1.4323339462280273,
+              0.9718414545059204
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.3693354637389067,
+              0.0
+            ]
+          }
+        ],
+        "max_contact_error_m": 1.2502775766493696e-06,
+        "switch_displacement_m": 9.830249847454215e-07,
+        "switch_quaternion_delta": 0.0,
+        "peak_viseme_during_contact": 0.8500000238418579
+      }
+    },
+    {
+      "job": "outputs/v062-renders/guided-mpfb-foot-lock-d49f80442ed44e2e845dbf494157325b",
+      "manifest_sha256": "0f7f01059712ae3261c9939734ecf811cfcc2cce891b5a358083ccf9a9f278c0",
+      "blender": "5.2.3 LTS",
+      "build_seconds": 11.87390189996222,
+      "project_id": "guided-mpfb-foot-lock",
+      "engine_version": "0.6.0",
+      "engine_source_sha256": "23dd61fcd38f5320bbb7aeac7be38de0522ca6a54578c6373dc07b651489550b",
+      "video": {
+        "width": 368,
+        "height": 208,
+        "frames": 56,
+        "fps": 12.0,
+        "duration": 4.666667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "0f1e2aeb5f57631894ecbcf015a78310740a500932f1024d895744f19e173e5c"
+      },
+      "timings_seconds": {
+        "blender_process": 458.9797440000111,
+        "encoding": 6.696269299951382,
+        "decode_verification": 0.28216629999224097,
+        "total": 467.3466498000198
+      },
+      "disk_bytes": 37512036,
+      "foot_contact": [
+        {
+          "actor": "walker",
+          "clip_start": 5,
+          "contact_pairs": 29,
+          "mean_ankle_drift_before_mps": 1.0677925201662295,
+          "mean_ankle_drift_after_mps": 0.6182279849843294,
+          "shoe_min_before_m": -0.0028034604620188475,
+          "shoe_min_after_m": -0.0028563139494508505
+        }
+      ],
+      "movement": [
+        {
+          "actor": "walker",
+          "kind": "walk_to",
+          "motion": {
+            "id": "curator-walk",
+            "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"
+          },
+          "points": [
+            [
+              -1.65,
+              1.35
+            ],
+            [
+              -0.91,
+              -0.8100000000000002
+            ],
+            [
+              1.3,
+              -2.45
+            ]
+          ],
+          "frames": [
+            5,
+            26,
+            51
+          ],
+          "distance_m": 5.035278917462403,
+          "speed_mps": 1.3135510219467137,
+          "playback": 1.1590067446072885,
+          "facing": null,
+          "stop_distance_m": null
+        }
+      ],
+      "reopened-movement": {
+        "armatures": 1,
+        "actors": {
+          "walker": {
+            "action": "ATLAS Motion curator-walk",
+            "blend_frames": [
+              4.0,
+              4.0
+            ],
+            "root_error_m": 6.74349575232249e-08,
+            "arrival_frame": 51,
+            "arrival": [
+              1.3,
+              -2.45
+            ],
+            "stop_distance_m": null,
+            "arrival_yaw_error_deg": null,
+            "full_weight_sample_count": 39,
+            "shoe_min_z_range_m": [
+              -0.004064955748617649,
+              0.023395875468850136
+            ],
+            "distinct_left_calf_poses": 39,
+            "relative_contact_frames": {
+              "left": [
+                9,
+                10,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                38,
+                39,
+                40,
+                41,
+                42,
+                43
+              ],
+              "right": [
+                11,
+                12,
+                13,
+                14,
+                15,
+                22,
+                23,
+                24,
+                25,
+                26,
+                33,
+                34,
+                35,
+                36,
+                37,
+                44,
+                45,
+                46,
+                47
+              ]
+            },
+            "contact_ankle_speed_mps": {
+              "count": 31,
+              "mean": 0.607069262688355,
+              "peak": 2.3496793884853813
+            }
+          }
+        },
+        "face": {},
+        "authored_windows": {}
+      }
+    },
+    {
+      "job": "outputs/v062-cli/handoff-service-proof-59d0cc1ced884fa091537937081cc466",
+      "manifest_sha256": "bc07c84030f5d290fbcec621b8323439aff0c9af9ee8548f2f0784a03d57afea",
+      "blender": "5.2.3 LTS",
+      "build_seconds": 11.027255900029559,
+      "project_id": "handoff-service-proof",
+      "engine_version": "0.6.2",
+      "engine_source_sha256": "73f7be64b8ea07db43e515575cd60b0d5f2a47a63e8026fb6a869c322756843c",
+      "video": {
+        "width": 64,
+        "height": 64,
+        "frames": 20,
+        "fps": 10.0,
+        "duration": 2.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "3c8044da86b105e7bf955d51b0fabbcd5f1acd3db734b96c2aaf9f181da64e9e"
+      },
+      "timings_seconds": {
+        "blender_process": 37.311755800037645,
+        "encoding": 0.3290226000244729,
+        "decode_verification": 0.402491899963934,
+        "total": 38.90534840000328
+      },
+      "disk_bytes": 68091379,
+      "handoff": {
+        "prop": "archive-parcel",
+        "owners": [
+          {
+            "frame": 1,
+            "actor": "curator"
+          },
+          {
+            "frame": 10,
+            "actor": "scholar"
+          }
+        ],
+        "contact_frames": [
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "wrist_error_m": [
+          6.194296387084284e-07,
+          1.0254770835688861e-06
+        ],
+        "switch_displacement_m": 3.95372484964776e-07,
+        "release_error_m": 0.0,
+        "switch_samples": [
+          {
+            "frame": 9.99,
+            "prop_world": [
+              1.3362199068069458,
+              -1.1956920623779297,
+              1.2900002002716064
+            ],
+            "wrist_error_m": [
+              0.0,
+              5.196212462831347e-07
+            ]
+          },
+          {
+            "frame": 10,
+            "prop_world": [
+              1.3362200260162354,
+              -1.1956919431686401,
+              1.2899998426437378
+            ],
+            "wrist_error_m": [
+              6.194296387084284e-07,
+              0.0
+            ]
+          },
+          {
+            "frame": 10.01,
+            "prop_world": [
+              1.3362200260162354,
+              -1.1956920623779297,
+              1.2899998426437378
+            ],
+            "wrist_error_m": [
+              3.769728732309794e-07,
+              0.0
+            ]
+          }
+        ],
+        "tolerance_m": {
+          "wrist": 0.012,
+          "switch": 0.003
+        }
+      },
+      "reopened-handoff": {
+        "samples": [
+          {
+            "frame": 1,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              1.1010191440582275,
+              -1.1830308437347412,
+              1.010033369064331
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              0.4439825958660672
+            ]
+          },
+          {
+            "frame": 9.99,
+            "owner": [
+              1.0,
+              0.0
+            ],
+            "translation": [
+              1.3362199068069458,
+              -1.1956920623779297,
+              1.2900002002716064
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.0,
+              5.196212462831347e-07
+            ]
+          },
+          {
+            "frame": 10,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.3362200260162354,
+              -1.1956919431686401,
+              1.2899998426437378
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              6.194296387084284e-07,
+              0.0
+            ]
+          },
+          {
+            "frame": 10.01,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.3362200260162354,
+              -1.1956920623779297,
+              1.2899998426437378
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              3.769728732309794e-07,
+              0.0
+            ]
+          },
+          {
+            "frame": 17,
+            "owner": [
+              0.0,
+              1.0
+            ],
+            "translation": [
+              1.4597880840301514,
+              -1.431607723236084,
+              0.97184157371521
+            ],
+            "rotation": [
+              0.8910065293312073,
+              0.0,
+              0.0,
+              0.45399051904678345
+            ],
+            "gap_m": [
+              0.365887975061597,
+              0.0
+            ]
+          }
+        ],
+        "max_contact_error_m": 1.0254770835688861e-06,
+        "switch_displacement_m": 3.95372484964776e-07,
+        "switch_quaternion_delta": 0.0,
+        "peak_viseme_during_contact": null
+      }
+    }
+  ],
+  "fort_still": {
+    "file": "docs/evidence/v062_handoff.png",
+    "frame": 61,
+    "sha256": "332dcfb11168e8036bf3d94f8c6b1598df72f5df4375a5ebd59f77699478da72"
+  }
+}

@@ -12,7 +12,9 @@ V0.4 verified isolated Turbo CPU speech and Rhubarb facial animation. V0.5 added
 
 V0.6 verifies a KayKit-to-MPFB retarget, immutable cached movements, bounded routes, approach distances and simultaneous speech. Broader capture and rig support, terrain IK and phase-matched gait transitions remain open. [V0.6 status](V06_REPORT.md)
 
-V0.6.2 starts with stateful interactions at named object and actor anchors. Verify a two-actor approach, turn and dialogue with one contact-constrained object handoff before expanding manipulation or semantic planning.
+V0.6.2 verifies shared production contracts and one stateful wrist-level prop handoff with approach, dialogue and measured release. Opt-in walking stabilization reduces measured ankle drift in the guided fixture. [V0.6.2 evidence](V062_DEMOS.md)
+
+V0.7 starts with a deterministic layout contract, reusable asset pins, named interaction anchors and spatial validation. [Ordered implementation checkpoints](superpowers/plans/2026-11-25-director-infrastructure.md)
 
 ## Ordered phases and exit criteria
 

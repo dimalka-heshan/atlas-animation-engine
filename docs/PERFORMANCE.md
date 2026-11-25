@@ -1,5 +1,7 @@
 # Performance evidence
 
+V0.6.2 measures both transfer continuity and per-foot ankle drift at runtime. The guided correction changed the mean stance ankle speed from 1.068 to 0.618 m/s over the same 29 consecutive contact pairs. The lowest sampled shoe point changed from -2.80 mm to -2.86 mm. [Fixture details and render timings](V062_DEMOS.md)
+
 V0.6 records measured Blender process, cache reuse, preview wall time, and local disk usage on the Intel CPU. Motion preparation and shoe correction run in the same bake process. [V0.6 measurements](V06_REPORT.md)
 
 See [V0.5.2 measured performance](V052_REPORT.md) for provider transfers, the photographic woodland, Blendkit interior and narrated fort. Cycles on CPU gave more consistent preview throughput than concurrent Eevee jobs on the integrated GPU during the new production tests.
