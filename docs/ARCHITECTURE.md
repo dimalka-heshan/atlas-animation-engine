@@ -2,6 +2,8 @@
 
 ## Implemented flow
 
+The director supplies versioned creative intent and requests declared production capabilities. Host services provide project preflight, movement compilation and bounded preview generation, using the same scene preparation pipeline as the existing CLI. Blender remains the execution backend. [Director contracts](DIRECTOR.md)
+
 `apps/cli` loads JSON -> `engine/core/models.py` validates a Project -> `engine/worlds/placement.py` expands deterministic scatter -> `engine/rendering/pipeline.py` persists a job and calls the Blender worker -> `engine/rendering/video.py` encodes and checks the result -> `engine/storage/jobs.py` records status and atomically writes the manifest.
 
 V0.5.2 stores discovery rows and approved production versions in their existing separate SQLite databases. The selector joins them by identity and checks local hashes and inspection proofs before returning a pin. A separate optical PBR profile admits two bounded, parameter-only material extensions. Blendkit native conversion runs in a fresh offline Blender profile, then registers a standalone GLB through the existing static pipeline. The job snapshots assets, media and video credits before production.

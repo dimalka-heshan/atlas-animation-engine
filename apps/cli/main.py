@@ -12,19 +12,15 @@ from apps.cli.audio import add_audio_commands, run_audio_command
 from apps.cli.voice import add_voice_commands, run_voice_command
 from apps.cli.lipsync import add_lipsync_commands, run_lipsync_command
 from apps.cli.characters import add_character_commands, run_character_command
-from engine.audio.production import resolve_audio
-from engine.assets.resolution import resolve_project_assets
-from engine.assets.environment_media import resolve_media
-from engine.characters.locomotion import compile_movement
-from engine.characters.motion import resolve_motions
 from engine import __version__
 from engine.core.models import EnvironmentCollection, Project
-from engine.core.quality import PRESETS, enforce_geometry_budget
+from engine.core.quality import PRESETS
+from engine.production import (CreativePlan, ProductionError, ProductionWorkspace, capabilities, compile_actions,
+                               preflight, preview, validate_creative_plan)
 from engine.rendering.pipeline import render_project
 from engine.rendering.runtime import doctor, find_tool
 from engine.rendering.video import verify_video
 from engine.storage.jobs import list_jobs
-from engine.worlds.placement import expand_project
 
 
 class JsonFormatter(logging.Formatter):
@@ -42,12 +38,22 @@ def load_project(path: Path) -> Project:
     return Project.model_validate_json(path.read_text(encoding="utf-8-sig"))
 
 
+def workspace_for(args) -> ProductionWorkspace:
+    return ProductionWorkspace(**{name: getattr(args, name) for name in
+        ("output", "asset_library", "asset_cache", "audio_library", "motion_cache") if hasattr(args, name)})
+
+
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="atlas", description="ATLAS local 3D animation production")
     root.add_argument("--version", action="version", version=__version__)
     sub = root.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor", help="inspect runtime and installed executables")
     sub.add_parser("schema", help="print the project JSON Schema")
+    sub.add_parser("capabilities", help="list versioned production capabilities and contracts")
+    director = sub.add_parser("director", help="inspect or validate a creative intent plan")
+    director_commands = director.add_subparsers(dest="director_command", required=True)
+    director_commands.add_parser("schema")
+    director_commands.add_parser("validate").add_argument("plan", type=Path)
     quality = sub.add_parser("quality", help="inspect available Blender production profiles")
     quality.add_subparsers(dest="quality_command", required=True).add_parser("profiles")
     add_asset_commands(sub)
@@ -69,15 +75,18 @@ def parser() -> argparse.ArgumentParser:
         command.add_argument("project", type=Path)
         command.add_argument("--asset-library", type=Path, default=Path("assets/library"))
     render = sub.add_parser("render", help="render and verify a new production job")
-    render.add_argument("project", type=Path)
-    render.add_argument("--output", type=Path, default=Path("outputs"))
-    render.add_argument("--blender", type=Path)
+    production = sub.add_parser("production", help="run bounded production services")
+    preview_parser = production.add_subparsers(dest="production_command", required=True).add_parser("preview")
     render.add_argument("--engine", choices=["cycles", "eevee"])
-    render.add_argument("--asset-library", type=Path, default=Path("assets/library"))
-    render.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
-    render.add_argument("--environment-collection", type=Path)
-    render.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
-    for area in (validate, render, plan, compile_actions):
+    for command in (render, preview_parser):
+        command.add_argument("project", type=Path)
+        command.add_argument("--output", type=Path, default=Path("outputs"))
+        command.add_argument("--blender", type=Path)
+        command.add_argument("--asset-library", type=Path, default=Path("assets/library"))
+        command.add_argument("--asset-cache", type=Path, default=Path("assets/acquisition"))
+        command.add_argument("--environment-collection", type=Path)
+        command.add_argument("--audio-library", type=Path, default=Path("assets/audio"))
+    for area in (validate, render, preview_parser, plan, compile_actions):
         area.add_argument("--motion-cache", type=Path, default=Path("assets/motions"))
     verify = sub.add_parser("verify", help="verify an existing video against project settings")
     verify.add_argument("video", type=Path)
@@ -101,6 +110,16 @@ def main(argv: list[str] | None = None) -> int:
             return 2 if any("error" in tool for tool in result["tools"].values()) else 0
         if args.command == "schema":
             result = Project.model_json_schema()
+        elif args.command == "capabilities":
+            result = capabilities().model_dump(mode="json")
+        elif args.command == "director":
+            if args.director_command == "schema":
+                result = CreativePlan.model_json_schema()
+            else:
+                if args.plan.stat().st_size > 2 * 1024 * 1024:
+                    raise ProductionError("plan_size", "Creative plan exceeds the 2 MiB input limit.")
+                plan = CreativePlan.model_validate_json(args.plan.read_text(encoding="utf-8-sig"))
+                result = validate_creative_plan(plan).model_dump(mode="json")
         elif args.command == "quality":
             result = PRESETS
         elif args.command == "jobs":
@@ -122,24 +141,15 @@ def main(argv: list[str] | None = None) -> int:
                 if collection.stat().st_size > 2 * 1024 * 1024:
                     raise ValueError("Environment collection exceeds 2 MiB")
                 project = EnvironmentCollection.model_validate_json(collection.read_text(encoding="utf-8-sig")).apply(project)
-            if args.command in {"validate", "navigation", "actions"}:
-                motions = resolve_motions(project, args.motion_cache)
-                expanded, plans = compile_movement(expand_project(project), motions)
-                assets = resolve_project_assets(expanded, args.asset_library, motions, movement_actions=project.actions)
-                enforce_geometry_budget(expanded, assets)
-                if args.command == "validate":
-                    audio = resolve_audio(expanded, args.audio_library)
-                    media = resolve_media(expanded, args.asset_cache)
-                    result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),
-                              "frames": project.render.frames, "duration_seconds": project.render.frames / project.render.fps,
-                              "assets": [{"id": entry["id"], "version": entry["version"], "sha256": entry["sha256"]} for entry in assets],
-                              "audio_events": len(audio), "environment_media": len(media)}
-                    if motions or plans:
-                        result.update(motions=len(motions), movement=plans)
-                else:
-                    result = {"project": project.id, "movement": plans}
-                    if args.command == "actions":
-                        result["compiled_project"] = expanded.model_dump(mode="json")
+            if args.command == "validate":
+                fields = {"motions", "movement"}
+                report = preflight(project, workspace_for(args))
+                result = report.model_dump(mode="json", exclude=fields if report.motions is None else None)
+            elif args.command in {"navigation", "actions"}:
+                result = compile_actions(project, workspace_for(args)).model_dump(mode="json",
+                    exclude={"compiled_project"} if args.command == "navigation" else None)
+            elif args.command == "production":
+                result = preview(project, workspace_for(args), blender=args.blender).model_dump(mode="json")
             elif args.command == "verify":
                 result = verify_video(args.video.resolve(), project.render, find_tool("ffprobe"), expect_audio=bool(project.audio))
             else:
@@ -157,6 +167,9 @@ def main(argv: list[str] | None = None) -> int:
     except KeyboardInterrupt:
         print(json.dumps({"error": "Production cancelled; completed files and job history retained"}), file=sys.stderr)
         return 130
+    except ProductionError as exc:
+        print(json.dumps({"code": exc.code, "error": str(exc)}), file=sys.stderr)
+        return 2
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError, sqlite3.Error) as exc:
         print(json.dumps({"error": str(exc)}), file=sys.stderr)
         return 2

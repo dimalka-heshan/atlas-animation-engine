@@ -9,17 +9,15 @@ import uuid
 from pathlib import Path
 
 from engine import __version__
-from engine.assets.resolution import resolve_project_assets, snapshot_assets, write_video_credits
-from engine.characters.locomotion import compile_movement
-from engine.characters.motion import resolve_motions, snapshot_motions
+from engine.assets.resolution import snapshot_assets, write_video_credits
+from engine.characters.motion import snapshot_motions
 from engine.assets.environment_media import resolve_media, snapshot_media
 from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
-from engine.core.quality import enforce_geometry_budget
+from engine.production import ProductionWorkspace, prepare_scene
 from engine.rendering.runtime import capture, find_tool, run_logged
 from engine.rendering.video import encode_video, verify_video
 from engine.storage.jobs import JobStore, atomic_json, contained_path, utc_now
-from engine.worlds.placement import expand_project
 
 LOG = logging.getLogger("atlas")
 
@@ -62,16 +60,15 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
                         dependencies={"pydantic": importlib.metadata.version("pydantic")})
         atomic_json(directory / "project.json", project.model_dump(mode="json"))
         manifest["project_sha256"] = hashlib.sha256((directory / "project.json").read_bytes()).hexdigest()
-        motions = resolve_motions(project, motion_cache or Path("assets/motions"))
-        expanded, plans = compile_movement(expand_project(project), motions)
-        entries = resolve_project_assets(expanded, asset_library or Path("assets/library"), motions,
-                                         movement_actions=project.actions)
+        workspace = ProductionWorkspace(asset_library=asset_library or Path("assets/library"),
+                                        motion_cache=motion_cache or Path("assets/motions"))
+        prepared = prepare_scene(project, workspace)
+        expanded, plans, entries, motions = prepared.project, prepared.movement, prepared.assets, prepared.motions
         if motions:
             manifest["motions"] = snapshot_motions(motions, directory)
         if plans:
             manifest["movement"] = plans
             atomic_json(directory / "movement-plan.json", plans)
-        enforce_geometry_budget(expanded, entries)
         if project.quality:
             manifest["quality"] = project.quality.model_dump(mode="json")
         manifest["assets"] = snapshot_assets(entries, directory)

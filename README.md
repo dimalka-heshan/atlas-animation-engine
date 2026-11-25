@@ -2,6 +2,8 @@
 
 A local, configuration-driven Blender animation engine. Version 0.6 adds licensed skeletal motion transfer to MPFB humans, reusable baked motions, obstacle-aware walking, and movement during dialogue. [V0.6 setup and renders](docs/V06_DEMOS.md) · [Delivery report](docs/V06_REPORT.md) · [V0.5.2 asset workflows](docs/V052_DEMOS.md)
 
+Use `atlas capabilities` to discover machine-readable production contracts and `atlas director schema` to inspect the creative intent format. [Director services](docs/DIRECTOR.md)
+
 Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 
 ## Install (PowerShell)
