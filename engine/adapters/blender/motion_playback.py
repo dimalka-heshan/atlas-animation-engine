@@ -27,6 +27,10 @@ def materialize(rig, event, record, skeleton_hash):
     if record.get("profile") not in {"atlas-motion-1", "atlas-motion-2"} or record["target"]["skeleton_sha256"] != skeleton_hash:
         raise ValueError("Motion snapshot is incompatible with the imported rest skeleton")
     bake = record["bake"]
+    captured_travel = (record["profile"] == "atlas-motion-2"
+                       and record.get("source", {}).get("family") == "cmu-motionbuilder-bvh"
+                       and bake["metrics"].get("root_type") == "root-motion-preserved")
+    translation_limit = 12 if captured_travel else 3
     names, pelvis_name, frames = (bake[key] for key in ("bones", "pelvis", "frames"))
     if (bake["fps"] != 30 or not 2 <= len(frames) <= 361 or not 1 <= len(names) <= 53
             or len(set(names)) != len(names) or pelvis_name not in names
@@ -39,7 +43,7 @@ def materialize(rig, event, record, skeleton_hash):
     data.action = action
     for index, frame in enumerate(frames):
         if (len(frame) != len(bones) + 1 or len(frame[-1]) != 3
-                or any(not math.isfinite(value) or abs(value) > 3 for value in frame[-1])):
+                or any(not math.isfinite(value) or abs(value) > translation_limit for value in frame[-1])):
             raise ValueError("Invalid motion translation sample")
         for bone, rotation in zip(bones, frame[:-1]):
             if len(rotation) != 4 or not math.isclose(sum(value * value for value in rotation), 1, abs_tol=.001):
