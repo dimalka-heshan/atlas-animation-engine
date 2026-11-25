@@ -1,6 +1,6 @@
 # Status — ATLAS 0.5.0 — 2026-11-25
 
-The current delivery is [ATLAS 0.5.1](V051_REPORT.md). The sections below preserve the V0.5 baseline and its independently verified demos.
+The current delivery is [ATLAS 0.5.2](V052_REPORT.md). [ATLAS 0.5.1 evidence](V051_REPORT.md) and the sections below preserve earlier verified baselines.
 
 ATLAS renders approved acquired environments and source-rig animation through the existing JSON and Blender pipeline. Two official providers supplied real assets for four verified previews. V0.4 speech, audio and facial workflows remain integrated.
 

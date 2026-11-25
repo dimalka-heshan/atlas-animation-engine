@@ -2,6 +2,8 @@
 
 The local SQLite catalog stores source metadata separately from immutable production asset versions. Network use is explicit through sync/download. Rendering from locally available, inspected assets and acquired media uses local files. The [high-fidelity source guide](HIGH_FIDELITY_SOURCES.md) covers the 0.5.1 Poly Haven model expansion, ambientCG materials and the curated Smithsonian derivative.
 
+V0.5.2 adds `assets variants` and `--resolution auto` for Poly Haven. `ATLAS_ASSET_CACHE_MIB` controls the content-addressed source cache, with a 5120 MiB default. The per-acquisition `--budget-mib` limit still controls transfers. [Sketchfab OAuth setup](SKETCHFAB.md) · [Blendkit official add-on and import](BLENDKIT.md) · [V0.5.2 acquisition commands](V052_DEMOS.md)
+
 | Provider | Implemented source and scope |
 |---|---|
 | KayKit | Curated, commit-pinned starter members from the official [Adventurers release](https://github.com/KayKit-Game-Assets/KayKit-Character-Pack-Adventures-1.0/tree/672074b73ba276876a19e8816ecdc5241817ab47) and [Medieval Hexagon release](https://github.com/KayKit-Game-Assets/KayKit-Medieval-Hexagon-Pack-1.0/tree/84fa4e91af6a88989be7c99e0891cede11f2ca38). License text comes from each selected archive. |
@@ -9,7 +11,7 @@ The local SQLite catalog stores source metadata separately from immutable produc
 | ambientCG | API v3 PBR texture sets in JPEG and PNG. See the [high-fidelity guide](HIGH_FIDELITY_SOURCES.md). |
 | Smithsonian Open Access | Reviewed CC0 Rococo chair with a pinned static GLB derivative. See the [high-fidelity guide](HIGH_FIDELITY_SOURCES.md). |
 
-Quaternius and Kenney starter packs may be imported through the documented local ZIP workflow after obtaining and checking the exact assets. OpenGameArt and Blender Studio assets have source-specific terms. Sketchfab requires its authorized download workflow. MPFB is installed through the [character generation workflow](V051_DEMOS.md).
+Quaternius and Kenney starter packs may be imported through the documented local ZIP workflow after obtaining and checking the exact assets. OpenGameArt and Blender Studio assets have source-specific terms. MPFB is installed through the [character generation workflow](V051_DEMOS.md).
 
 ## Starter acquisition
 

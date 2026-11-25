@@ -1,0 +1,522 @@
+{
+  "version": "0.5.2",
+  "commits": [
+    "020c744f7988eafd2e24c64ba76c99e423eb6264",
+    "0793ae77b1aada234717ad83cd0d0bca8b8e8fdf"
+  ],
+  "runtime": {
+    "blender": "5.2.3 LTS",
+    "cpu": "Intel Core 7 240H",
+    "platform": "Windows",
+    "wheel": "outputs/wheels/v052/atlas_animation-0.5.2-py3-none-any.whl",
+    "installed_cli_providers": "outputs/installed-v052/providers.json"
+  },
+  "catalog_records": {
+    "blendkit": 1,
+    "polyhaven": 2389,
+    "sketchfab": 76
+  },
+  "polyhaven_acquisitions": [
+    {
+      "id": "polyhaven-boulder_01",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/boulder_01",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 5771986,
+      "transfer_seconds": 8.93,
+      "version": 1,
+      "sha256": "c616965bbb67e2bc2263f215ccb58966d250774757e55decd60e1191290d1601",
+      "profile": "static",
+      "triangles": 66122,
+      "textures": 3,
+      "dimensions_m": [
+        1.272135615348816,
+        1.830334186553955,
+        1.0038301944732666
+      ]
+    },
+    {
+      "id": "polyhaven-chinese_screen_panels",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/chinese_screen_panels",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 1692932,
+      "transfer_seconds": 5.55,
+      "version": 1,
+      "sha256": "4974b29a732daa62c85c0414c8ee1c6132da2bcc2610bb623632c332db0fe2b1",
+      "profile": "static",
+      "triangles": 784,
+      "textures": 3,
+      "dimensions_m": [
+        1.2939677238464355,
+        0.376891165971756,
+        1.6031262874603271
+      ]
+    },
+    {
+      "id": "polyhaven-cobblestone_05",
+      "kind": "material",
+      "source": "https://polyhaven.com/a/cobblestone_05",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 1181306,
+      "transfer_seconds": 6.41,
+      "fingerprint": "584e94a9af716611a1276f5c2df8901af8e05c0cdef9dc3128f3435199d87560"
+    },
+    {
+      "id": "polyhaven-dead_tree_trunk",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/dead_tree_trunk",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 4787539,
+      "transfer_seconds": 9.95,
+      "version": 1,
+      "sha256": "6d71aad27e7b68669122850a3154a1cd18c861497a25b040baa4d188025b93b1",
+      "profile": "static",
+      "triangles": 101802,
+      "textures": 3,
+      "dimensions_m": [
+        3.0510149002075195,
+        0.27752751111984253,
+        0.29043155908584595
+      ]
+    },
+    {
+      "id": "polyhaven-fern_02",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/fern_02",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 1146361,
+      "transfer_seconds": 4.48,
+      "version": 1,
+      "sha256": "68b47695e77263eaf2294ed7431255793b54fe5165aece19ace01637b24e6808",
+      "profile": "static",
+      "triangles": 6232,
+      "textures": 3,
+      "dimensions_m": [
+        1.9725297689437866,
+        1.7240276336669922,
+        0.427694708108902
+      ]
+    },
+    {
+      "id": "polyhaven-fir_sapling",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/fir_sapling",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 25423602,
+      "transfer_seconds": 29.95,
+      "version": 1,
+      "sha256": "c67552e2785244ad570fa7cddccd9d540ae04202b8a1014ce36ca1a12b5f71fa",
+      "profile": "pbr",
+      "triangles": 433021,
+      "textures": 6,
+      "dimensions_m": [
+        2.7427279949188232,
+        0.8264130353927612,
+        1.300737977027893
+      ]
+    },
+    {
+      "id": "polyhaven-forest_ground_04",
+      "kind": "material",
+      "source": "https://polyhaven.com/a/forest_ground_04",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 3068218,
+      "transfer_seconds": 3.32,
+      "fingerprint": "be3ab5251bc502d44a9114adaa95d23382796e930153c5b1bce9de27ed143c41"
+    },
+    {
+      "id": "polyhaven-gothic_statue",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/gothic_statue",
+      "license": "CC0-1.0",
+      "resolution": "2k",
+      "original_bytes": 11119654,
+      "transfer_seconds": 13.81,
+      "version": 1,
+      "sha256": "23c353ccd7f61b4b9e3df440252e455079c78547a8e95e994347206b0fb6b534",
+      "profile": "static",
+      "triangles": 27739,
+      "textures": 3,
+      "dimensions_m": [
+        1.477463960647583,
+        1.5637580156326294,
+        1.7398978471755981
+      ]
+    },
+    {
+      "id": "polyhaven-large_castle_door",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/large_castle_door",
+      "license": "CC0-1.0",
+      "resolution": "2k",
+      "original_bytes": 11539413,
+      "transfer_seconds": 13.75,
+      "version": 1,
+      "sha256": "df333dd0793d6a30b3bb545286d803969cc285914c335be4e32216c8f1ddeef8",
+      "profile": "static",
+      "triangles": 12640,
+      "textures": 3,
+      "dimensions_m": [
+        2.012115716934204,
+        0.29632624983787537,
+        2.964752435684204
+      ]
+    },
+    {
+      "id": "polyhaven-misty_pines",
+      "kind": "hdri",
+      "source": "https://polyhaven.com/a/misty_pines",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 1798128,
+      "transfer_seconds": 2.94,
+      "fingerprint": "338e7dfb2d5eb5684d330ae9287d3a714a0e9bd4a518231da7809d40f4e30be6"
+    },
+    {
+      "id": "polyhaven-modular_fort_01",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/modular_fort_01",
+      "license": "CC0-1.0",
+      "resolution": "2k",
+      "original_bytes": 37675856,
+      "transfer_seconds": 40.26,
+      "version": 1,
+      "sha256": "ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab",
+      "profile": "static",
+      "triangles": 28218,
+      "textures": 9,
+      "dimensions_m": [
+        42.66987991333008,
+        71.37529754638672,
+        13.67209243774414
+      ]
+    },
+    {
+      "id": "polyhaven-pine_roots",
+      "kind": "environment",
+      "source": "https://polyhaven.com/a/pine_roots",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 9702901,
+      "transfer_seconds": 14.31,
+      "version": 1,
+      "sha256": "11477e5f62dc6b7f6dea9d8ed6eaec41b88146c10175671bfde8264c1b1f4ac1",
+      "profile": "static",
+      "triangles": 162693,
+      "textures": 6,
+      "dimensions_m": [
+        1.772075891494751,
+        1.8930891752243042,
+        0.15480004251003265
+      ]
+    },
+    {
+      "id": "polyhaven-secluded_beach",
+      "kind": "hdri",
+      "source": "https://polyhaven.com/a/secluded_beach",
+      "license": "CC0-1.0",
+      "resolution": "1k",
+      "original_bytes": 1582472,
+      "transfer_seconds": 3.18,
+      "fingerprint": "711862cbe82a192545a0a689801d5c4ad143d35f2715bb061bb2db3fee5ca282"
+    }
+  ],
+  "fort_derivatives": [
+    {
+      "id": "fort-gate",
+      "version": 1,
+      "sha256": "0f8def41d37d09968caea07d4dcb9a2f59e8f79cda7ab1e1c6c3f4e5f46a8f1c",
+      "triangles": 1368,
+      "dimensions_m": [
+        2.6719698905944824,
+        7.4102373123168945,
+        8.616226196289062
+      ],
+      "source": "Derived root mesh 'modular_fort_01_wall_thin_gate_01' from polyhaven-modular_fort_01@1 (ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab). Removed the source display offset."
+    },
+    {
+      "id": "fort-wall",
+      "version": 1,
+      "sha256": "cef70e8f0049c7a12ccef339fb7315a007a1ec02c24c8f61840201ab543c477d",
+      "triangles": 1076,
+      "dimensions_m": [
+        2.5497798919677734,
+        14.819940567016602,
+        8.605535507202148
+      ],
+      "source": "Derived root mesh 'modular_fort_01_wall_thin_straight_01' from polyhaven-modular_fort_01@1 (ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab). Removed the source display offset."
+    },
+    {
+      "id": "fort-tower",
+      "version": 1,
+      "sha256": "31710861403d8491c94025f435c897d08682a875044749c1150208f2feae8cd8",
+      "triangles": 4772,
+      "dimensions_m": [
+        15.838444709777832,
+        15.838444709777832,
+        13.498151779174805
+      ],
+      "source": "Derived root mesh 'modular_fort_01_tower_round' from polyhaven-modular_fort_01@1 (ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab). Removed the source display offset."
+    },
+    {
+      "id": "fort-stairs",
+      "version": 1,
+      "sha256": "bf9784aa0aa3f26547072d3e80836ba5878054acb8860aa9a3247d117017544b",
+      "triangles": 1196,
+      "dimensions_m": [
+        3.538637161254883,
+        14.819400787353516,
+        7.53277587890625
+      ],
+      "source": "Derived root mesh 'modular_fort_01_wall_stairs_straight_01' from polyhaven-modular_fort_01@1 (ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab). Removed the source display offset."
+    }
+  ],
+  "blendkit_acquisition": {
+    "id": "blendkit-small-wooden-table",
+    "version": 1,
+    "sha256": "270f44a98df931cde535ca4404d1ce1da03524491e16e5a97b794c5902b04c0f",
+    "licensed_gallery": "https://www.blendkit.com/asset-gallery-detail/e1901884-2e47-4a82-8a2e-bfd573200c6f/",
+    "license": "CC0-1.0",
+    "official_source_sha256": "07767225bdefb5abf7a69155df97b7714ca11717cf16c9cde08350bea5fd90c0",
+    "official_source_bytes": 11093631,
+    "staged_native_bytes": 11950739,
+    "receipt": "outputs/blendkit-addon-smoke/table-cli-receipt.json",
+    "thumbnail": "outputs/v052-library/thumbnails/d06e9c5501644d02b252e3cb3550baff/thumbnail.png"
+  },
+  "sketchfab": {
+    "configured_authorization": false,
+    "live_authorized_downloads": 0,
+    "public_queries": [
+      "castle",
+      "South Asian temple",
+      "ancient Asian architecture"
+    ]
+  },
+  "selection": {
+    "command_report": "outputs/v052-selection.json",
+    "candidates": [
+      {
+        "id": "polyhaven-modular_fort_01",
+        "provider": "polyhaven",
+        "name": "Modular Fort 01",
+        "status": "ready",
+        "style": "photorealistic",
+        "quality": "high",
+        "license_id": "CC0-1.0",
+        "source_url": "https://polyhaven.com/a/modular_fort_01",
+        "category_path": "Architecture/Facades & Modules/Fortifications",
+        "pin": {
+          "id": "polyhaven-modular_fort_01",
+          "version": 1,
+          "sha256": "ce02a8ba504a0b2ffdae442b7f3cc6c2e1ceb2cacda9b4bcbb3ca17b887913ab"
+        },
+        "polygon_count": 28218,
+        "texture_count": 9,
+        "reasons": []
+      }
+    ]
+  },
+  "voice": {
+    "method": "local Chatterbox-Turbo CPU",
+    "wav": {
+      "duration_seconds": 7.07,
+      "sample_rate": 24000,
+      "channels": 1,
+      "sample_width": 2,
+      "frames": 169680,
+      "peak": 0.350067138671875,
+      "clipped_samples": 0,
+      "sha256": "6390d32a1a44d795e98943c496eb4f7f18b216a051375f4b344cf7a47e8943f3"
+    },
+    "total_seconds": 34.56164679999347,
+    "cue_count": 45
+  },
+  "storage_bytes": {
+    "provider_blobs": 116490368,
+    "registered_glb": 293182768,
+    "private_native_staging": 11950739
+  },
+  "tests": {
+    "direct_baseline": {
+      "path": "outputs/v052-baseline.xml",
+      "passed": 242,
+      "failed": 1,
+      "skipped": 1,
+      "seconds": 256.022
+    },
+    "provider_tests": {
+      "path": "outputs/v052-provider-tests.xml",
+      "passed": 53,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 15.162
+    },
+    "focused_post_review": {
+      "path": "outputs/v052-post-review-tests.xml",
+      "passed": 56,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 172.772
+    },
+    "full": {
+      "path": "outputs/v052-final-tests.xml",
+      "passed": 293,
+      "failed": 0,
+      "skipped": 1,
+      "seconds": 479.775
+    }
+  },
+  "production_jobs": {
+    "woodland": {
+      "job": "outputs/v052-renders/photo-woodland-b50c72bc390c415e8246798d3f638234",
+      "video": "outputs/v052-renders/photo-woodland-b50c72bc390c415e8246798d3f638234/video.mp4",
+      "verified": {
+        "width": 400,
+        "height": 226,
+        "frames": 24,
+        "fps": 12.0,
+        "duration": 2.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "6cec775f9be1cbe23fcb93f2b818cdbf7c7f6270ccd1c9e8db4c15568dad16f5"
+      },
+      "scene": "outputs/v052-renders/photo-woodland-b50c72bc390c415e8246798d3f638234/scene.blend",
+      "manifest": "outputs/v052-renders/photo-woodland-b50c72bc390c415e8246798d3f638234/manifest.json",
+      "source_sha256": "f9d708d4dee159c8ab583354fdca45bb53471641454ff0bf1a6557e4202752de",
+      "version": "0.5.2",
+      "seconds": 180.33,
+      "renderer": "CYCLES",
+      "video_credits": "outputs/v052-renders/photo-woodland-b50c72bc390c415e8246798d3f638234/video-credits.txt",
+      "representative_frame": "docs/evidence/v052_woodland.jpg"
+    },
+    "fort": {
+      "job": "outputs/v052-renders/fort-approach-8a309f47f664486684355f60be1fa99e",
+      "video": "outputs/v052-renders/fort-approach-8a309f47f664486684355f60be1fa99e/video.mp4",
+      "verified": {
+        "width": 432,
+        "height": 244,
+        "frames": 94,
+        "fps": 12.0,
+        "duration": 7.833333,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 2,
+          "duration": 7.833,
+          "start_time": 0.0
+        },
+        "sha256": "33b2cd8d6f6be3dd36a2cbb357a7240fdaad36b60e1f54eca267b5a3ef0da8e4"
+      },
+      "scene": "outputs/v052-renders/fort-approach-8a309f47f664486684355f60be1fa99e/scene.blend",
+      "manifest": "outputs/v052-renders/fort-approach-8a309f47f664486684355f60be1fa99e/manifest.json",
+      "source_sha256": "f9d708d4dee159c8ab583354fdca45bb53471641454ff0bf1a6557e4202752de",
+      "version": "0.5.2",
+      "seconds": 410.28,
+      "renderer": "CYCLES",
+      "reopened": {
+        "curator": {
+          "body_action": "HumanIdle",
+          "peak_viseme": 0.8500000238418579,
+          "peak_jaw": 0.20000000298023224,
+          "peak_head_delta_radians": 0.0349799282848835,
+          "blink_samples": [
+            {
+              "frame": 22,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 55,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            },
+            {
+              "frame": 77,
+              "values": [
+                0.949999988079071,
+                0.949999988079071
+              ]
+            }
+          ],
+          "audio_id": "fort-line",
+          "cues": 45,
+          "audio_sha256": "6390d32a1a44d795e98943c496eb4f7f18b216a051375f4b344cf7a47e8943f3"
+        }
+      },
+      "video_credits": "outputs/v052-renders/fort-approach-8a309f47f664486684355f60be1fa99e/video-credits.txt"
+    },
+    "fort_still": {
+      "job": "outputs/v052-renders/fort-cinematic-still-addd3835b7f44a08ad49a9fa3220b350",
+      "video": "outputs/v052-renders/fort-cinematic-still-addd3835b7f44a08ad49a9fa3220b350/video.mp4",
+      "verified": {
+        "width": 960,
+        "height": 540,
+        "frames": 1,
+        "fps": 24.0,
+        "duration": 0.041667,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "479a0c2aae3c041834e5f8a5e258e8dde53137fe4a967891678a48369807957d"
+      },
+      "scene": "outputs/v052-renders/fort-cinematic-still-addd3835b7f44a08ad49a9fa3220b350/scene.blend",
+      "manifest": "outputs/v052-renders/fort-cinematic-still-addd3835b7f44a08ad49a9fa3220b350/manifest.json",
+      "source_sha256": "8e9581053e86ed712259e1fc81ea77a577023fb18d6a42e48070c313d66036a3",
+      "version": "0.5.2",
+      "seconds": 47.38,
+      "renderer": "CYCLES",
+      "video_credits": "outputs/v052-renders/fort-cinematic-still-addd3835b7f44a08ad49a9fa3220b350/video-credits.txt",
+      "representative_frame": "docs/evidence/v052_fort.jpg"
+    },
+    "blendkit": {
+      "job": "outputs/v052-renders/blendkit-table-9f2a1609f8c443f3a5cac174d2425461",
+      "video": "outputs/v052-renders/blendkit-table-9f2a1609f8c443f3a5cac174d2425461/video.mp4",
+      "verified": {
+        "width": 360,
+        "height": 202,
+        "frames": 24,
+        "fps": 12.0,
+        "duration": 2.0,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "sha256": "49e67610626b409f34e74dc478a2fba17c59ea5635b28c63354aa19faff4730a"
+      },
+      "scene": "outputs/v052-renders/blendkit-table-9f2a1609f8c443f3a5cac174d2425461/scene.blend",
+      "manifest": "outputs/v052-renders/blendkit-table-9f2a1609f8c443f3a5cac174d2425461/manifest.json",
+      "source_sha256": "8e9581053e86ed712259e1fc81ea77a577023fb18d6a42e48070c313d66036a3",
+      "version": "0.5.2",
+      "seconds": 48.88,
+      "renderer": "BLENDER_EEVEE",
+      "reopened": {
+        "blender_version": "5.2.3 LTS",
+        "triangles": 3410,
+        "material": "small_wooden_table_01",
+        "uv_sets": 1,
+        "surface_channels": [
+          "Base Color",
+          "Metallic",
+          "Roughness",
+          "Normal"
+        ],
+        "packed_texture_count": 3,
+        "camera_travel_meters": 0.4031129308490721,
+        "linked_library_count": 0
+      },
+      "video_credits": "outputs/v052-renders/blendkit-table-9f2a1609f8c443f3a5cac174d2425461/video-credits.txt",
+      "representative_frame": "docs/evidence/v052_blendkit.jpg"
+    }
+  }
+}

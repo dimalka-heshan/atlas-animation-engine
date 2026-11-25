@@ -2,6 +2,8 @@
 
 ATLAS 0.3 adds directory inventory, reviewed batch import and verified thumbnails to local registration, immutable provenance versions, deterministic search, Blender inspection and reusable static GLB instances. Primitive-only schema 1.0 and asset schema 1.1 projects remain supported.
 
+In V0.5.2, `assets select` ranks eligible models and reports rejection reasons. `assets derive-module` selects one named root mesh from an inspected static kit, removes its presentation translation, and registers and inspects the standalone piece. Use `assets import-blendkit` for approved native collections. The `pbr` GLB profile extends static registration with bounded IOR and specular values. [Verification and commands](V052_DEMOS.md)
+
 ## Try the bundled original fixture
 
 The committed `assets/fixtures/lantern.glb` is generated entirely from local primitive geometry. It contains no downloaded asset or texture. Its sidecar identifies the source generator and the rendering permission for this project. The `assets/library/` registry is local state and is ignored by Git.

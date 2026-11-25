@@ -1,6 +1,6 @@
 # ATLAS
 
-A local, configuration-driven Blender animation engine. Version 0.5.1 adds programmatic MPFB character generation, audio-driven human faces, photogrammetry and historical assets, and reusable Blender quality profiles. Start with the [V0.5.1 reproduction guide](docs/V051_DEMOS.md).
+A local, configuration-driven Blender animation engine. Version 0.5.2 adds Sketchfab discovery and OAuth, reviewed Blendkit native import, expanded Poly Haven models, and selection based on verified asset quality. Start with [V0.5.2 setup and renders](docs/V052_DEMOS.md). [MPFB character generation and local voice](docs/V051_DEMOS.md) remain available.
 
 Change JSON to produce a different video. No paid AI, browser service or coding assistant is required during production. Voice generation uses a separately installed local model. This is a working foundation; the full studio roadmap remains incomplete.
 

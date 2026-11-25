@@ -4,6 +4,8 @@
 
 `apps/cli` loads JSON -> `engine/core/models.py` validates a Project -> `engine/worlds/placement.py` expands deterministic scatter -> `engine/rendering/pipeline.py` persists a job and calls the Blender worker -> `engine/rendering/video.py` encodes and checks the result -> `engine/storage/jobs.py` records status and atomically writes the manifest.
 
+V0.5.2 stores discovery rows and approved production versions in their existing separate SQLite databases. The selector joins them by identity and checks local hashes and inspection proofs before returning a pin. A separate optical PBR profile admits two bounded, parameter-only material extensions. Blendkit native conversion runs in a fresh offline Blender profile, then registers a standalone GLB through the existing static pipeline. The job snapshots assets, media and video credits before production.
+
 The host runs Python/Pydantic; Blender runs trusted stdlib + bpy entrypoints. Blender needs no pip packages. Portable models never import bpy. No generated script or expression from project JSON is executed. Blender is the sole 3D execution and rendering backend. Portable validated models remain independent of bpy for testing and orchestration, not for a planned second renderer.
 
 ## Public interfaces

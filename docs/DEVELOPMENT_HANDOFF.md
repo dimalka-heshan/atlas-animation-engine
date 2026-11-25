@@ -1,6 +1,8 @@
 # Development handoff — ATLAS 0.5
 
-Repository C:/Dimalka/yt/blender. V0.5 branch codex/atlas-v05, based on V0.4 commit 48112b2. Use STATUS for measured outcomes, ACQUISITION for exact starter commands, CHARACTERS for rig schema and V05_DEMOS for production commands. Existing videos, original speech and model downloads are local outputs kept outside Git.
+Repository `C:/Dimalka/yt/blender`. For the current V0.5.2 implementation and fixtures, use [the delivery report](V052_REPORT.md) and [reproduction guide](V052_DEMOS.md). `engine/assets/sketchfab.py` owns authorized HTTPS and OAuth. `engine/assets/blendkit.py` and `engine/adapters/blender/convert_native.py` own user-mediated licensed conversion. `engine/assets/selection.py` ranks pinned candidates using the provider catalog and Blender-measured quality. Downloaded sources, voice weights, editable native assets and videos stay in local `outputs/`.
+
+The rest of this handoff records the V0.5 baseline and the proposed navigation slice.
 
 ## Working interfaces
 

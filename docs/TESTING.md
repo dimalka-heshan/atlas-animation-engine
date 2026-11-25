@@ -1,5 +1,7 @@
 # Testing
 
+V0.5.2 provider tests use offline HTTP and archive fixtures by default. `ATLAS_INTEGRATION=1` runs the native conversion tests with real Blender, including packed image and material retention, rejected input, and saved-scene verification. The delivery report records separate permitted live discovery, actual acquisitions, and demo jobs. [V0.5.2 results](V052_REPORT.md)
+
 ## Commands
 
 ```powershell

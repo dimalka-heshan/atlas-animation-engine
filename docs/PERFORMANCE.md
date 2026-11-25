@@ -1,5 +1,7 @@
 # Performance evidence
 
+See [V0.5.2 measured performance](V052_REPORT.md) for provider transfers, the photographic woodland, Blendkit interior and narrated fort. Cycles on CPU gave more consistent preview throughput than concurrent Eevee jobs on the integrated GPU during the new production tests.
+
 Measured on 2026-11-23 (user date), Windows 11 Pro 64-bit, Intel Core 7 240H with 16 logical CPUs, 33,271,672 KiB visible RAM (~31.73 GiB), Intel integrated Graphics. Windows reports ~2 GiB adapter memory; that value is not a measurement of usable shared GPU memory.
 
 Runtime: Python 3.14.6, Pydantic 2.14.4, Blender 5.2.3 LTS (e13b728c6880), FFmpeg/ffprobe N-123395-gb66c314c4b-20260312. Python dependencies are pinned in `requirements-tested.txt`; full executable versions and configuration hashes are in the manifests and [evidence JSON](evidence/2026-11-23-renders.json).

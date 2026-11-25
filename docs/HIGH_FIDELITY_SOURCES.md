@@ -1,5 +1,7 @@
 # High-fidelity source assets
 
+V0.5.2 added authorized Sketchfab metadata discovery and a reviewed Blendkit Free-plan CC0 import path. Current coverage includes 2,389 Poly Haven catalog records, measured variant sizes and verified model acquisition from architecture and nature categories. See the [V0.5.2 delivery report](V052_REPORT.md), [Sketchfab](SKETCHFAB.md), and [Blendkit](BLENDKIT.md).
+
 ATLAS 0.5.1 indexes Poly Haven models, HDRIs and textures, ambientCG materials, and a reviewed historical object from Smithsonian Open Access. Catalog synchronization stores metadata locally. The download command fetches one selected source and requires an explicit network call. GLB registry versions require Blender inspection before use in a render.
 
 | Source | Derivatives | License evidence |
