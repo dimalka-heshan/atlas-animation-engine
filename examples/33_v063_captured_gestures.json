@@ -1,0 +1,411 @@
+{
+  "schema_version": "1.6",
+  "id": "captured-conversational-gestures",
+  "scene": {
+    "environment": {
+      "ground_size": 86,
+      "background": [
+        0.06,
+        0.08,
+        0.12
+      ],
+      "strength": 0.68,
+      "ground_material": {
+        "color": [
+          0.12,
+          0.16,
+          0.18
+        ],
+        "roughness": 0.8
+      }
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.8,
+          -4.7,
+          4.5
+        ],
+        "target": [
+          0,
+          -0.5,
+          1.2
+        ],
+        "energy": 430,
+        "size": 4.3,
+        "temperature_kelvin": 5250
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          1.2,
+          3.4,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          0.8
+        ],
+        "energy": 220,
+        "size": 3.0,
+        "temperature_kelvin": 6600
+      }
+    ],
+    "camera": {
+      "location": [
+        0.86,
+        -5.4,
+        1.5
+      ],
+      "target": [
+        0.05,
+        0,
+        1.0
+      ],
+      "lens": 47
+    },
+    "entities": [
+      {
+        "id": "curator",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          -0.55,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "HumanIdle",
+            "start_frame": 1,
+            "frame_count": 76,
+            "loop": true
+          },
+          {
+            "name": "curator-cmu-point",
+            "motion": {
+              "id": "curator-cmu-point",
+              "sha256": "1c0e23e0d595ee1e293f73fcfc703b33b51f2aa33707bd39370ed0e54d13cd76"
+            },
+            "start_frame": 10,
+            "frame_count": 31,
+            "loop": false,
+            "overlay": true,
+            "blend_frames": 3,
+            "blend_out_frames": 3
+          }
+        ]
+      },
+      {
+        "id": "scholar",
+        "asset": {
+          "id": "mpfb-scholar",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          0.77,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "HumanIdle",
+            "start_frame": 1,
+            "frame_count": 76,
+            "loop": true
+          },
+          {
+            "name": "scholar-cmu-wave",
+            "motion": {
+              "id": "scholar-cmu-wave",
+              "sha256": "d11898cb9d7a4b23f0d1ee7c0823cd979bf2fc6a9149233d374bf8f3ad5afd83"
+            },
+            "start_frame": 11,
+            "frame_count": 23,
+            "loop": false,
+            "overlay": true,
+            "blend_frames": 3,
+            "blend_out_frames": 3
+          }
+        ]
+      }
+    ]
+  },
+  "render": {
+    "width": 288,
+    "height": 180,
+    "frames": 76,
+    "fps": 10,
+    "samples": 1,
+    "threads": 4
+  },
+  "audio": [
+    {
+      "id": "explanation",
+      "clip": {
+        "id": "fort-line",
+        "version": 1
+      },
+      "role": "dialogue",
+      "speaker": "curator",
+      "start_seconds": 0.3
+    }
+  ],
+  "performances": [
+    {
+      "actor_id": "curator",
+      "audio_event_id": "explanation",
+      "profile": "mpfb-visemes-1",
+      "blink_frames": [
+        17,
+        43,
+        68
+      ],
+      "timeline": {
+        "audio_sha256": "6390d32a1a44d795e98943c496eb4f7f18b216a051375f4b344cf7a47e8943f3",
+        "duration_seconds": 7.07,
+        "cues": [
+          {
+            "start": 0.0,
+            "end": 0.05,
+            "value": "X"
+          },
+          {
+            "start": 0.05,
+            "end": 0.26,
+            "value": "B"
+          },
+          {
+            "start": 0.26,
+            "end": 0.33,
+            "value": "E"
+          },
+          {
+            "start": 0.33,
+            "end": 0.4,
+            "value": "F"
+          },
+          {
+            "start": 0.4,
+            "end": 0.61,
+            "value": "C"
+          },
+          {
+            "start": 0.61,
+            "end": 0.75,
+            "value": "B"
+          },
+          {
+            "start": 0.75,
+            "end": 0.83,
+            "value": "A"
+          },
+          {
+            "start": 0.83,
+            "end": 0.9,
+            "value": "D"
+          },
+          {
+            "start": 0.9,
+            "end": 1.17,
+            "value": "B"
+          },
+          {
+            "start": 1.17,
+            "end": 1.38,
+            "value": "C"
+          },
+          {
+            "start": 1.38,
+            "end": 1.45,
+            "value": "E"
+          },
+          {
+            "start": 1.45,
+            "end": 1.52,
+            "value": "F"
+          },
+          {
+            "start": 1.52,
+            "end": 1.59,
+            "value": "C"
+          },
+          {
+            "start": 1.59,
+            "end": 1.66,
+            "value": "B"
+          },
+          {
+            "start": 1.66,
+            "end": 1.74,
+            "value": "A"
+          },
+          {
+            "start": 1.74,
+            "end": 1.87,
+            "value": "D"
+          },
+          {
+            "start": 1.87,
+            "end": 2.01,
+            "value": "B"
+          },
+          {
+            "start": 2.01,
+            "end": 2.15,
+            "value": "G"
+          },
+          {
+            "start": 2.15,
+            "end": 2.22,
+            "value": "B"
+          },
+          {
+            "start": 2.22,
+            "end": 2.3,
+            "value": "A"
+          },
+          {
+            "start": 2.3,
+            "end": 2.49,
+            "value": "E"
+          },
+          {
+            "start": 2.49,
+            "end": 2.84,
+            "value": "F"
+          },
+          {
+            "start": 2.84,
+            "end": 3.4,
+            "value": "X"
+          },
+          {
+            "start": 3.4,
+            "end": 3.44,
+            "value": "G"
+          },
+          {
+            "start": 3.44,
+            "end": 3.48,
+            "value": "B"
+          },
+          {
+            "start": 3.48,
+            "end": 3.56,
+            "value": "A"
+          },
+          {
+            "start": 3.56,
+            "end": 3.9,
+            "value": "B"
+          },
+          {
+            "start": 3.9,
+            "end": 3.97,
+            "value": "F"
+          },
+          {
+            "start": 3.97,
+            "end": 4.11,
+            "value": "C"
+          },
+          {
+            "start": 4.11,
+            "end": 4.46,
+            "value": "B"
+          },
+          {
+            "start": 4.46,
+            "end": 4.53,
+            "value": "C"
+          },
+          {
+            "start": 4.53,
+            "end": 4.6,
+            "value": "H"
+          },
+          {
+            "start": 4.6,
+            "end": 4.74,
+            "value": "C"
+          },
+          {
+            "start": 4.74,
+            "end": 4.95,
+            "value": "B"
+          },
+          {
+            "start": 4.95,
+            "end": 5.3,
+            "value": "E"
+          },
+          {
+            "start": 5.3,
+            "end": 5.44,
+            "value": "B"
+          },
+          {
+            "start": 5.44,
+            "end": 5.52,
+            "value": "A"
+          },
+          {
+            "start": 5.52,
+            "end": 5.76,
+            "value": "C"
+          },
+          {
+            "start": 5.76,
+            "end": 5.97,
+            "value": "B"
+          },
+          {
+            "start": 5.97,
+            "end": 6.11,
+            "value": "F"
+          },
+          {
+            "start": 6.11,
+            "end": 6.39,
+            "value": "E"
+          },
+          {
+            "start": 6.39,
+            "end": 6.46,
+            "value": "B"
+          },
+          {
+            "start": 6.46,
+            "end": 6.53,
+            "value": "D"
+          },
+          {
+            "start": 6.53,
+            "end": 6.74,
+            "value": "B"
+          },
+          {
+            "start": 6.74,
+            "end": 7.07,
+            "value": "X"
+          }
+        ],
+        "method": "rhubarb",
+        "version": "1.14.0",
+        "transcript_sha256": "36ae0284f7434cb1a9ae79998dac4fb00833af731eb70ee38a3b220f19b5527b",
+        "executable_sha256": "9e289c6b5939ef6b306a61e8105ec721fd8d52b3ce950d08891ea3cc7df5718d"
+      }
+    }
+  ]
+}

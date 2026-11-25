@@ -87,6 +87,8 @@ def compile_movement(project, motions):
         if len(points) > 256:
             raise ValueError("Movement route exceeds 256 path knots")
         record = motions[action.motion.id, action.motion.sha256][1]
+        if record.get("source", {}).get("family") == "cmu-motionbuilder-bvh":
+            raise ValueError(f"Movement requires a qualified gait loop. Use uncycled capture {action.motion.id} as a one-shot clip.")
         speed = record["bake"]["metrics"].get("calibrated_speed_mps")
         expected = "run" if action.kind == "run_to" else "walk"
         if record["category"] != expected or not speed or not .25 <= speed <= 8:

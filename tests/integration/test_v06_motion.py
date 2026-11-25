@@ -22,8 +22,14 @@ def test_licensed_walk_bake_routes_and_reopens(tmp_path):
     args = ("kaykit-knight", "Walking_A", "mpfb-curator", "walk", source, library, cache)
     motion = retarget(*args)
     assert not motion["cache_hit"] and retarget(*args)["cache_hit"]
+    assert motion["profile"] == "atlas-motion-2" and not motion["legacy"]
     assert motion["metrics"]["root_type"] == "in-place"
     assert max(map(abs, motion["metrics"]["post_ground_z_range_m"])) < 1e-4
+    for arm in motion["metrics"]["arm_angle_ranges"].values():
+        assert arm["lateral_deg"][1] < 17
+        assert arm["wrist_deg"][1] < 22
+        assert arm["elbow_deg"][1] - arm["elbow_deg"][0] > 3
+    assert max(motion["metrics"]["peak_joint_step_deg"].values()) < 20
     project = Project.model_validate({"schema_version": "1.5", "id": "motion-proof",
         "render": {"width": 64, "height": 64, "samples": 1, "frames": 14, "fps": 10},
         "scene": {"entities": [{"id": "hero", "asset": {"id": "mpfb-curator", "version": 1},

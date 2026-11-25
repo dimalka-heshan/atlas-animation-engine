@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.6",
+  "id": "anatomical-walk-comparison",
+  "scene": {
+    "environment": {
+      "ground_size": 86,
+      "background": [
+        0.06,
+        0.08,
+        0.12
+      ],
+      "strength": 0.68,
+      "ground_material": {
+        "color": [
+          0.12,
+          0.16,
+          0.18
+        ],
+        "roughness": 0.8
+      }
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.8,
+          -4.7,
+          4.5
+        ],
+        "target": [
+          0,
+          -0.5,
+          1.2
+        ],
+        "energy": 430,
+        "size": 4.3,
+        "temperature_kelvin": 5250
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          1.2,
+          3.4,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          0.8
+        ],
+        "energy": 220,
+        "size": 3.0,
+        "temperature_kelvin": 6600
+      }
+    ],
+    "camera": {
+      "location": [
+        0,
+        -5.4,
+        1.32
+      ],
+      "target": [
+        0,
+        0,
+        0.91
+      ],
+      "lens": 43
+    },
+    "entities": [
+      {
+        "id": "legacy",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          -0.69,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "curator-walk",
+            "motion": {
+              "id": "curator-walk",
+              "sha256": "59b9aac5aa85108d548eb6ecba4eed9e38cf4df92eeb00a1486954af21e3b840"
+            },
+            "start_frame": 1,
+            "frame_count": 34,
+            "loop": true
+          }
+        ]
+      },
+      {
+        "id": "corrected",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          0.69,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "curator-walk",
+            "motion": {
+              "id": "curator-walk",
+              "sha256": "b7b266b379163f7b0b734fcf42ef50dc25bed08689d9060067f516e16ffc753a"
+            },
+            "start_frame": 1,
+            "frame_count": 34,
+            "loop": true
+          }
+        ]
+      }
+    ]
+  },
+  "render": {
+    "width": 336,
+    "height": 208,
+    "samples": 2,
+    "frames": 34,
+    "fps": 24,
+    "threads": 4,
+    "engine": "cycles"
+  }
+}

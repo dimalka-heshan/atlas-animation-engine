@@ -4,7 +4,7 @@ from pathlib import Path
 from engine.assets.registry import AssetRegistry
 from engine.storage.jobs import contained_path
 from engine.characters.mpfb import HumanSpec, generate, install_runtime
-from engine.characters.motion import load_motion, motions, retarget, summarize
+from engine.characters.motion import load_motion, motions, retarget, retarget_cmu, summarize
 
 
 def add_character_commands(subparsers):
@@ -13,6 +13,7 @@ def add_character_commands(subparsers):
     motion_list = motion_commands.add_parser("list")
     motion_list.add_argument("--category", choices=["idle", "walk", "run", "sit", "gesture"])
     motion_list.add_argument("--query", default="")
+    motion_list.add_argument("--include-legacy", action="store_true")
     motion_inspect = motion_commands.add_parser("inspect")
     motion_inspect.add_argument("id")
     motion_inspect.add_argument("sha256")
@@ -42,7 +43,16 @@ def add_character_commands(subparsers):
             transfer.add_argument("--motion-cache", type=Path, default=Path("assets/motions"))
             transfer.add_argument("--category", choices=["idle", "walk", "run", "sit", "gesture"], default="walk")
             transfer.add_argument("--no-ground", action="store_true")
+            transfer.add_argument("--refinement", choices=["category", "none"], default="category")
             transfer.add_argument("--blender", type=Path)
+            capture = commands.add_parser("retarget-cmu", help="bake a reviewed CMU MotionBuilder BVH onto MPFB")
+            capture.add_argument("source", type=Path)
+            capture.add_argument("target")
+            capture.add_argument("--id", required=True)
+            capture.add_argument("--target-version", type=int, default=1)
+            capture.add_argument("--library", type=Path, default=Path("assets/library"))
+            capture.add_argument("--motion-cache", type=Path, default=Path("assets/motions"))
+            capture.add_argument("--blender", type=Path)
             inspect.add_argument("clip")
             check = commands.add_parser("compatibility")
             check.add_argument("character")
@@ -69,10 +79,12 @@ def add_character_commands(subparsers):
 def run_character_command(args):
     if args.command == "motions":
         if args.rig_command == "providers":
-            return [{"id": "kaykit", "license": "CC0-1.0", "format": "inspected-rigged-glb",
+            return [{"id": "kaykit", "license": "CC0-1.0", "format": "inspected-rigged-glb", "target": "mpfb-game-engine"},
+                    {"id": "cmu", "license": "LicenseRef-CMU-Mocap", "format": "reviewed-motionbuilder-bvh",
                      "target": "mpfb-game-engine"}]
         if args.rig_command == "list":
-            return [row for row in motions(args.motion_cache) if (not args.category or row["category"] == args.category)
+            return [row for row in motions(args.motion_cache, include_legacy=args.include_legacy)
+                    if (not args.category or row["category"] == args.category)
                     and args.query.casefold() in (row["motion"]["id"] + " " + row["source"]["clip"]).casefold()]
         pin = {"id": args.id, "sha256": args.sha256}
         record, _ = load_motion(args.motion_cache, pin)
@@ -80,7 +92,10 @@ def run_character_command(args):
     if args.rig_command == "retarget":
         return retarget(args.source, args.clip, args.target, args.id, args.source_library, args.library,
                         args.motion_cache, source_version=args.source_version, target_version=args.target_version,
-                        category=args.category, ground=not args.no_ground, blender=args.blender)
+                        category=args.category, ground=not args.no_ground, refinement=args.refinement, blender=args.blender)
+    if args.rig_command == "retarget-cmu":
+        return retarget_cmu(args.source, args.target, args.id, args.library, args.motion_cache,
+                            target_version=args.target_version, blender=args.blender)
     if args.rig_command == "install-mpfb":
         return install_runtime(args.runtime, blender=args.blender)
     if args.rig_command == "generate":

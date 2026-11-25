@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.6",
+  "id": "anatomical-motion-sampler",
+  "scene": {
+    "environment": {
+      "ground_size": 86,
+      "background": [
+        0.06,
+        0.08,
+        0.12
+      ],
+      "strength": 0.68,
+      "ground_material": {
+        "color": [
+          0.12,
+          0.16,
+          0.18
+        ],
+        "roughness": 0.8
+      }
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.8,
+          -4.7,
+          4.5
+        ],
+        "target": [
+          0,
+          -0.5,
+          1.2
+        ],
+        "energy": 430,
+        "size": 4.3,
+        "temperature_kelvin": 5250
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          1.2,
+          3.4,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          0.8
+        ],
+        "energy": 220,
+        "size": 3.0,
+        "temperature_kelvin": 6600
+      }
+    ],
+    "camera": {
+      "location": [
+        3.65,
+        -5.85,
+        1.32
+      ],
+      "target": [
+        0,
+        0,
+        0.91
+      ],
+      "lens": 48
+    },
+    "entities": [
+      {
+        "id": "curator",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          -0.68,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "curator-idle",
+            "motion": {
+              "id": "curator-idle",
+              "sha256": "4360e6ce45dcc7af40852c3fb126893f6463d8f772740b95aa8ea28d0cd085f4"
+            },
+            "start_frame": 1,
+            "frame_count": 17,
+            "loop": true
+          },
+          {
+            "name": "curator-walk",
+            "motion": {
+              "id": "curator-walk",
+              "sha256": "b7b266b379163f7b0b734fcf42ef50dc25bed08689d9060067f516e16ffc753a"
+            },
+            "start_frame": 18,
+            "frame_count": 20,
+            "loop": true
+          },
+          {
+            "name": "curator-run",
+            "motion": {
+              "id": "curator-run",
+              "sha256": "5fc76f50933287125b7d0ac0be397e9b0d4c1fa6f88808f6b74058c7b1115767"
+            },
+            "start_frame": 38,
+            "frame_count": 24,
+            "loop": true
+          },
+          {
+            "name": "curator-sit",
+            "motion": {
+              "id": "curator-sit",
+              "sha256": "04266bbae7e9117dc349edacd3581cb589c103f2ba62ab1c8916e0f9bb9dfa52"
+            },
+            "start_frame": 62,
+            "frame_count": 19,
+            "loop": false
+          },
+          {
+            "name": "curator-stand",
+            "motion": {
+              "id": "curator-stand",
+              "sha256": "ae4efad5cd53a9231caa8e2538ef1a08e4bcf5e83e19acbae66130ac8942b07c"
+            },
+            "start_frame": 81,
+            "frame_count": 19,
+            "loop": false
+          },
+          {
+            "name": "curator-gesture",
+            "motion": {
+              "id": "curator-gesture",
+              "sha256": "31fc4c05ce960a40def79e399a48e0d65e235a2b6392b846a57b8a9bcc4a253f"
+            },
+            "start_frame": 100,
+            "frame_count": 38,
+            "loop": false
+          }
+        ]
+      },
+      {
+        "id": "scholar",
+        "asset": {
+          "id": "mpfb-scholar",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          0.73,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "scholar-cmu-wave",
+            "motion": {
+              "id": "scholar-cmu-wave",
+              "sha256": "d11898cb9d7a4b23f0d1ee7c0823cd979bf2fc6a9149233d374bf8f3ad5afd83"
+            },
+            "start_frame": 1,
+            "frame_count": 58,
+            "loop": false
+          },
+          {
+            "name": "scholar-reach",
+            "motion": {
+              "id": "scholar-reach",
+              "sha256": "eb8c2a34872c9f645428dc0278db65929cf87cf4b34ed55a2b0bfe1045c04b68"
+            },
+            "start_frame": 59,
+            "frame_count": 26,
+            "loop": false
+          },
+          {
+            "name": "scholar-cmu-walk",
+            "motion": {
+              "id": "scholar-cmu-walk",
+              "sha256": "116bd29ed6eba5754ec61ea2749e9fd8a8c413606d9a08bf07b56b9878d8c743"
+            },
+            "start_frame": 85,
+            "frame_count": 53,
+            "loop": false
+          }
+        ]
+      }
+    ]
+  },
+  "render": {
+    "width": 288,
+    "height": 180,
+    "samples": 1,
+    "frames": 137,
+    "fps": 24,
+    "threads": 4,
+    "engine": "cycles"
+  }
+}

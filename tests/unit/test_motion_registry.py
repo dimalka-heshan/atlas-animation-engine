@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import pytest
 
 from engine.assets.registry import file_hash
-from engine.characters.motion import load_motion, resolve_motions, snapshot_motions, store_motion
+from engine.characters.motion import load_motion, motions, resolve_motions, snapshot_motions, store_motion
 from engine.core.models import MotionPin
 
 
@@ -36,3 +36,13 @@ def test_snapshot_retains_both_aliases_and_copies_shared_blob_once(tmp_path):
     snapshots = snapshot_motions(resolve_motions(project, cache), job)
     assert [entry["motion"] for entry in snapshots] == [first, second]
     assert len(list((job / "motions").iterdir())) == 1
+
+
+def test_legacy_motion_is_explicitly_replayable_but_excluded_from_discovery(tmp_path):
+    record = {"profile": "atlas-motion-1", "source": {"clip": "Walk"}, "target": {}, "category": "walk",
+              "bake": {"fps": 30, "frames": [[], []], "metrics": {}}}
+    old = store_motion(tmp_path, "walking", record)
+    new = store_motion(tmp_path, "walking", record | {"profile": "atlas-motion-2"})
+    assert old != new and load_motion(tmp_path, old)[0]["profile"] == "atlas-motion-1"
+    assert [row["motion"] for row in motions(tmp_path)] == [new]
+    assert {row["legacy"] for row in motions(tmp_path, include_legacy=True)} == {True, False}

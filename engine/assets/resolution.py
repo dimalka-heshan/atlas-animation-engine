@@ -47,6 +47,8 @@ def resolve_project_assets(project: Project, library: Path, motions=None, *, mov
                 if event.motion:
                     record = _target_motion(event.motion, entity, entry, profile, report, motions)
                     baked = record["bake"]
+                    if event.loop and record.get("source", {}).get("family") == "cmu-motionbuilder-bvh":
+                        raise ValueError(f"Uncycled capture {event.motion.id} requires loop=false")
                     if event.foot_lock:
                         transforms = [entity, *entity.keyframes]
                         moving_off_plane = any(

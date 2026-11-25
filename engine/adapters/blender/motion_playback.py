@@ -24,7 +24,7 @@ def read_bakes(directory):
 
 
 def materialize(rig, event, record, skeleton_hash):
-    if record.get("profile") != "atlas-motion-1" or record["target"]["skeleton_sha256"] != skeleton_hash:
+    if record.get("profile") not in {"atlas-motion-1", "atlas-motion-2"} or record["target"]["skeleton_sha256"] != skeleton_hash:
         raise ValueError("Motion snapshot is incompatible with the imported rest skeleton")
     bake = record["bake"]
     names, pelvis_name, frames = (bake[key] for key in ("bones", "pelvis", "frames"))

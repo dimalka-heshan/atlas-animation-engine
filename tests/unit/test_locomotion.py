@@ -100,3 +100,11 @@ def test_routes_reject_crossing_actors_and_out_of_frame_arrivals():
 def test_schema_14_rejects_new_movement_configuration():
     with pytest.raises(ValueError, match="require schema 1.5"):
         project([actor("hero", 0, 0)], [movement("hero", [1, 0, 0])], schema_version="1.4")
+
+
+def test_uncycled_human_capture_cannot_drive_guided_locomotion():
+    key = (PIN["id"], PIN["sha256"])
+    value = project([actor("hero", 0, 0)], [movement("hero", [0, -2, 0])])
+    record = BAKES[key][1] | {"source": {"family": "cmu-motionbuilder-bvh"}}
+    with pytest.raises(ValueError, match="qualified gait loop"):
+        compile_movement(value, {key: (PIN, record, None)})

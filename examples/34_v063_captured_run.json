@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.6",
+  "id": "captured-running-study",
+  "scene": {
+    "environment": {
+      "ground_size": 86,
+      "background": [
+        0.06,
+        0.08,
+        0.12
+      ],
+      "strength": 0.68,
+      "ground_material": {
+        "color": [
+          0.12,
+          0.16,
+          0.18
+        ],
+        "roughness": 0.8
+      }
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.8,
+          -4.7,
+          4.5
+        ],
+        "target": [
+          0,
+          -0.5,
+          1.2
+        ],
+        "energy": 430,
+        "size": 4.3,
+        "temperature_kelvin": 5250
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          1.2,
+          3.4,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          0.8
+        ],
+        "energy": 220,
+        "size": 3.0,
+        "temperature_kelvin": 6600
+      }
+    ],
+    "camera": {
+      "location": [
+        0.5,
+        -7,
+        2.15
+      ],
+      "target": [
+        0.1,
+        0,
+        0.85
+      ],
+      "lens": 35
+    },
+    "entities": [
+      {
+        "id": "runner",
+        "asset": {
+          "id": "mpfb-scholar",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          -1.8,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "scholar-cmu-run",
+            "motion": {
+              "id": "scholar-cmu-run",
+              "sha256": "a4b922dbc5b9649b5b6ad42d535d5cac2100e896f5150789bb9c474fced8d977"
+            },
+            "start_frame": 1,
+            "frame_count": 60,
+            "loop": false
+          }
+        ]
+      }
+    ]
+  },
+  "render": {
+    "width": 320,
+    "height": 180,
+    "frames": 60,
+    "fps": 24,
+    "samples": 1,
+    "threads": 4
+  }
+}
