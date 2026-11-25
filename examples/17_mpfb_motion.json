@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.4",
+  "id": "mpfb-body-motion",
+  "seed": 1042,
+  "quality": {
+    "profile": "preview",
+    "look": "AgX - Medium High Contrast"
+  },
+  "scene": {
+    "entities": [
+      {
+        "id": "curator",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          -23
+        ],
+        "clips": [
+          {
+            "name": "HumanIdle",
+            "start_frame": 1,
+            "frame_count": 12
+          },
+          {
+            "name": "HumanPresent",
+            "start_frame": 13,
+            "frame_count": 36,
+            "blend_frames": 3
+          }
+        ]
+      }
+    ],
+    "environment": {
+      "background": [
+        0.06,
+        0.08,
+        0.1
+      ],
+      "strength": 0.65,
+      "ground_size": 20,
+      "ground_material": {
+        "color": [
+          0.11,
+          0.14,
+          0.16
+        ],
+        "roughness": 0.85
+      }
+    },
+    "camera": {
+      "location": [
+        0.6,
+        -3.48,
+        1.1
+      ],
+      "target": [
+        0,
+        0,
+        0.89
+      ],
+      "lens": 50,
+      "depth_of_field": true,
+      "fstop": 8,
+      "keyframes": [
+        {
+          "frame": 48,
+          "location": [
+            -0.36,
+            -3.45,
+            1.09
+          ]
+        }
+      ]
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.3,
+          -3.8,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          1.1
+        ],
+        "energy": 480,
+        "size": 4.5,
+        "temperature_kelvin": 4950
+      },
+      {
+        "id": "fill",
+        "kind": "AREA",
+        "location": [
+          2.3,
+          -2.8,
+          3.2
+        ],
+        "target": [
+          0,
+          0,
+          1.1
+        ],
+        "energy": 180,
+        "size": 3.7,
+        "temperature_kelvin": 6100
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          0,
+          1.5,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          1
+        ],
+        "energy": 320,
+        "size": 4,
+        "temperature_kelvin": 7000
+      }
+    ]
+  },
+  "render": {
+    "width": 384,
+    "height": 376,
+    "fps": 12,
+    "frames": 48,
+    "samples": 8,
+    "engine": "eevee"
+  }
+}

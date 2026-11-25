@@ -39,6 +39,10 @@ def _linear(animation_data):
 def apply_performance(root, spec: dict, fps: float) -> None:
     """Animate explicit controls on root/descendants; host validates full schema."""
     objects = [root, *root.children_recursive]
+    if spec.get("profile") == "mpfb-visemes-1":
+        apply_mpfb_performance(objects, spec, fps)
+        root["atlas_facial_profile"] = "mpfb-visemes-1"
+        return
     controls = spec.get('controls')
     if not controls:
         if spec.get('profile', 'atlas-face-1') != 'atlas-face-1':
@@ -78,6 +82,37 @@ def apply_performance(root, spec: dict, fps: float) -> None:
     else:
         raise ValueError('Unsupported facial control kind')
     root['atlas_facial_profile'] = spec.get('profile', 'atlas-face-1')
+
+
+def apply_mpfb_performance(objects, spec, fps):
+    from human_controls import HUMAN_KEYS, MOUTH
+    jaw_opening = {"C": .065, "D": .20, "E": .09, "F": .06, "H": .04}
+    targets = [obj.data.shape_keys for obj in objects if obj.type == "MESH" and obj.data.shape_keys]
+    if sum(HUMAN_KEYS <= set(keys.key_blocks.keys()) for keys in targets) != 1:
+        raise ValueError("MPFB performance requires one inspected human facial mesh")
+    cues = performance_keys(spec["timeline"], spec["start_seconds"], fps, spec["smoothing_seconds"])
+    for target in targets:
+        mouth = {code: target.key_blocks[name] for code, name in MOUTH.items() if name in target.key_blocks}
+        jaw = target.key_blocks.get("jawOpen")
+        brow = target.key_blocks.get("browInnerUp")
+        for frame, cue in cues:
+            for code, block in mouth.items():
+                block.value = .85 if code == cue else 0
+                block.keyframe_insert(data_path="value", frame=frame)
+            if jaw:
+                jaw.value = jaw_opening.get(cue, 0)
+                jaw.keyframe_insert(data_path="value", frame=frame)
+            if brow:
+                brow.value = .11 if cue == "D" else 0
+                brow.keyframe_insert(data_path="value", frame=frame)
+        for name in ("eyeBlinkLeft", "eyeBlinkRight"):
+            block = target.key_blocks.get(name)
+            if block:
+                for frame in spec.get("blink_frames", []):
+                    for offset, value in ((-1, 0), (0, .95), (1, 0)):
+                        block.value = value
+                        block.keyframe_insert(data_path="value", frame=frame + offset)
+        _linear(target.animation_data)
 
 
 def build_talking_head(spec: dict):

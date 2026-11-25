@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "id": "coastal-outlook",
+  "entities": [
+    {"id": "outcrop","asset": {"id": "polyhaven-coast_rocks_01","version": 1},"pivot": "base","location": [0,5,0],"scale": [0.7,0.7,0.7],"rotation": [0,0,-17]},
+    {"id": "trail-marker","asset": {"id": "polyhaven-stone_01","version": 1},"pivot": "base","location": [1.65,-0.8,0],"scale": [4.2,4.2,4.2],"rotation": [0,0,33]},
+    {"id": "trail-crate","asset": {"id": "polyhaven-wooden_crate_01","version": 1},"pivot": "base","location": [-0.8,0,0],"scale": [1,1,1],"rotation": [0,0,-18]}
+  ]
+}

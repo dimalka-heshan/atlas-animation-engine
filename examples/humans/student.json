@@ -1,0 +1,12 @@
+{
+  "id": "mpfb-student",
+  "seed": 1045,
+  "age": 0.31,
+  "gender": 0.10,
+  "ancestry": "asian",
+  "height": 0.46,
+  "build": 0.43,
+  "hair": "bob01",
+  "skin": "young_asian_female",
+  "wardrobe": "casual-female"
+}

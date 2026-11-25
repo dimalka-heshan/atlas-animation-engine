@@ -119,24 +119,48 @@ def apply_ground_media(material, directory, entry, repeats):
     scale.operation = "SCALE"
     scale.inputs["Scale"].default_value = repeats
     links.new(coords.outputs["Object"], scale.inputs[0])
-    for channel, destination in (("Diffuse", "Base Color"), ("Rough", "Roughness"), ("nor_gl", "Normal")):
+    textures = {}
+    for channel in sorted(item["channel"] for item in entry["files"]):
         texture = nodes.new("ShaderNodeTexImage")
+        texture.label = channel
         texture.image = media_image(directory, entry, channel)
         links.new(scale.outputs["Vector"], texture.inputs["Vector"])
-        if channel != "Diffuse":
+        if channel not in {"Diffuse", "Emission"}:
             texture.image.colorspace_settings.name = "Non-Color"
-        if channel == "nor_gl":
-            normal = nodes.new("ShaderNodeNormalMap")
-            links.new(texture.outputs["Color"], normal.inputs["Color"])
-            links.new(normal.outputs["Normal"], shader.inputs[destination])
-        else:
-            links.new(texture.outputs["Color"], shader.inputs[destination])
+        textures[channel] = texture.outputs["Alpha"] if channel == "Opacity" and texture.image.channels == 4 else texture.outputs["Color"]
+    diffuse = textures["Diffuse"]
+    if "AO" in textures:
+        multiply = nodes.new("ShaderNodeMixRGB")
+        multiply.blend_type = "MULTIPLY"
+        multiply.inputs[0].default_value = .35
+        links.new(diffuse, multiply.inputs[1])
+        links.new(textures["AO"], multiply.inputs[2])
+        diffuse = multiply.outputs[0]
+    links.new(diffuse, shader.inputs["Base Color"])
+    for channel, destination in (("Rough", "Roughness"), ("Metal", "Metallic"),
+                                 ("Opacity", "Alpha"), ("Emission", "Emission Color")):
+        if channel in textures:
+            links.new(textures[channel], shader.inputs[destination])
+    if "Emission" in textures:
+        shader.inputs["Emission Strength"].default_value = 1
+    normal = nodes.new("ShaderNodeNormalMap")
+    links.new(textures["nor_gl"], normal.inputs["Color"])
+    normal_output = normal.outputs["Normal"]
+    height = textures.get("Displacement", textures.get("Height"))
+    if height is not None:
+        bump = nodes.new("ShaderNodeBump")
+        bump.inputs["Distance"].default_value = .015
+        links.new(height, bump.inputs["Height"])
+        links.new(normal_output, bump.inputs["Normal"])
+        normal_output = bump.outputs["Normal"]
+    links.new(normal_output, shader.inputs["Normal"])
 
 
 def build(project, directory):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
     settings, spec = project["render"], project["scene"]
+    quality = project.get("quality") or {}
     scene.frame_start, scene.frame_end = 1, settings["frames"]
     scene.render.fps, scene.render.fps_base = settings["fps"], 1.0
     scene.render.resolution_x = settings["width"]
@@ -150,7 +174,7 @@ def build(project, directory):
         scene.cycles.device = "CPU"
         scene.cycles.samples = settings["samples"]
         scene.cycles.seed = project["seed"]
-        scene.cycles.use_denoising = True
+        scene.cycles.use_denoising = quality.get("denoise", True)
     else:
         # Blender 4.2 used NEXT; Blender 5 uses BLENDER_EEVEE again.
         errors = []
@@ -167,6 +191,12 @@ def build(project, directory):
                 scene.eevee.taa_render_samples = settings["samples"]
     if "AgX" in [x.identifier for x in scene.view_settings.bl_rna.properties["view_transform"].enum_items]:
         scene.view_settings.view_transform = "AgX"
+    if quality:
+        scene.view_settings.exposure = quality["exposure"]
+        if quality.get("look") is not None:
+            scene.view_settings.look = quality["look"]
+        if quality.get("motion_blur"):
+            scene.render.use_motion_blur = True
     world = bpy.data.worlds.new("ATLAS_world")
     scene.world = world
     world.use_nodes = True
@@ -228,6 +258,11 @@ def build(project, directory):
     for light in spec["lights"]:
         data = bpy.data.lights.new(light["id"], light["kind"])
         data.energy, data.color = light["energy"], light["color"]
+        if light.get("temperature_kelvin") is not None:
+            data.use_temperature = True
+            data.temperature = light["temperature_kelvin"]
+        if light.get("cast_shadows") is not None:
+            data.use_shadow = light["cast_shadows"]
         if light["kind"] == "AREA":
             data.shape, data.size = "DISK", light["size"]
         elif light["kind"] == "POINT":

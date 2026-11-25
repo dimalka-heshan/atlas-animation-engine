@@ -1,0 +1,13 @@
+{
+  "id": "mpfb-host",
+  "seed": 1046,
+  "age": 0.64,
+  "gender": 0.91,
+  "ancestry": "african",
+  "height": 0.67,
+  "build": 0.57,
+  "muscularity": 0.67,
+  "hair": "afro01",
+  "skin": "middleage_african_male",
+  "wardrobe": "casual"
+}

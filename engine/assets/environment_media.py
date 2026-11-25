@@ -8,7 +8,18 @@ import shutil
 from engine.assets.registry import file_hash
 from engine.storage.jobs import atomic_json, contained_path
 
-CHANNELS = {"hdri": {"hdri": ".hdr"}, "material": {"Diffuse": ".jpg", "Rough": ".jpg", "nor_gl": ".jpg"}}
+REQUIRED_CHANNELS = {"hdri": {"hdri"}, "material": {"Diffuse", "Rough", "nor_gl"}}
+MATERIAL_CHANNELS = REQUIRED_CHANNELS["material"] | {"Metal", "AO", "Height", "Displacement", "Opacity", "Emission"}
+MEDIA_PROVIDERS = {"hdri": {"polyhaven"}, "material": {"polyhaven", "ambientcg"}}
+
+
+def media_extension(category: str, item: dict) -> str:
+    extensions = {"hdr"} if category == "hdri" else {"jpg", "png"}
+    default = "hdr" if category == "hdri" else "jpg"
+    extension = item.get("format", default)
+    if extension not in extensions:
+        raise ValueError(f"Unsupported environment media format: {extension}")
+    return f".{extension}"
 
 
 def media_fingerprint(record: dict) -> str:
@@ -32,13 +43,18 @@ def resolve_media(project, cache: Path) -> list[dict]:
         record = json.loads(path.read_text(encoding="utf-8"))
         try:
             origin = record["catalog"]
-            if (origin["id"] != reference.id or origin["provider"] != "polyhaven"
+            if (origin["id"] != reference.id or origin["provider"] not in MEDIA_PROVIDERS[category]
+                    or not reference.id.startswith(origin["provider"] + "-")
                     or origin["license_id"] != "CC0-1.0" or not record["license_text"]
                     or origin["category"] != category or reference.fingerprint != media_fingerprint(record)):
                 raise ValueError(f"Environment media identity or fingerprint mismatch: {reference.id}")
-            if sorted(f["channel"] for f in record["files"]) != sorted(CHANNELS[category]):
+            channels = [item["channel"] for item in record["files"]]
+            required = REQUIRED_CHANNELS[category]
+            accepted = MATERIAL_CHANNELS if category == "material" else required
+            if len(channels) != len(set(channels)) or not required <= set(channels) <= accepted:
                 raise ValueError(f"Environment media channel mismatch: {reference.id}")
             for item in record["files"]:
+                media_extension(category, item)
                 digest = item["sha256"]
                 if not re.fullmatch(r"[a-f0-9]{64}", digest):
                     raise ValueError("Invalid environment media hash")
@@ -58,7 +74,8 @@ def snapshot_media(records: list[dict], cache: Path, directory: Path) -> list[di
         snapshot = []
         for item in record["files"]:
             digest, channel = item["sha256"], item["channel"]
-            relative = f"environment/{digest}{CHANNELS[category][channel]}"
+            # Blender reuses images by path and each channel needs its own color space.
+            relative = f"environment/{digest}-{channel}{media_extension(category, item)}"
             target = contained_path(directory, relative)
             target.parent.mkdir(exist_ok=True)
             shutil.copyfile(contained_path(cache, f"blobs/{digest}"), target)

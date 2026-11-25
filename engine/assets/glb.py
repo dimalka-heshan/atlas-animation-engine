@@ -12,7 +12,7 @@ MAX_JSON_BYTES = 8 * 1024 * 1024
 
 
 def inspect_glb(path: Path, profile: str = "static") -> dict:
-    if profile not in {"static", "rigged"}:
+    if profile not in {"static", "rigged", "human"}:
         raise ValueError("Unknown GLB import profile")
     size = path.stat().st_size
     if not 20 <= size <= MAX_GLB_BYTES:
@@ -72,7 +72,7 @@ def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "st
         raise ValueError("GLB extensions are not supported by this importer profile")
     if profile == "static" and (doc.get("animations") or doc.get("skins")):
         raise ValueError("Animated/skinned GLBs are unsupported; use a static mesh asset")
-    _check_scene(doc, rigged=profile == "rigged")
+    _check_scene(doc, rigged=profile in {"rigged", "human"})
     buffers = doc.get("buffers", [])
     if len(buffers) > 1:
         raise ValueError("GLB must have at most one embedded buffer")
@@ -112,11 +112,11 @@ def _inspect_document(doc: dict, binary_size: int, size: int, profile: str = "st
         for primitive in mesh["primitives"]:
             if primitive.get("mode", 4) != 4:
                 raise ValueError("Only triangle-surface GLB primitives are supported")
-            if primitive.get("targets"):
+            if primitive.get("targets") and profile != "human":
                 raise ValueError("GLB morph targets are not supported")
-    if profile == "rigged":
+    if profile in {"rigged", "human"}:
         from engine.assets.rigged import validate_rigged
-        validate_rigged(doc)
+        validate_rigged(doc, facial=profile == "human")
     return {"format": "glb", "gltf_version": "2.0", "size_bytes": size, "profile": profile,
             "mesh_count": len(doc.get("meshes", [])), "material_count": len(doc.get("materials", [])),
             "texture_count": len(doc.get("images", [])), "animation_count": len(doc.get("animations", [])),

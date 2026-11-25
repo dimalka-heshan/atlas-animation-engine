@@ -2,7 +2,7 @@
 import math
 
 
-def validate_rigged(doc: dict) -> None:
+def validate_rigged(doc: dict, *, facial=False) -> None:
     nodes, meshes = doc["nodes"], doc["meshes"]
     skins, animations = doc["skins"], doc.get("animations", [])
     accessors, views = doc["accessors"], doc["bufferViews"]
@@ -58,6 +58,29 @@ def validate_rigged(doc: dict) -> None:
                 raise ValueError("Invalid skin weight accessors")
     if not skinned:
         raise ValueError("Rigged GLB contains no skinned meshes")
+    if facial:
+        from engine.adapters.blender.human_controls import HUMAN_KEYS
+        faces = 0
+        total_morph_vectors = 0
+        for mesh in meshes:
+            names = mesh.get("extras", {}).get("targetNames", [])
+            if len(names) > len(HUMAN_KEYS) or len(set(names)) != len(names) or not set(names) <= HUMAN_KEYS:
+                raise ValueError("Human GLB contains unknown or duplicate facial targets")
+            faces += set(names) == HUMAN_KEYS
+            for primitive in mesh["primitives"]:
+                count = index(accessors, primitive["attributes"]["POSITION"])["count"]
+                targets = primitive.get("targets", [])
+                if len(targets) != len(names) or any(set(target) != {"POSITION"} for target in targets):
+                    raise ValueError("Human GLB requires named position-only facial deltas")
+                for target in targets:
+                    delta = index(accessors, target["POSITION"])
+                    if delta["type"] != "VEC3" or delta["componentType"] != 5126 or delta["count"] != count:
+                        raise ValueError("Human GLB facial delta accessor does not match its mesh")
+                    total_morph_vectors += count
+                    if total_morph_vectors > 1_000_000:
+                        raise ValueError("Human GLB exceeds the facial target budget")
+        if faces != 1:
+            raise ValueError("Human GLB must contain exactly one complete facial mesh")
     names = set()
     total_keys = 0
     for clip in animations:
@@ -76,7 +99,7 @@ def validate_rigged(doc: dict) -> None:
             index(nodes, target["node"])
             path = target["path"]
             key = target["node"], path
-            if path not in {"translation", "rotation", "scale"} or key in targets:
+            if path not in {"translation", "rotation", "scale"} or key in targets or (facial and target["node"] not in joints):
                 raise ValueError("Only unique transform channels are supported")
             targets.add(key)
             points = index(accessors, sampler["input"])

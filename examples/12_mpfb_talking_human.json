@@ -1,0 +1,328 @@
+{
+  "schema_version": "1.4",
+  "id": "mpfb-talking-human",
+  "seed": 24,
+  "scene": {
+    "entities": [
+      {
+        "id": "human",
+        "asset": {
+          "id": "mpfb-curator",
+          "version": 1
+        },
+        "rigged": true,
+        "pivot": "base",
+        "location": [
+          0,
+          0,
+          0
+        ],
+        "clips": [
+          {
+            "name": "HumanIdle",
+            "start_frame": 1,
+            "frame_count": 116,
+            "loop": true
+          }
+        ]
+      }
+    ],
+    "scatter": [],
+    "environment": {
+      "background": [
+        0.045,
+        0.07,
+        0.105
+      ],
+      "strength": 0.65,
+      "ground": false,
+      "ground_size": 200.0,
+      "ground_material": {
+        "color": [
+          0.035,
+          0.055,
+          0.075
+        ],
+        "metallic": 0.0,
+        "roughness": 0.65
+      }
+    },
+    "camera": {
+      "location": [
+        -0.08,
+        -1.32,
+        1.59
+      ],
+      "target": [
+        0,
+        -0.07,
+        1.53
+      ],
+      "target_entity": null,
+      "lens": 57,
+      "keyframes": [],
+      "interpolation": "LINEAR",
+      "depth_of_field": false,
+      "fstop": 5.6
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -0.7,
+          -1.3,
+          2.35
+        ],
+        "target": [
+          0,
+          -0.05,
+          1.55
+        ],
+        "color": [
+          1,
+          0.92,
+          0.8
+        ],
+        "energy": 135,
+        "size": 1.65
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          0.7,
+          0.3,
+          1.98
+        ],
+        "target": [
+          0,
+          0,
+          1.58
+        ],
+        "color": [
+          0.72,
+          0.82,
+          1
+        ],
+        "energy": 30,
+        "size": 1.2
+      },
+      {
+        "id": "fill",
+        "kind": "AREA",
+        "location": [
+          0.75,
+          -1.2,
+          1.79
+        ],
+        "target": [
+          0,
+          0,
+          1.55
+        ],
+        "color": [
+          0.94,
+          0.97,
+          1
+        ],
+        "energy": 58,
+        "size": 1.9
+      }
+    ]
+  },
+  "render": {
+    "engine": "eevee",
+    "width": 480,
+    "height": 270,
+    "fps": 24,
+    "frames": 116,
+    "samples": 16,
+    "threads": 8,
+    "timeout_seconds": 3600
+  },
+  "audio": [
+    {
+      "id": "intro",
+      "clip": {
+        "id": "atlas-line",
+        "version": 1
+      },
+      "role": "dialogue",
+      "start_seconds": 0.2,
+      "gain": 1.0,
+      "speaker": "human"
+    }
+  ],
+  "performances": [
+    {
+      "actor_id": "human",
+      "audio_event_id": "intro",
+      "timeline": {
+        "audio_sha256": "1cb13c530e79c9e9fe429f4812231014b83a25876e7d0a14aa452be11b32d6e3",
+        "duration_seconds": 4.27,
+        "cues": [
+          {
+            "start": 0.0,
+            "end": 0.06,
+            "value": "X"
+          },
+          {
+            "start": 0.06,
+            "end": 0.21,
+            "value": "C"
+          },
+          {
+            "start": 0.21,
+            "end": 0.42,
+            "value": "E"
+          },
+          {
+            "start": 0.42,
+            "end": 0.49,
+            "value": "F"
+          },
+          {
+            "start": 0.49,
+            "end": 0.68,
+            "value": "B"
+          },
+          {
+            "start": 0.68,
+            "end": 0.72,
+            "value": "C"
+          },
+          {
+            "start": 0.72,
+            "end": 0.83,
+            "value": "B"
+          },
+          {
+            "start": 0.83,
+            "end": 0.91,
+            "value": "A"
+          },
+          {
+            "start": 0.91,
+            "end": 0.96,
+            "value": "C"
+          },
+          {
+            "start": 0.96,
+            "end": 1.0,
+            "value": "B"
+          },
+          {
+            "start": 1.0,
+            "end": 1.14,
+            "value": "H"
+          },
+          {
+            "start": 1.14,
+            "end": 1.28,
+            "value": "C"
+          },
+          {
+            "start": 1.28,
+            "end": 1.49,
+            "value": "B"
+          },
+          {
+            "start": 1.49,
+            "end": 2.08,
+            "value": "X"
+          },
+          {
+            "start": 2.08,
+            "end": 2.16,
+            "value": "A"
+          },
+          {
+            "start": 2.16,
+            "end": 2.22,
+            "value": "C"
+          },
+          {
+            "start": 2.22,
+            "end": 2.27,
+            "value": "B"
+          },
+          {
+            "start": 2.27,
+            "end": 2.34,
+            "value": "G"
+          },
+          {
+            "start": 2.34,
+            "end": 2.41,
+            "value": "E"
+          },
+          {
+            "start": 2.41,
+            "end": 2.69,
+            "value": "B"
+          },
+          {
+            "start": 2.69,
+            "end": 2.9,
+            "value": "C"
+          },
+          {
+            "start": 2.9,
+            "end": 2.98,
+            "value": "A"
+          },
+          {
+            "start": 2.98,
+            "end": 3.04,
+            "value": "C"
+          },
+          {
+            "start": 3.04,
+            "end": 3.45,
+            "value": "B"
+          },
+          {
+            "start": 3.45,
+            "end": 3.52,
+            "value": "C"
+          },
+          {
+            "start": 3.52,
+            "end": 3.59,
+            "value": "E"
+          },
+          {
+            "start": 3.59,
+            "end": 3.8,
+            "value": "C"
+          },
+          {
+            "start": 3.8,
+            "end": 4.01,
+            "value": "B"
+          },
+          {
+            "start": 4.01,
+            "end": 4.27,
+            "value": "X"
+          }
+        ],
+        "method": "rhubarb",
+        "version": "1.14.0",
+        "transcript_sha256": "69418a683763fc97ba07adacd1d068ecd8b5711a82bf3512d5f747f9355227cd",
+        "executable_sha256": "9e289c6b5939ef6b306a61e8105ec721fd8d52b3ce950d08891ea3cc7df5718d"
+      },
+      "profile": "mpfb-visemes-1",
+      "controls": null,
+      "smoothing_seconds": 0.04,
+      "blink_frames": [
+        30,
+        86
+      ]
+    }
+  ],
+  "quality": {
+    "profile": "realistic"
+  }
+}

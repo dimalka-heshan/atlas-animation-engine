@@ -21,13 +21,19 @@ def resolve_project_assets(project: Project, library: Path) -> list[dict]:
     registry = AssetRegistry(library)
     entries = [registry.resolve(asset_id, version) for asset_id, version in references]
     pinned = {(entry["id"], entry["version"]): entry for entry in entries}
+    human_faces = {p.actor_id for p in project.performances if p.profile == "mpfb-visemes-1"}
     for entity in [*project.scene.entities, *(group.prototype for group in project.scene.scatter)]:
         if not isinstance(entity, AssetEntity):
             continue
         entry = pinned[(entity.asset.id, entity.asset.version)]
         rigged = isinstance(entity, RiggedEntity)
-        if rigged != (entry["container"].get("profile", "static") == "rigged"):
+        profile = entry["container"].get("profile", "static")
+        if rigged != (profile in {"rigged", "human"}):
             raise ValueError(f"Asset profile does not match entity {entity.id}")
+        if profile == "human" and project.schema_version != "1.4":
+            raise ValueError("MPFB humans require schema 1.4")
+        if entity.id in human_faces and profile != "human":
+            raise ValueError(f"Actor {entity.id} has no inspected MPFB human facial profile")
         if rigged:
             report = entry["inspection"]["report"]
             if any(role not in report["humanoid_mapping"] for role in entity.equipment):

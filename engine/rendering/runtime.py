@@ -36,13 +36,13 @@ def capture(command: list[str], timeout: float = 30) -> str:
     return result.stdout
 
 
-def run_logged(command: list[str], log: Path, timeout: float) -> float:
+def run_logged(command: list[str], log: Path, timeout: float, *, env: dict | None = None) -> float:
     """Run a tool, retaining full diagnostics and reaping it on timeout/cancel."""
     started = time.perf_counter()
     with log.open("w", encoding="utf-8") as handle:
         handle.write(json.dumps({"command": command}) + "\n")
         handle.flush()
-        process = subprocess.Popen(command, stdout=handle, stderr=subprocess.STDOUT, shell=False)
+        process = subprocess.Popen(command, stdout=handle, stderr=subprocess.STDOUT, shell=False, env=env)
         try:
             code = process.wait(timeout=timeout)
         except subprocess.TimeoutExpired as exc:

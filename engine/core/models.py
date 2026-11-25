@@ -4,6 +4,7 @@ from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, model_validator
 from engine.lipsync.models import LipSyncTimeline, FacialControls
+from engine.core.quality import PRESETS
 
 Number = Annotated[float, Field(allow_inf_nan=False, strict=True, ge=-1e9, le=1e9)]
 Positive = Annotated[Number, Field(gt=0)]
@@ -84,8 +85,8 @@ class EnvironmentCollection(Model):
     entities: list[AssetEntity] = Field(min_length=1, max_length=1000)
 
     def apply(self, project: "Project") -> "Project":
-        if project.schema_version != "1.3":
-            raise ValueError("Environment collections require project schema_version 1.3")
+        if project.schema_version not in {"1.3", "1.4"}:
+            raise ValueError("Environment collections require project schema_version 1.3 or later")
         data = project.model_dump(mode="json")
         data["scene"]["entities"].extend(entity.model_dump(mode="json") for entity in self.entities)
         return Project.model_validate(data)
@@ -110,6 +111,8 @@ class Light(Model):
     color: Color = (1, 0.9, 0.78)
     energy: Annotated[Number, Field(ge=0, le=1000000)] = 1200
     size: Annotated[Number, Field(gt=0, le=1000)] = 5
+    temperature_kelvin: Annotated[Number, Field(ge=1000, le=20000)] | None = None
+    cast_shadows: bool | None = None
 
     @model_validator(mode="after")
     def directional_target(self) -> Self:
@@ -130,7 +133,7 @@ class Environment(Model):
 
 
 class EnvironmentMedia(Model):
-    id: Annotated[str, Field(pattern=r"^polyhaven-[a-z0-9_]{1,80}$")]
+    id: Annotated[str, Field(pattern=r"^(?:polyhaven-[a-z0-9_]{1,80}|ambientcg-[a-z0-9]{1,80})$")]
     fingerprint: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
 
 
@@ -177,29 +180,59 @@ class RenderSettings(Model):
         return self
 
 
+class QualitySettings(Model):
+    profile: Literal["preview", "stylized", "realistic", "cinematic"]
+    look: Literal["None", "AgX - Medium High Contrast", "AgX - Medium Low Contrast"] | None = None
+    exposure: Annotated[Number, Field(ge=-5, le=5)] = 0
+    motion_blur: bool = False
+    denoise: bool = True
+    max_asset_polygons: Annotated[StrictInt, Field(ge=1, le=20_000_000)] = 2_000_000
+    max_texture_size: Literal[1024, 2048, 4096, 8192] = 4096
+
+
 class Project(Model):
-    schema_version: Literal["1.0", "1.1", "1.2", "1.3"] = "1.0"
+    schema_version: Literal["1.0", "1.1", "1.2", "1.3", "1.4"] = "1.0"
     id: Identifier
     seed: Annotated[StrictInt, Field(ge=0, le=2147483647)] = 1
     scene: Scene
     render: RenderSettings = Field(default_factory=RenderSettings)
     audio: list["AudioEvent"] = Field(default_factory=list, max_length=100)
     performances: list["FacialPerformance"] = Field(default_factory=list, max_length=100)
+    quality: QualitySettings | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def preset_defaults(cls, data):
+        if not isinstance(data, dict) or not isinstance(data.get("quality"), dict):
+            return data
+        quality = data["quality"]
+        profile = quality.get("profile")
+        preset = PRESETS.get(profile) if isinstance(profile, str) else None
+        if preset is None or not isinstance(data.get("render", {}), dict):
+            return data
+        settings = {key: preset[key] for key in ("engine", "width", "height", "samples")}
+        return data | {"quality": {"look": preset["look"]} | quality, "render": settings | data.get("render", {})}
 
     @model_validator(mode="after")
     def validate_scene(self) -> Self:
-        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version != "1.3":
-            raise ValueError("Acquired environment media require schema_version 1.3")
-        if self.audio and self.schema_version not in {"1.2", "1.3"}:
+        if self.quality is not None and self.schema_version != "1.4":
+            raise ValueError("Production quality profiles require schema 1.4")
+        if self.schema_version != "1.4" and any(
+                light.temperature_kelvin is not None or light.cast_shadows is not None for light in self.scene.lights):
+            raise ValueError("Light temperature and shadow overrides require schema 1.4")
+        if (self.scene.environment.hdri or self.scene.environment.ground_texture) and self.schema_version not in {"1.3", "1.4"}:
+            raise ValueError("Acquired environment media require schema_version 1.3 or later")
+        if self.audio and self.schema_version not in {"1.2", "1.3", "1.4"}:
             raise ValueError("Audio requires schema_version 1.2 or later")
         characters = {entity.id for entity in self.scene.entities if isinstance(entity, CharacterEntity)}
-        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3"}:
+        if (characters or self.performances) and self.schema_version not in {"1.2", "1.3", "1.4"}:
             raise ValueError("Characters and facial performances require schema_version 1.2 or later")
         static_ids = {e.id for e in self.scene.entities if type(e) is AssetEntity}
         attached = set()
-        for actor in (e for e in self.scene.entities if isinstance(e, RiggedEntity)):
-            if self.schema_version != "1.3":
-                raise ValueError("Rigged assets require schema_version 1.3")
+        actors = {e.id: e for e in self.scene.entities if isinstance(e, RiggedEntity)}
+        for actor in actors.values():
+            if self.schema_version not in {"1.3", "1.4"}:
+                raise ValueError("Rigged assets require schema_version 1.3 or later")
             for equipment in actor.equipment.values():
                 if equipment not in static_ids or equipment in attached:
                     raise ValueError("Equipment must reference a unique explicit static asset entity")
@@ -219,7 +252,14 @@ class Project(Model):
         events = {event.id: event for event in self.audio}
         active: dict[str, list[tuple[float, float]]] = {}
         for performance in self.performances:
-            if performance.actor_id not in characters:
+            if performance.profile == "mpfb-visemes-1":
+                if self.schema_version != "1.4" or performance.actor_id not in actors or performance.controls is not None:
+                    raise ValueError("MPFB facial performances require schema 1.4 and a pinned compatible rigged actor")
+                blinks = performance.blink_frames
+                if any(frame < 2 or frame >= self.render.frames for frame in blinks) or any(
+                        second - first < 2 for first, second in zip(blinks, blinks[1:])):
+                    raise ValueError("Blink frames must be inside the rendered interval and at least two frames apart")
+            elif performance.actor_id not in characters or performance.blink_frames:
                 raise ValueError("Facial actor must reference a compatible character, not a static asset")
             event = events.get(performance.audio_event_id)
             if event is None or event.role != "dialogue" or event.speaker != performance.actor_id:
@@ -275,7 +315,8 @@ class FacialPerformance(Model):
     actor_id: Identifier
     audio_event_id: Identifier
     timeline: LipSyncTimeline
-    profile: Literal["atlas-face-1"] = "atlas-face-1"
+    profile: Literal["atlas-face-1", "mpfb-visemes-1"] = "atlas-face-1"
+    blink_frames: list[Frame] = Field(default_factory=list, max_length=100)
     controls: FacialControls | None = None
     smoothing_seconds: Annotated[Number, Field(ge=0, le=.2)] = .04
 

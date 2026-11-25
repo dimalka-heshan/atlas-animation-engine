@@ -6,10 +6,14 @@ import math
 from mathutils import Matrix
 
 HUMANOID = {"root": "root", "pelvis": "hips", "spine": "spine", "chest": "chest", "head": "head"}
+MPFB = {"root": "Root", "pelvis": "pelvis", "spine": "spine_01", "chest": "spine_03", "head": "head", "neck": "neck_01"}
 for side, suffix in (("left", ".l"), ("right", ".r")):
     for role, name in (("upper_arm", "upperarm"), ("forearm", "lowerarm"), ("hand", "hand"),
                        ("thigh", "upperleg"), ("shin", "lowerleg"), ("foot", "foot"), ("toes", "toes")):
         HUMANOID[f"{side}_{role}"] = name + suffix
+    for role, name in (("upper_arm", "upperarm"), ("forearm", "lowerarm"), ("hand", "hand"),
+                       ("thigh", "thigh"), ("shin", "calf"), ("foot", "foot"), ("toes", "ball")):
+        MPFB[f"{side}_{role}"] = name + "_" + suffix[-1]
 
 
 def inspect_skeleton(objects, meshes):
@@ -66,6 +70,15 @@ def inspect_skeleton(objects, meshes):
                 ("foot", "lowerleg"), ("toes", "foot")))
         if all(descends(child, parent) for child, parent in chains):
             mapping = HUMANOID.copy()
+    elif all(name in rig.data.bones for name in MPFB.values()):
+        def descends_role(child, ancestor):
+            return MPFB[ancestor] in {bone.name for bone in rig.data.bones[MPFB[child]].parent_recursive}
+        chains = [("pelvis", "root"), ("spine", "pelvis"), ("head", "chest")]
+        for side in ("left", "right"):
+            chains.extend((f"{side}_{child}", f"{side}_{parent}") for child, parent in (
+                ("forearm", "upper_arm"), ("hand", "forearm"), ("shin", "thigh"), ("foot", "shin")))
+        if all(descends_role(child, parent) for child, parent in chains):
+            mapping = MPFB.copy()
     return rig, actions, {
         "skeleton_count": 1, "skinned_mesh_count": skin_count, "skeleton": skeleton, "clips": clips,
         "skeleton_sha256": hashlib.sha256(json.dumps(skeleton, sort_keys=True).encode()).hexdigest(),

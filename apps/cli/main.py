@@ -17,6 +17,7 @@ from engine.assets.resolution import resolve_project_assets
 from engine.assets.environment_media import resolve_media
 from engine import __version__
 from engine.core.models import EnvironmentCollection, Project
+from engine.core.quality import PRESETS, enforce_geometry_budget
 from engine.rendering.pipeline import render_project
 from engine.rendering.runtime import doctor, find_tool
 from engine.rendering.video import verify_video
@@ -45,6 +46,8 @@ def parser() -> argparse.ArgumentParser:
     sub = root.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor", help="inspect runtime and installed executables")
     sub.add_parser("schema", help="print the project JSON Schema")
+    quality = sub.add_parser("quality", help="inspect available Blender production profiles")
+    quality.add_subparsers(dest="quality_command", required=True).add_parser("profiles")
     add_asset_commands(sub)
     add_audio_commands(sub)
     add_voice_commands(sub)
@@ -87,6 +90,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2 if any("error" in tool for tool in result["tools"].values()) else 0
         if args.command == "schema":
             result = Project.model_json_schema()
+        elif args.command == "quality":
+            result = PRESETS
         elif args.command == "jobs":
             result = list_jobs(args.output.resolve())
         elif args.command == "assets":
@@ -109,6 +114,7 @@ def main(argv: list[str] | None = None) -> int:
             if args.command == "validate":
                 expanded = expand_project(project)
                 assets = resolve_project_assets(expanded, args.asset_library)
+                enforce_geometry_budget(expanded, assets)
                 audio = resolve_audio(expanded, args.audio_library)
                 media = resolve_media(expanded, args.asset_cache)
                 result = {"valid": True, "project": project.id, "entities": len(expanded.scene.entities),

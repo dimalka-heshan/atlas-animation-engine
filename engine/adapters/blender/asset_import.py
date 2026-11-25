@@ -11,30 +11,34 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
     before = set(bpy.data.objects)
     scene = bpy.context.scene
     previous_fps = scene.render.fps
-    if profile == "rigged":
+    rigged = profile in {"rigged", "human"}
+    if rigged:
         scene.render.fps = 30
     try:
+        options = {}
+        if profile == "human" and "disable_bone_shape" in bpy.ops.import_scene.gltf.get_rna_type().properties:
+            options["disable_bone_shape"] = True
         result = bpy.ops.import_scene.gltf(filepath=str(path), import_pack_images=True,
-                                         import_scene_extras=False, import_scene_as_collection=False)
+                                         import_scene_extras=False, import_scene_as_collection=False, **options)
     finally:
         scene.render.fps = previous_fps
     if "FINISHED" not in result:
         raise ValueError(f"GLB importer did not finish: {result}")
     objects = sorted(set(bpy.data.objects) - before, key=lambda obj: obj.name)
     meshes = [obj for obj in objects if obj.type == "MESH"]
-    allowed = {"MESH", "EMPTY"} | ({"ARMATURE"} if profile == "rigged" else set())
+    allowed = {"MESH", "EMPTY"} | ({"ARMATURE"} if rigged else set())
     if not meshes or any(obj.type not in allowed for obj in objects):
         raise ValueError("GLB object types exceed the selected import profile")
     if profile == "static" and any(obj.animation_data or (obj.type == "MESH" and obj.data.shape_keys) for obj in objects):
         raise ValueError("Imported animation or morph targets are unsupported")
     rig_report = {}
-    if profile == "rigged":
+    if rigged:
         from skeleton import inspect_skeleton, play_clips
         rig, actions, rig_report = inspect_skeleton(objects, meshes)
     bpy.context.view_layer.update()
     low, high = Vector((math.inf,) * 3), Vector((-math.inf,) * 3)
     bounds_meshes = meshes
-    if profile == "rigged":
+    if rigged:
         bounds_meshes = [mesh for mesh in meshes if any(mod.type == "ARMATURE" and mod.object == rig
                                                        for mod in mesh.modifiers)]
     for obj in bounds_meshes:
@@ -46,6 +50,9 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
     if not all(math.isfinite(value) for value in (*low, *high)) or max(dimensions) < 1e-8:
         raise ValueError("Imported asset has nonfinite or degenerate bounds")
     materials = {slot.material for obj in meshes for slot in obj.material_slots if slot.material}
+    if profile == "human":
+        for material in materials:
+            material.surface_render_method = "DITHERED"
     texture_nodes = [node for mat in materials if mat.use_nodes for node in mat.node_tree.nodes if node.type == "TEX_IMAGE"]
     images = {node.image for node in texture_nodes if node.image}
     missing = [f"unbound image node: {node.name}" for node in texture_nodes if node.image is None]
@@ -67,7 +74,7 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
               "coordinate_system": "right-handed Z-up meters", **rig_report}
     # Reserve the public entity name independently of names inside the imported file.
     for index, obj in enumerate(objects):
-        if profile == "rigged":
+        if rigged:
             obj["atlas_source_name"] = obj.name
         obj.name = f"__{identifier}_part_{index}"
     root = bpy.data.objects.new(identifier, None)
@@ -88,7 +95,7 @@ def import_asset(path, identifier, normalize="none", pivot="origin", *, profile=
             origin.z = low.z
     normalization.scale = (factor,) * 3
     normalization.location = -origin * factor
-    if profile == "rigged":
+    if rigged:
         play_clips(rig, actions, clips, fps or previous_fps)
     report["normalization"] = {"profile": "atlas-parent-transform-1", "scale": factor, "origin": list(origin)}
     bpy.context.view_layer.update()

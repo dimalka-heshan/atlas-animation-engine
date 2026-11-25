@@ -1,0 +1,1 @@
+"""Versioned character generation adapters."""

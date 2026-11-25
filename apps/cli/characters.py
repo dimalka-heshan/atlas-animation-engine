@@ -3,6 +3,7 @@ from pathlib import Path
 
 from engine.assets.registry import AssetRegistry
 from engine.storage.jobs import contained_path
+from engine.characters.mpfb import HumanSpec, generate, install_runtime
 
 
 def add_character_commands(subparsers):
@@ -24,6 +25,14 @@ def add_character_commands(subparsers):
             check.add_argument("--version", type=int, default=1)
             check.add_argument("--library", type=Path, default=Path("assets/library"))
         else:
+            runtime = commands.add_parser("install-mpfb", help="install the pinned MPFB runtime and CC0 source packs")
+            runtime.add_argument("--runtime", type=Path, default=Path("outputs/v051-mpfb"))
+            runtime.add_argument("--blender", type=Path)
+            generation = commands.add_parser("generate", help="generate and inspect a reusable clothed MPFB human")
+            generation.add_argument("spec", type=Path)
+            generation.add_argument("--runtime", type=Path, default=Path("outputs/v051-mpfb"))
+            generation.add_argument("--library", type=Path, default=Path("assets/library"))
+            generation.add_argument("--blender", type=Path)
             validate = commands.add_parser("validate")
             validate.add_argument("character")
             validate.add_argument("--version", type=int, default=1)
@@ -31,17 +40,24 @@ def add_character_commands(subparsers):
 
 
 def run_character_command(args):
+    if args.rig_command == "install-mpfb":
+        return install_runtime(args.runtime, blender=args.blender)
+    if args.rig_command == "generate":
+        if args.spec.stat().st_size > 256 * 1024:
+            raise ValueError("Human specification exceeds 256 KiB")
+        spec = HumanSpec.model_validate_json(args.spec.read_text(encoding="utf-8-sig"))
+        return generate(spec, args.runtime, args.library, blender=args.blender)
     if not contained_path(args.library, "assets.sqlite3").is_file():
         raise ValueError("Asset library does not exist. Acquire and inspect a rig first.")
     registry = AssetRegistry(args.library)
     if args.rig_command == "list" and not args.character:
-        candidates = [e for e in registry.search() if e["container"].get("profile") == "rigged"
+        candidates = [e for e in registry.search() if e["container"].get("profile") in {"rigged", "human"}
                       and e["inspection"]["status"] == "ready"]
     else:
         candidates = [registry.get(args.character, args.version)]
     results = []
     for candidate in candidates:
-        if candidate["container"].get("profile") != "rigged":
+        if candidate["container"].get("profile") not in {"rigged", "human"}:
             raise ValueError("Selected asset does not use the rigged GLB profile")
         entry = registry.resolve(candidate["id"], candidate["version"])
         report = entry["inspection"]["report"]

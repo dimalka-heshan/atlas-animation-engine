@@ -54,7 +54,7 @@ class InspectionProof(BaseModel):
     """Required evidence for readiness; full diagnostic report remains retained."""
     model_config = ConfigDict(extra="ignore")
     source_sha256: Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
-    inspection_profile: Literal["atlas-static-glb-1", "atlas-rigged-glb-1"]
+    inspection_profile: Literal["atlas-static-glb-1", "atlas-rigged-glb-1", "atlas-human-glb-1"]
     blender_version: Annotated[str, Field(min_length=1)]
     mesh_count: Annotated[StrictInt, Field(ge=1)]
     polygon_count: Annotated[StrictInt, Field(ge=1)]

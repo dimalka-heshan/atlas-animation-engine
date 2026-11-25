@@ -14,12 +14,16 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 from zipfile import ZipFile
 
+from engine.assets.glb import inspect_glb
 from engine.assets.registry import file_hash
 from engine.storage.jobs import atomic_json, contained_path, utc_now
 
 MIB = 1024 * 1024
 HOSTS = frozenset({"api.polyhaven.com", "dl.polyhaven.org", "cdn.polyhaven.com",
-                   "raw.githubusercontent.com", "codeload.github.com", "creativecommons.org"})
+                   "raw.githubusercontent.com", "codeload.github.com", "creativecommons.org",
+                   "ambientcg.com", "acg-download.struffelproductions.com",
+                   "3d-api.si.edu",
+                   "files.makehumancommunity.org", "files2.makehumancommunity.org"})
 
 
 def check_url(url: str) -> None:
@@ -119,7 +123,7 @@ def download(url: str, root: Path, budget: int, *, expected_size=None, expected_
     raise RuntimeError("Download retries exhausted")
 
 
-def unpack_models(archive: ZipFile) -> dict:
+def unpack_models(archive: ZipFile, *, allow_scripts: bool = False) -> dict:
     """Validate the entire directory. Only callers' selected files are read into memory."""
     entries = archive.infolist()
     if len(entries) > 10000 or sum(i.file_size for i in entries) > 512 * MIB:
@@ -141,23 +145,27 @@ def unpack_models(archive: ZipFile) -> dict:
         if item.file_size > 128 * MIB or item.file_size > max(item.compress_size * 500, MIB):
             raise ValueError("Archive entry exceeds size or compression-ratio budget")
         if not item.is_dir():
-            if PurePosixPath(name).suffix.lower() in {".exe", ".dll", ".msi", ".bat", ".ps1", ".cmd", ".sh", ".py", ".scr"}:
+            suffix = PurePosixPath(name).suffix.lower()
+            if suffix in {".exe", ".dll", ".msi", ".bat", ".ps1", ".cmd", ".sh", ".scr"} or (suffix == ".py" and not allow_scripts):
                 raise ValueError("Archive contains an executable or script")
             files[name] = item
     return files
 
 
-def pack_gltf(payload: bytes, read_dependency) -> bytes:
-    """Embed one same-directory BIN buffer and PNG/JPEG images without loading them."""
+def pack_gltf(payload: bytes, read_dependency, *, texture_subdirectory: bool = False) -> bytes:
+    """Embed one external BIN buffer and PNG/JPEG images without decoding them."""
     if len(payload) > 8 * MIB:
         raise ValueError("glTF JSON exceeds 8 MiB")
     doc = json.loads(payload)
     if not isinstance(doc, dict) or doc.get("asset", {}).get("version") != "2.0" or len(doc.get("buffers", [])) != 1:
         raise ValueError("Expected glTF 2.0 with one external binary buffer")
 
-    def read(uri, suffixes):
-        if (not isinstance(uri, str) or not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9_. -]{0,199}", uri)
-                or PurePosixPath(uri).suffix.lower() not in suffixes):
+    def read(uri, suffixes, *, image=False):
+        name = uri
+        if image and texture_subdirectory and isinstance(uri, str):
+            name = uri.removeprefix("textures/")
+        if (not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9_-][A-Za-z0-9_. -]{0,199}", name)
+                or PurePosixPath(name).suffix.lower() not in suffixes):
             raise ValueError("Unsafe glTF dependency filename")
         data = read_dependency(uri)
         if not isinstance(data, bytes) or not 0 < len(data) <= 128 * MIB:
@@ -171,7 +179,7 @@ def pack_gltf(payload: bytes, read_dependency) -> bytes:
     views = doc.setdefault("bufferViews", [])
     for image in doc.get("images", []):
         uri = image.pop("uri", None)
-        data = read(uri, {".png", ".jpg", ".jpeg"})
+        data = read(uri, {".png", ".jpg", ".jpeg"}, image=True)
         mime = "image/png" if uri.lower().endswith(".png") else "image/jpeg"
         if not data.startswith(b"\x89PNG\r\n\x1a\n" if mime == "image/png" else b"\xff\xd8\xff"):
             raise ValueError("glTF texture signature does not match its file type")
@@ -182,11 +190,33 @@ def pack_gltf(payload: bytes, read_dependency) -> bytes:
         views.append({"buffer": 0, "byteOffset": len(binary), "byteLength": len(data)})
         binary.extend(data)
     buffer["byteLength"] = len(binary)
-    binary.extend(b"\0" * (-len(binary) % 4))
-    header = json.dumps(doc, separators=(",", ":"), allow_nan=False).encode()
+    return _encode_glb(doc, binary)
+
+
+def _encode_glb(document: dict, binary: bytes | bytearray) -> bytes:
+    header = json.dumps(document, separators=(",", ":"), allow_nan=False).encode()
     header += b" " * (-len(header) % 4)
-    return (struct.pack("<4sIIII", b"glTF", 2, 28 + len(header) + len(binary), len(header), 0x4E4F534A)
-            + header + struct.pack("<II", len(binary), 0x004E4942) + binary)
+    chunks = struct.pack("<II", len(header), 0x4E4F534A) + header
+    if binary:
+        padded_size = len(binary) + (-len(binary) % 4)
+        chunks += struct.pack("<II", padded_size, 0x004E4942) + binary + b"\0" * (padded_size - len(binary))
+    return struct.pack("<4sII", b"glTF", 2, 12 + len(chunks)) + chunks
+
+
+def scale_static_glb(path: Path, meters_per_unit: float) -> bytes:
+    """Add a unit conversion at the root of an already validated static GLB."""
+    inspect_glb(path, "static")
+    with path.open("rb") as handle:
+        handle.seek(12)
+        json_size, _ = struct.unpack("<II", handle.read(8))
+        doc = json.loads(handle.read(json_size))
+        binary_header = handle.read(8)
+        binary = handle.read(struct.unpack("<II", binary_header)[0]) if binary_header else b""
+    nodes, scene = doc["nodes"], doc["scenes"][0]
+    roots = scene["nodes"]
+    scene["nodes"] = [len(nodes)]
+    nodes.append({"scale": [meters_per_unit] * 3, "children": roots})
+    return _encode_glb(doc, binary)
 
 
 def read_archive_model(path: Path, member: str) -> bytes:

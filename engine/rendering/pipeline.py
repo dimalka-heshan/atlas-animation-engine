@@ -13,6 +13,7 @@ from engine.assets.resolution import resolve_project_assets, snapshot_assets
 from engine.assets.environment_media import resolve_media, snapshot_media
 from engine.audio.production import resolve_audio, snapshot_audio, mix_audio, mux_audio
 from engine.core.models import Project
+from engine.core.quality import enforce_geometry_budget
 from engine.rendering.runtime import capture, find_tool, run_logged
 from engine.rendering.video import encode_video, verify_video
 from engine.storage.jobs import JobStore, atomic_json, contained_path, utc_now
@@ -61,6 +62,9 @@ def render_project(project: Project, output_root: Path, *, blender: Path | None 
         manifest["project_sha256"] = hashlib.sha256((directory / "project.json").read_bytes()).hexdigest()
         expanded = expand_project(project)
         entries = resolve_project_assets(expanded, asset_library or Path("assets/library"))
+        enforce_geometry_budget(expanded, entries)
+        if project.quality:
+            manifest["quality"] = project.quality.model_dump(mode="json")
         manifest["assets"] = snapshot_assets(entries, directory)
         cache = asset_cache or Path("assets/acquisition")
         manifest["environment_media"] = snapshot_media(resolve_media(expanded, cache), cache, directory)

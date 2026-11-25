@@ -182,8 +182,12 @@ class AssetRegistry:
         profile = entry["container"].get("profile", "static")
         if proof.inspection_profile != f"atlas-{profile}-glb-1":
             raise ValueError("Inspection profile does not match registry asset profile")
-        if profile == "rigged" and (report.get("skeleton_count") != 1 or not report.get("clips")):
+        if profile in {"rigged", "human"} and (report.get("skeleton_count") != 1 or not report.get("clips")):
             raise ValueError("Rigged inspection requires one skeleton and playable clips")
+        if profile == "human":
+            from engine.adapters.blender.human_controls import HUMAN_KEYS
+            if not HUMAN_KEYS <= set(report.get("facial_shape_keys", [])):
+                raise ValueError("MPFB inspection is missing required facial controls")
 
     def set_thumbnail(self, asset_id: str, version: int, status: str, report: dict) -> None:
         if status not in {"ready", "failed"}:

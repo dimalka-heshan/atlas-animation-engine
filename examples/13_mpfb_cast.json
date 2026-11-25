@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.4",
+  "id": "mpfb-cast",
+  "seed": 1042,
+  "quality": {
+    "profile": "cinematic",
+    "motion_blur": false
+  },
+  "scene": {
+    "entities": [
+      {"id": "worker","asset": {"id": "mpfb-worker","version": 1},"rigged": true,"pivot": "base","location": [-1.8,0,0],"rotation": [0,0,0],"clips": [{"name": "HumanIdle","start_frame": 1,"frame_count": 1,"loop": true}]},
+      {"id": "scholar","asset": {"id": "mpfb-scholar","version": 1},"rigged": true,"pivot": "base","location": [-0.9,0,0],"rotation": [0,0,0],"clips": [{"name": "HumanIdle","start_frame": 1,"frame_count": 1,"loop": true}]},
+      {"id": "curator","asset": {"id": "mpfb-curator","version": 1},"rigged": true,"pivot": "base","location": [0,0,0],"rotation": [0,0,0],"clips": [{"name": "HumanIdle","start_frame": 1,"frame_count": 1,"loop": true}]},
+      {"id": "student","asset": {"id": "mpfb-student","version": 1},"rigged": true,"pivot": "base","location": [0.9,0,0],"rotation": [0,0,0],"clips": [{"name": "HumanIdle","start_frame": 1,"frame_count": 1,"loop": true}]},
+      {"id": "host","asset": {"id": "mpfb-host","version": 1},"rigged": true,"pivot": "base","location": [1.8,0,0],"rotation": [0,0,0],"clips": [{"name": "HumanIdle","start_frame": 1,"frame_count": 1,"loop": true}]}
+    ],
+    "environment": {
+      "background": [
+        0.06,
+        0.08,
+        0.1
+      ],
+      "strength": 0.65,
+      "ground_size": 20,
+      "ground_material": {
+        "color": [
+          0.11,
+          0.14,
+          0.16
+        ],
+        "roughness": 0.85
+      }
+    },
+    "camera": {
+      "location": [
+        0,
+        -6.5,
+        2.05
+      ],
+      "target": [
+        0,
+        0,
+        1.0
+      ],
+      "lens": 46,
+      "depth_of_field": true,
+      "fstop": 8
+    },
+    "lights": [
+      {
+        "id": "key",
+        "kind": "AREA",
+        "location": [
+          -2.3,
+          -3.8,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          1.1
+        ],
+        "energy": 480,
+        "size": 4.5,
+        "temperature_kelvin": 4950
+      },
+      {
+        "id": "fill",
+        "kind": "AREA",
+        "location": [
+          2.3,
+          -2.8,
+          3.2
+        ],
+        "target": [
+          0,
+          0,
+          1.1
+        ],
+        "energy": 180,
+        "size": 3.7,
+        "temperature_kelvin": 6100
+      },
+      {
+        "id": "rim",
+        "kind": "AREA",
+        "location": [
+          0,
+          1.5,
+          4.4
+        ],
+        "target": [
+          0,
+          0,
+          1
+        ],
+        "energy": 320,
+        "size": 4,
+        "temperature_kelvin": 7000
+      }
+    ]
+  },
+  "render": {
+    "width": 1000,
+    "height": 460,
+    "fps": 24,
+    "frames": 1,
+    "samples": 32
+  }
+}

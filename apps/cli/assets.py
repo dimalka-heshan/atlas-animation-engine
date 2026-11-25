@@ -1,4 +1,4 @@
-"""Asset library subcommands. No network or implicit license approvals."""
+"""Asset discovery, acquisition, and local library subcommands."""
 import argparse
 from pathlib import Path
 import tempfile
@@ -9,13 +9,13 @@ from engine.assets.inspection import inspect_asset
 from engine.assets.models import Provenance
 from engine.assets.registry import AssetRegistry, file_hash
 from engine.assets.thumbnails import create_thumbnail
-from engine.assets.providers import PACKS, PROVIDERS, acquire, search_catalog, synchronize
+from engine.assets.providers import PACKS, PROVIDERS, RESOLUTIONS, acquire, search_catalog, synchronize
 from engine.assets.acquisition import MIB, read_archive_model
 from engine.storage.jobs import atomic_json, contained_path
 
 
 def add_asset_commands(subparsers):
-    group = subparsers.add_parser("assets", help="register, inspect and search approved local GLBs")
+    group = subparsers.add_parser("assets", help="acquire, register and inspect production assets")
     commands = group.add_subparsers(dest="asset_command", required=True)
     commands.add_parser("providers", help="list supported acquisition providers")
     sync = commands.add_parser("sync", help="synchronize an official provider catalog")
@@ -30,6 +30,9 @@ def add_asset_commands(subparsers):
     download = commands.add_parser("download", help="acquire one eligible catalog asset")
     download.add_argument("id")
     download.add_argument("--budget-mib", type=int, default=64)
+    download.add_argument("--resolution", choices=RESOLUTIONS, type=str.lower, default="1k")
+    download.add_argument("--format", dest="source_format", choices=["gltf", "glb", "jpg", "png", "hdr"], type=str.lower,
+                          help="source derivative format (provider-specific default if omitted)")
     download.add_argument("--library", type=Path, default=Path("assets/library"))
     pack = commands.add_parser("download-pack", help="acquire the reviewed starter subset of one KayKit pack")
     pack.add_argument("id", choices=sorted(PACKS))
@@ -91,7 +94,8 @@ def run_asset_command(args: argparse.Namespace):
         return search_catalog(args.cache, args.query, category=args.category, style=args.style, seed=args.seed,
                               offset=args.offset, limit=args.limit)
     if args.asset_command == "download":
-        return acquire(args.id, args.cache, args.library, args.budget_mib * MIB)
+        return acquire(args.id, args.cache, args.library, args.budget_mib * MIB,
+                       resolution=args.resolution, source_format=args.source_format)
     if args.asset_command == "download-pack":
         selected = [entry for entry in PROVIDERS["kaykit"].discover() if entry["pack"] == args.id]
         records = [acquire(entry["id"], args.cache, args.library, args.budget_mib * MIB) for entry in selected]

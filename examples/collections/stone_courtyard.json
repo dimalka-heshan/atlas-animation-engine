@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "id": "stone-courtyard",
+  "entities": [
+    {"id": "courtyard-chair","asset": {"id": "smithsonian-rococo-side-chair","version": 1},"pivot": "base","location": [-2.25,1.0,0],"rotation": [0,0,165]},
+    {"id": "courtyard-barrel","asset": {"id": "polyhaven-wine_barrel_01","version": 1},"pivot": "base","location": [-1.9,0.25,0],"scale": [1,1,1],"rotation": [0,0,21]},
+    {"id": "courtyard-crate","asset": {"id": "polyhaven-wooden_crate_01","version": 1},"pivot": "base","location": [1.72,0.5,0],"scale": [1,1,1],"rotation": [0,0,16]},
+    {"id": "courtyard-stone","asset": {"id": "polyhaven-stone_01","version": 1},"pivot": "base","location": [1.2,0.38,0],"scale": [2.4,2.4,2.4],"rotation": [0,0,-31]},
+    {"id": "courtyard-quarry","asset": {"id": "polyhaven-coast_rocks_01","version": 1},"pivot": "base","location": [0,7.4,-0.12],"scale": [0.27,0.27,0.27],"rotation": [0,0,13]}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "mpfb-worker",
+  "seed": 1044,
+  "age": 0.92,
+  "gender": 0.94,
+  "ancestry": "asian",
+  "height": 0.42,
+  "build": 0.68,
+  "hair": "short02",
+  "skin": "old_asian_male",
+  "wardrobe": "worker"
+}
